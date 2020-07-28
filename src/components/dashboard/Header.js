@@ -2,7 +2,7 @@ import React from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
 import {BLACK} from "../main/Styles";
-import ArrowDropDownRoundedIcon from "@material-ui/icons/ArrowDropDownRounded";
+import DropDown from "../main/Dropdown";
 
 const useStyles = makeStyles(() => ({
 
@@ -41,7 +41,6 @@ const MyAppBar = styled(AppBar)({
 });
 
 export default function Header() {
-
     const classes = useStyles();
 
     return (
@@ -52,9 +51,14 @@ export default function Header() {
                     <h2 className={classes.title}>Online Shop</h2>
                 </div>
                 <div className={classes.subMenu}>
-                    <div className={classes.dropdownItem}>Setting<ArrowDropDownRoundedIcon/></div>
+                    <div className={classes.dropdownItem}><DropDown name="Languages" items={<div>
+                        <div>English</div>
+                        <div>Russian</div>
+                        <div>Armenian</div>
+                    </div>}/>
+                    </div>
                     <div className={classes.dropdownItem}>Checkout</div>
-                    <div className={classes.dropdownItem}>Logout</div>
+                    <div className={classes.dropdownItem}>Login</div>
                 </div>
             </div>
         </MyAppBar>
