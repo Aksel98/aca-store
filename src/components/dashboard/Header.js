@@ -47,15 +47,15 @@ export default function Header() {
         <MyAppBar>
             <div className={classes.menu}>
                 <div className={classes.subMenu}>
-                    <img src="/images/logo.png" width={20} height={20}/>
+                    <img src="/images/logo.png" width={20} height={20} alt=""/>
                     <h2 className={classes.title}>Online Shop</h2>
                 </div>
                 <div className={classes.subMenu}>
-                    <div className={classes.dropdownItem}><DropDown name="Languages" items={<div>
+                    <div className={classes.dropdownItem}><DropDown name="Languages" dropdownContent={<>
                         <div>English</div>
                         <div>Russian</div>
                         <div>Armenian</div>
-                    </div>}/>
+                    </>}/>
                     </div>
                     <div className={classes.dropdownItem}>Checkout</div>
                     <div className={classes.dropdownItem}>Login</div>

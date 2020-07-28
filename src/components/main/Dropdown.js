@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ArrowDropDownRoundedIcon from "@material-ui/icons/ArrowDropDownRounded";
 import {BLACK} from "./Styles";
 
@@ -18,7 +17,7 @@ const useStyles = makeStyles(() => ({
     dropdown: {
         width: 'max-content',
         position: 'absolute',
-        top: 28,
+        top: 0,
         right: 0,
         left: 0,
         zIndex: 1,
@@ -26,34 +25,34 @@ const useStyles = makeStyles(() => ({
 
         '& :not(selector)': {
             color: BLACK,
-            margin: '20px 16px',
+            margin: '20px 15px 20px 2px',
+            borderBottom: '2px solid transparent'
+        },
+
+        '& :not(selector):hover': {
+            borderBottom: '2px solid'
+        },
+
+        '& :first-child': {
+            marginTop: '35px',
         },
     },
 }));
 
 export default function DropDown(props) {
     const classes = useStyles();
-    const [open, setOpen] = useState(false);
-
-    const handleClick = () => {
-        setOpen((prev) => !prev);
-    };
-
-    const handleClickAway = () => {
-        setOpen(false);
-    };
+    const [hover, setHover] = useState(false);
 
     return (
-        <ClickAwayListener onClickAway={handleClickAway}>
             <div className={classes.root}>
-                <div className={classes.dropdownTitle} onClick={handleClick}>
-                    {props.name}<ArrowDropDownRoundedIcon/>
+                <div className={classes.dropdownTitle} onMouseEnter={() => setHover(true)} >
+                    {props.name}
+                    <ArrowDropDownRoundedIcon/>
                 </div>
-                {open && (<div className={classes.dropdown}>
-                    {props.items}
+                {hover && (<div className={classes.dropdown} onMouseLeave={() => setHover(false)}>
+                    {props.dropdownContent}
                 </div>)
                 }
             </div>
-        </ClickAwayListener>
     );
 }
