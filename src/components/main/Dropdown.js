@@ -44,15 +44,15 @@ export default function DropDown(props) {
     const [hover, setHover] = useState(false);
 
     return (
-            <div className={classes.root}>
-                <div className={classes.dropdownTitle} onMouseEnter={() => setHover(true)} >
-                    {props.name}
-                    <ArrowDropDownRoundedIcon/>
-                </div>
-                {hover && (<div className={classes.dropdown} onMouseLeave={() => setHover(false)}>
-                    {props.dropdownContent}
-                </div>)
-                }
+        <div className={classes.root} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <div className={classes.dropdownTitle}>
+                <div>{props.name}</div>
+                <ArrowDropDownRoundedIcon/>
             </div>
+            {hover && (<div className={classes.dropdown}>
+                {props.dropdownContent}
+            </div>)
+            }
+        </div>
     );
 }
