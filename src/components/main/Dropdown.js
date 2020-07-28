@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 
         '& :not(selector)': {
             color: BLACK,
-            padding: '12px 16px',
+            margin: '20px 16px',
         },
     },
 }));

@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
         alignItems: "center",
         justifyContent: 'space-between',
         background: "transparent",
-        padding: '10px 20px'
+        padding: '0 20px'
     },
 
     subMenu: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
         fontWeight: 'bold',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 10px',
+        margin: '0 10px',
         cursor: 'pointer'
     },
 
