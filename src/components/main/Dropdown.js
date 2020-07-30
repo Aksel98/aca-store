@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import ArrowDropDownRoundedIcon from "@material-ui/icons/ArrowDropDownRounded";
-import {BLACK} from "./Styles";
+import {BLACK, WHITE} from "./Styles";
 
 const useStyles = makeStyles(() => ({
 
@@ -15,16 +15,18 @@ const useStyles = makeStyles(() => ({
     },
 
     dropdown: {
+        background: BLACK,
         width: 'max-content',
+        borderRadius: '7px',
         position: 'absolute',
-        top: 0,
+        top: 20,
         right: 0,
         left: 0,
         zIndex: 1,
         boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
 
         '& :not(selector)': {
-            color: BLACK,
+            color: WHITE,
             margin: '20px 15px 20px 2px',
             borderBottom: '2px solid transparent'
         },
@@ -44,7 +46,7 @@ export default function DropDown(props) {
     const [hover, setHover] = useState(false);
 
     return (
-        <div className={classes.root} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+        <div className={classes.root} onClick={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <div className={classes.dropdownTitle}>
                 <div>{props.name}</div>
                 <ArrowDropDownRoundedIcon/>

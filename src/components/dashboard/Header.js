@@ -1,7 +1,7 @@
 import React from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK} from "../main/Styles";
+import {BLACK, WHITE} from "../main/Styles";
 import DropDown from "../main/Dropdown";
 
 const useStyles = makeStyles(() => ({
@@ -11,12 +11,13 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         alignItems: "center",
         justifyContent: 'space-between',
-        background: "transparent",
+        background: BLACK,
+        opacity: '0.7',
         padding: '0 20px'
     },
 
     subMenu: {
-        color: BLACK,
+        color: WHITE,
         display: "flex",
         alignItems: "center",
     },
@@ -57,7 +58,6 @@ export default function Header() {
                         <div>Armenian</div>
                     </>}/>
                     </div>
-                    <div className={classes.dropdownItem}>Checkout</div>
                     <div className={classes.dropdownItem}>Login</div>
                 </div>
             </div>
