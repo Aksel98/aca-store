@@ -1,11 +1,10 @@
 import React from 'react';
-import './App.css';
+import Main from "./components/Main";
 
 function App() {
   return (
-    <div className="App">
-      <input type="text" />
-      <h1>Online Shop</h1>
+    <div>
+      <Main/>
     </div>
   );
 }
