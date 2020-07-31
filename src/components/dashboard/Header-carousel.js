@@ -68,9 +68,7 @@ export default function Carousel() {
             index < imageList.length - 1 ? newIndex = index + 1 : newIndex = 0;
             setIndex(newIndex)
         }, 4000);
-        return () => {
-            clearTimeout(timerId)
-        }
+        return () => clearTimeout(timerId)
     })
 
     return (
