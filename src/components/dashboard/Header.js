@@ -1,7 +1,7 @@
 import React from 'react';
-import {makeStyles, styled} from '@material-ui/core/styles';
+import { makeStyles, styled } from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK, WHITE} from "../main/Styles";
+import { BLACK, WHITE } from "../main/Styles";
 import DropDown from "../main/Dropdown";
 
 const useStyles = makeStyles(() => ({
@@ -38,7 +38,8 @@ const useStyles = makeStyles(() => ({
 
 const MyAppBar = styled(AppBar)({
     background: 'transparent',
-    boxShadow: "none"
+    boxShadow: "none",
+
 });
 
 export default function Header() {
@@ -48,7 +49,7 @@ export default function Header() {
         <MyAppBar>
             <div className={classes.menu}>
                 <div className={classes.subMenu}>
-                    <img src="/images/logo.png" width={20} height={20} alt=""/>
+                    <img src="/images/logo.png" width={20} height={20} alt="" />
                     <h2 className={classes.title}>Online Shop</h2>
                 </div>
                 <div className={classes.subMenu}>
@@ -56,7 +57,7 @@ export default function Header() {
                         <div>English</div>
                         <div>Russian</div>
                         <div>Armenian</div>
-                    </>}/>
+                    </>} />
                     </div>
                     <div className={classes.dropdownItem}>Login</div>
                 </div>

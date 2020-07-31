@@ -3,8 +3,8 @@ import Main from "./components/Main";
 
 function App() {
   return (
-    <div>
-      <Main/>
+    <div style={{ margin: '0px', padding: '0px' }}>
+      <Main />
     </div>
   );
 }

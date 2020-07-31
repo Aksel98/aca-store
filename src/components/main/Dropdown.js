@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import ArrowDropDownRoundedIcon from "@material-ui/icons/ArrowDropDownRounded";
-import {BLACK, WHITE} from "./Styles";
+import { BLACK, WHITE } from "./Styles";
 
 const useStyles = makeStyles(() => ({
 
     root: {
+
         position: 'relative',
     },
 
@@ -49,7 +50,7 @@ export default function DropDown(props) {
         <div className={classes.root} onClick={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <div className={classes.dropdownTitle}>
                 <div>{props.name}</div>
-                <ArrowDropDownRoundedIcon/>
+                <ArrowDropDownRoundedIcon />
             </div>
             {hover && (<div className={classes.dropdown}>
                 {props.dropdownContent}
