@@ -1,12 +1,14 @@
 import React from "react";
 import Header from "./Header";
-import Carousel from "./Header-carousel";
+import Footer from "./Footer";
+import Carousel from "./Carousel";
 
 export default function Dashboard() {
     return (
         <div>
             <Header />
             <Carousel />
+            <Footer />
         </div>
     )
 }
