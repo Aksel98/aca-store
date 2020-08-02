@@ -7,15 +7,12 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import {BLACK, WHITE, ORANGE} from "../main/Styles";
 import MailIcon from '@material-ui/icons/Mail';
-import {
-    BrowserRouter as Router,
-    Link
-} from "react-router-dom";
+import {BrowserRouter as Router, Link} from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     container: {
         paddingTop: 20,
         display: "flex",
