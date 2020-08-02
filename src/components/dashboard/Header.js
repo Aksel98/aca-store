@@ -61,7 +61,7 @@ export default function Header() {
                         <div onClick={() => handleClick('en')}>{t('english')}</div>
                         <div onClick={() => handleClick('rus')}>{t('russian')}</div>
                         <div onClick={() => handleClick('arm')}>{t('armenian')}</div>
-                    </>} />
+                    </>}/>
                     </div>
                     <div className={classes.dropdownItem}>{t('login')}</div>
                 </div>
