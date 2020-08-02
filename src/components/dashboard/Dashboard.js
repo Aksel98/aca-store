@@ -9,6 +9,7 @@ export default function Dashboard() {
             <Header />
             <Carousel />
             <Footer />
+
         </div>
     )
 }
