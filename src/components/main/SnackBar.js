@@ -11,7 +11,7 @@ export default function SnackBar(props) {
 
     return (
         <Snackbar open={open} autoHideDuration={props.duration || 5000} onClose={handleClose}>
-            <MuiAlert elevation={6} variant="filled" onClose={handleClose} severity={props.isErrorMessage ? 'error' : 'success'}>
+            <MuiAlert elevation={6} variant="filled" onClose={handleClose} severity={props.error ? 'error' : 'success'}>
                 {props.message}
             </MuiAlert>
         </Snackbar>
