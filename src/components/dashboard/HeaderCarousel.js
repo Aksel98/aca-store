@@ -7,7 +7,9 @@ import Loader from "../main/Loader";
 
 const useStyles = makeStyles(() => ({
     display: {
-        display: 'grid'
+        display: 'grid',
+        gridTemplateColumns: 'repeat(20, 1fr)',
+        gridTemplateRows: 'repeat(9, 1fr)',
     },
     carouselImg: {
         width: '100%',
@@ -25,6 +27,7 @@ const useStyles = makeStyles(() => ({
         cursor: 'pointer',
         color: 'rgb(156, 156, 156)',
         padding: '0 5px',
+        justifySelf: 'center',
         '&:hover': {
             color: 'rgb(182, 155, 0)'
         }
