@@ -1,21 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
 import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
+import { db, storageRef } from '../services/Firebase';
+// import uniqid from 'uniqid';
 
-const imageList = [
-    "./images/iphone.jpg",
-    "./images/laptop.jpg",
-    "./images/monitor.jpg",
-    "./images/watch.jpg"
-];
+const imageList = [];
+async function getImageRefs() {
+    // console.log(storageRef);
+    const imageListRef = await storageRef.child('/images/carousel/');
+    imageListRef.listAll()
+        .then((res) => res.items.forEach((itemRef) => { (itemRef.getDownloadURL().then((url) => { imageList.push(url); })); }))
+        .catch(e => console.log(e));
 
+    return imageList
+}
+getImageRefs();
 const styleCarousel = {
     display: 'grid',
+    gridTemplateColumns: 'repeat(20, 1fr)',
+    gridTemplateRows: 'repeat(9, 1fr)',
+
 }
 const arrowColor = 'rgb(156, 156, 156)';
 const arrowHoverColor = 'rgb(182, 155, 0)';
 
 function Carousel() {
+
+    // const imageRef = db.collection('laptop').doc('apple');
+    // imageRef.get().then((doc) => { (console.log(doc.data().macbook.image)) });
+
+
     const [index, setIndex] = useState(0);
     const [color, setColor] = useState(arrowColor);
     const [color1, setColor1] = useState(arrowColor);
@@ -38,6 +52,9 @@ function Carousel() {
         return () => { clearTimeout(timerId) }
     })
 
+
+
+
     return (
         <div style={styleCarousel} >
             <ArrowBackIosSharpIcon
@@ -48,7 +65,8 @@ function Carousel() {
                     gridRowStart: '5',
                     gridRowEnd: '6',
                     transform: 'scale(2)',
-                    marginLeft: '5px',
+                    justifySelf: 'center',
+
                     cursor: 'pointer',
                     color: `${color}`
                 }}
@@ -64,7 +82,9 @@ function Carousel() {
                     gridColumnStart: '1',
                     gridColumnEnd: '21',
                     gridRowStart: '1',
-                    gridRowEnd: '10'
+                    gridRowEnd: '10',
+
+
                 }}
                 src={imageList[index]} alt='' />
             <ArrowForwardIosSharpIcon
@@ -75,7 +95,8 @@ function Carousel() {
                     gridRowStart: '5',
                     gridRowEnd: '6',
                     transform: 'scale(2)',
-                    marginRight: '5px',
+                    justifySelf: 'center',
+
                     cursor: 'pointer',
                     color: `${color1}`
                 }}
