@@ -29,7 +29,6 @@ const useStyles = makeStyles(() => ({
         margin: '0 10px',
         cursor: 'pointer'
     },
-
     title: {
         fontStyle: 'italic',
         padding: '0 10px',
@@ -39,7 +38,6 @@ const useStyles = makeStyles(() => ({
 const MyAppBar = styled(AppBar)({
     background: 'transparent',
     boxShadow: "none",
-
 });
 
 export default function Header() {
