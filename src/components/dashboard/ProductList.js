@@ -3,10 +3,8 @@ import Product from './Product';
 import uniqid from 'uniqid';
 import { db } from '../services/Firebase';
 
-export default function ProductList(props) {
-
-    const [dbtest, setDBtest] = useState([]);
-
+export default function ProductList() {
+    const [prod, setProd] = useState([]);
     useEffect(() => {
         getAllProductInfo();
     }, []);
@@ -18,14 +16,11 @@ export default function ProductList(props) {
                 let temp = doc.data();
                 tempArr.push({ ...temp })
             });
-            setDBtest(tempArr);
+            setProd(tempArr);
         } catch (e) {
             console.log("can not  get the docs:", e);
         }
     }
-
-
-
     return (
         <div style={
             {
@@ -36,7 +31,7 @@ export default function ProductList(props) {
             }}>
 
             {
-                dbtest.map((prod) => (<Product image={prod.image} name={prod.model} info={prod.device} price={prod.price} key={uniqid()} />))
+                prod.map((item) => (<Product image={item.image} name={item.model} info={item.device} price={item.price} key={uniqid()} />))
             }
 
         </div>
