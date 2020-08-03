@@ -1,9 +1,8 @@
 import React from "react";
 import Header from "./Header";
-import Carousel from "./Header-carousel";
-import ProductList from "./ProductList";
-
-
+import Footer from "./Footer";
+import Carousel from "./Carousel";
+import CategoryList from "./CategoryList";
 
 
 export default function Dashboard() {
@@ -11,9 +10,8 @@ export default function Dashboard() {
         <div>
             <Header />
             <Carousel />
-            <ProductList />
-
-
+            <CategoryList />
+            <Footer />
         </div>
     )
 }
