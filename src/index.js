@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -8,7 +8,7 @@ import './components/services/i18next'
 ReactDOM.render(
     <React.StrictMode>
         <Suspense fallback={''}>
-            <App/>
+            <App />
         </Suspense>
     </React.StrictMode>,
     document.getElementById('root')
