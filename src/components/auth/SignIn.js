@@ -1,60 +1,101 @@
 import React, {useState} from "react"
-import PersonIcon from '@material-ui/icons/Person'
+import EmailIcon from '@material-ui/icons/Email';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import {makeStyles, styled} from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import MailIcon from '@material-ui/icons/Mail';
+import {makeStyles, styled} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import {BLACK} from "../main/Styles";
+import {MyButton} from "../main/Styles"
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
+
+    signInContainer: {
+        transform: props => props.rightPanel && 'translateX(100%)',
+        left: '0',
+        width: '50%',
+        zIndex: 2,
+    },
+
+    socialContainer: {
+        margin: '20px 0',
+    },
+
+    social: {
+        border: `1px solid ${BLACK}`,
+        borderRadius: '50%',
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '0 5px',
+        height: '40px',
+        width: '40px',
+        cursor: "pointer"
+    },
+    forgotPassword: {
+        fontSize: '11px',
+        width: '100%',
+        textAlign: 'end',
+        margin: '5px 0',
+        cursor: 'pointer'
+    },
     cursor: {
         cursor: 'pointer'
     }
-}))
-
-const MyButton = styled(Button)({
-    width: '100%'
 })
 
 const MyTextField = styled(TextField)({
     width: '100%',
-    margin: '10px 0'
+    marginTop: '10px'
 })
 
 export default function SignIn(props) {
 
     const [showPassword, setShowPassword] = useState(false)
-    const {error, email, password, signIn} = props
-    const classes = useStyles()
+    const {error, email, password, signIn, classFormContainer} = props
+    const classes = useStyles(props)
 
     return (
-        <div>
-            <MyTextField label="Email..."
-                         type="email"
-                         InputProps={{endAdornment: <PersonIcon position="start"/>}}
-                         value={email.value}
-                         onChange={email.onChange}
-                         autoComplete="on"
-                         error={!!error}
-                         helperText={error}/>
-            <MyTextField label="Password..."
-                         type={showPassword ? 'text' : 'password'}
-                         InputProps={{
-                             endAdornment: (
-                                 <div className={classes.cursor}> {showPassword ?
-                                     <VisibilityIcon position="start" onClick={() => setShowPassword(!showPassword)}/> :
-                                     <VisibilityOffIcon position="start" onClick={() => setShowPassword(!showPassword)}/>}
-                                 </div>)
-                         }}
-                         value={password.value}
-                         onChange={password.onChange}
-                         autoComplete="off"
-                         error={!!error}
-                         helperText={error}/>
-            <MyButton color="primary"
-                      variant="contained"
-                      disabled={!email.value || !password.value}
-                      onClick={signIn}>Sign in</MyButton>
+            <div className={`${classFormContainer} ${classes.signInContainer}`}>
+                <form>
+                    <h1>Sign in</h1>
+                    <div className={classes.socialContainer}>
+                        <a className={classes.social}><FacebookIcon/></a>
+                        <a className={classes.social}><GitHubIcon/></a>
+                        <a className={classes.social}><MailIcon/></a>
+                    </div>
+                    <span>or use your account</span>
+                    <MyTextField label="Email..."
+                                 type="email"
+                                 InputProps={{endAdornment: <EmailIcon position="start"/>}}
+                                 value={email.value}
+                                 onChange={email.onChange}
+                                 autoComplete="on"
+                                 error={!!error}
+                                 helperText={error}/>
+                    <MyTextField label="Password..."
+                                 type={showPassword ? 'text' : 'password'}
+                                 InputProps={{
+                                     endAdornment: (
+                                         <div className={classes.cursor}> {showPassword ?
+                                             <VisibilityIcon position="start" onClick={() => setShowPassword(!showPassword)}/> :
+                                             <VisibilityOffIcon position="start"
+                                                                onClick={() => setShowPassword(!showPassword)}/>}
+                                         </div>)
+                                 }}
+                                 value={password.value}
+                                 onChange={password.onChange}
+                                 autoComplete="off"
+                                 error={!!error}
+                                 helperText={error}/>
+                    <div className={classes.forgotPassword}>Forgot your password?</div>
+                    <MyButton color="primary"
+                              variant="contained"
+                              disabled={!email.value || !password.value}
+                              onClick={signIn}>Sign in</MyButton>
+                </form>
         </div>
     )
 }

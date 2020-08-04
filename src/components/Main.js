@@ -18,9 +18,9 @@ export default function Main() {
     return (
         <React.Fragment>
             <div className={classes.loginContainer}>
-                {/*<Login/>*/}
+                <Login/>
             </div>
-            <Dashboard/>
+            {/*<Dashboard/>*/}
         </React.Fragment>
     )
 }
