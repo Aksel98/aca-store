@@ -2,8 +2,9 @@ import React, {useState} from "react"
 import SignIn from "./SignIn"
 import useInput from "../main/hooks/useInput"
 import {makeStyles} from "@material-ui/core/styles"
-import {BLACK, MyButton, ORANGE, WHITE} from "../main/Styles"
+import {MyButton, ORANGE, WHITE} from "../main/Styles"
 import SignUp from "./SignUp";
+import {useMediaQuery} from "@material-ui/core";
 
 const useStyles = makeStyles({
     container: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles({
             backgroundColor: WHITE,
             display: 'flex',
             flexDirection: 'column',
-            padding: '0 40px',
+            padding: props => props.media ? '0 40px' : '0 10px',
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
@@ -33,7 +34,7 @@ const useStyles = makeStyles({
         }
     },
     overlayContainer: {
-        transform: props => props && 'translateX(-100%)',
+        transform: props => props.rightPanel && 'translateX(-100%)',
         position: 'absolute',
         top: '0',
         left: '50%',
@@ -44,7 +45,7 @@ const useStyles = makeStyles({
         zIndex: '100',
     },
     overlay: {
-        transform: props => props ? 'translateX(50%)' : 'translateX(0)',
+        transform: props => props.rightPanel ? 'translateX(50%)' : 'translateX(0)',
         background: ORANGE,
         color: '#fff',
         position: 'relative',
@@ -67,11 +68,11 @@ const useStyles = makeStyles({
         transition: 'transform 0.6s ease-in-out',
     },
     overlayRight: {
-        transform: props => props ? 'translateX(20%)' : 'translateX(0)',
+        transform: props => props.rightPanel ? 'translateX(20%)' : 'translateX(0)',
         right: 0,
     },
     overlayLeft: {
-        transform: props => props ? 'translateX(0)' : 'translateX(-20%)',
+        transform: props => props.rightPanel ? 'translateX(0)' : 'translateX(-20%)',
     },
 })
 
@@ -82,7 +83,8 @@ export default function Login() {
     const password = useInput('')
     const [error, setError] = useState('')
     const [rightPanel, setRightPanel] = useState(false)
-    const classes = useStyles(rightPanel)
+    const media = useMediaQuery('(min-width:600px)');
+    const classes = useStyles({rightPanel, media})
 
     function signIn(e) {
         e.preventDefault()
@@ -113,23 +115,25 @@ export default function Login() {
                     error={error}
                     signIn={signUp}
                     rightPanel={rightPanel}
-                    classFormContainer={classes.formContainer}/>
+                    classFormContainer={classes.formContainer}
+                    media={media}/>
             <SignIn email={email.bind}
                     password={password.bind}
                     error={error}
                     signIn={signIn}
                     rightPanel={rightPanel}
-                    classFormContainer={classes.formContainer}/>
+                    classFormContainer={classes.formContainer}
+                    media={media}/>
             <div className={classes.overlayContainer}>
                 <div className={classes.overlay}>
                     <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
-                        <h1>Already have Account</h1>
+                        {media ? <h1>Already have Account</h1> : <h3>Already have Account</h3>}
                         <MyButton color="primary"
                                   variant="contained"
                                   onClick={signInPageHandler}>Sign In</MyButton>
                     </div>
                     <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
-                        <h1>Create Account</h1>
+                        {media ? <h1>Create Account</h1> : <h3>Create Account</h3>}
                         <MyButton color="primary"
                                   variant="contained"
                                   onClick={signUpPageHandler}>Sign Up</MyButton>

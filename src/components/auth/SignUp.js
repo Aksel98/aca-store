@@ -24,14 +24,14 @@ const useStyles = makeStyles({
     },
 
     social: {
-        border: `1px solid ${BLACK}`,
+        border: props => props.media && `1px solid ${BLACK}`,
         borderRadius: '50%',
         display: 'inline-flex',
         justifyContent: 'center',
         alignItems: 'center',
         margin: '0 5px',
-        height: '40px',
-        width: '40px',
+        height: props => props.media && '40px',
+        width: props => props.media && '40px',
         cursor: "pointer"
     },
 })
@@ -47,13 +47,13 @@ const MyBtn = styled(MyButton)({
 
 export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {error, name, surname, email, password, signIn, rightPanel, classFormContainer} = props
+    const {error, name, surname, email, password, signIn, rightPanel, classFormContainer, matches} = props
     const classes = useStyles(rightPanel)
 
     return (
         <div className={`${classFormContainer} ${classes.signUpContainer}`}>
             <form>
-                <h1>Create account</h1>
+                {matches ? <h1>Create Account</h1> : <h3>Create Account</h3>}
                 <div className={classes.socialContainer}>
                     <a className={classes.social}><FacebookIcon/></a>
                     <a className={classes.social}><GitHubIcon/></a>

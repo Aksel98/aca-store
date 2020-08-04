@@ -24,14 +24,14 @@ const useStyles = makeStyles({
     },
 
     social: {
-        border: `1px solid ${BLACK}`,
+        border: props => props.media && `1px solid ${BLACK}`,
         borderRadius: '50%',
         display: 'inline-flex',
         justifyContent: 'center',
         alignItems: 'center',
         margin: '0 5px',
-        height: '40px',
-        width: '40px',
+        height: props => props.media && '40px',
+        width: props => props.media && '40px',
         cursor: "pointer"
     },
     forgotPassword: {
@@ -52,15 +52,14 @@ const MyTextField = styled(TextField)({
 })
 
 export default function SignIn(props) {
-
     const [showPassword, setShowPassword] = useState(false)
-    const {error, email, password, signIn, classFormContainer} = props
+    const {error, email, password, signIn, classFormContainer, media} = props
     const classes = useStyles(props)
 
     return (
             <div className={`${classFormContainer} ${classes.signInContainer}`}>
                 <form>
-                    <h1>Sign in</h1>
+                    {media ? <h1>Sign in</h1>:  <h3>Sign in</h3>}
                     <div className={classes.socialContainer}>
                         <a className={classes.social}><FacebookIcon/></a>
                         <a className={classes.social}><GitHubIcon/></a>

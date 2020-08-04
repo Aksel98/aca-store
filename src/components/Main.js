@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     loginContainer: {
         display: 'flex',
         justifyContent: 'center',
-        paddingTop: '150px',
+        padding: '150px 10px',
         opacity: '0.6',
     }
 })
