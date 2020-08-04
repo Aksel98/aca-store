@@ -12,9 +12,9 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 const useStyles = makeStyles({
 
     signUpContainer: {
-        transform: props => props && 'translateX(100%)',
-        opacity: props => props ? 1 : 0,
-        zIndex: props => props ? 5 : 1,
+        transform: props => props.rightPanel && 'translateX(100%)',
+        opacity: props => props.rightPanel ? 1 : 0,
+        zIndex: props => props.rightPanel ? 5 : 1,
         left: 0,
         width: '50%'
     },
@@ -47,13 +47,13 @@ const MyBtn = styled(MyButton)({
 
 export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {error, name, surname, email, password, signIn, rightPanel, classFormContainer, matches} = props
-    const classes = useStyles(rightPanel)
+    const {error, name, surname, email, password, signIn, rightPanel, classFormContainer, media} = props
+    const classes = useStyles({rightPanel, media})
 
     return (
         <div className={`${classFormContainer} ${classes.signUpContainer}`}>
             <form>
-                {matches ? <h1>Create Account</h1> : <h3>Create Account</h3>}
+                {media ? <h1>Create Account</h1> : <h3>Create Account</h3>}
                 <div className={classes.socialContainer}>
                     <a className={classes.social}><FacebookIcon/></a>
                     <a className={classes.social}><GitHubIcon/></a>

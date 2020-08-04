@@ -26,7 +26,7 @@ const useStyles = makeStyles({
             backgroundColor: WHITE,
             display: 'flex',
             flexDirection: 'column',
-            padding: props => props.media ? '0 40px' : '0 10px',
+            padding: props => props.media ? '0 30px' : '0 10px',
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
