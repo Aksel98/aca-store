@@ -1,12 +1,23 @@
 import React from 'react';
-import { makeStyles, styled } from '@material-ui/core/styles';
+import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import { BLACK, WHITE } from "../main/Styles";
+import {BLACK, WHITE} from "../main/Styles";
 import DropDown from "../main/Dropdown";
 import {useTranslation} from "react-i18next";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
-
+    loginBg: {
+        height: '100vh',
+        backgroundColor: BLACK,
+        opacity: '0.7'
+    },
+    loginContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '150px 10px',
+        opacity: '0.6',
+    },
     menu: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -16,15 +27,15 @@ const useStyles = makeStyles(() => ({
         opacity: '0.7',
         padding: '0 20px'
     },
-
     subMenu: {
         color: WHITE,
         display: "flex",
         alignItems: "center",
     },
-
     dropdownItem: {
         fontWeight: 'bold',
+        color: WHITE,
+        textDecoration: 'none',
         display: 'flex',
         alignItems: 'center',
         margin: '0 10px',
@@ -53,7 +64,7 @@ export default function Header() {
         <MyAppBar>
             <div className={classes.menu}>
                 <div className={classes.subMenu}>
-                    <img src="/images/logo.png" width={20} height={20} alt="" />
+                    <img src="/images/logo.png" width={20} height={20} alt=""/>
                     <h2 className={classes.title}>Online Shop</h2>
                 </div>
                 <div className={classes.subMenu}>
@@ -63,7 +74,7 @@ export default function Header() {
                         <div onClick={() => handleClick('arm')}>{t('armenian')}</div>
                     </>}/>
                     </div>
-                    <div className={classes.dropdownItem}>{t('login')}</div>
+                    <Link to="/login" className={classes.dropdownItem}> {t('login')}</Link>
                 </div>
             </div>
         </MyAppBar>

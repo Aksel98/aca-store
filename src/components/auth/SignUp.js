@@ -11,19 +11,16 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
-
     signUpContainer: {
         transform: props => props.rightPanel && 'translateX(100%)',
         opacity: props => props.rightPanel ? 1 : 0,
-        zIndex: props => props.rightPanel ? 5 : 1,
+        zIndex: props => props.rightPanel ? 3 : 1,
         left: 0,
         width: '50%'
     },
-
     socialContainer: {
         margin: '20px 0',
     },
-
     social: {
         border: props => props.media && `1px solid ${BLACK}`,
         borderRadius: '50%',
@@ -35,6 +32,9 @@ const useStyles = makeStyles({
         width: props => props.media && '40px',
         cursor: "pointer"
     },
+    cursor: {
+        cursor: 'pointer'
+    }
 })
 
 const MyTextField = styled(TextField)({
@@ -48,7 +48,7 @@ const MyBtn = styled(MyButton)({
 
 export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {error, name, surname, email, password, signIn, rightPanel, classFormContainer, media} = props
+    const {error, name, surname, email, password, signUp, rightPanel, classFormContainer, media} = props
     const classes = useStyles({rightPanel, media})
     const {t} = useTranslation()
 
@@ -62,16 +62,16 @@ export default function SignUp(props) {
                     <a className={classes.social}><MailIcon/></a>
                 </div>
                 <span>{t('useYourEmailForRegistration')}</span>
-                <MyTextField label={`${t('name')}...`}
-                             type="text"
-                             value={name.value}
-                             onChange={name.onChange}
-                             autoComplete="on"/>
-                <MyTextField label={`${t('surname')}...`}
-                             type="text"
-                             value={surname.value}
-                             onChange={surname.onChange}
-                             autoComplete="on"/>
+                {/*<MyTextField label={`${t('name')}...`}*/}
+                {/*             type="text"*/}
+                {/*             value={name.value}*/}
+                {/*             onChange={name.onChange}*/}
+                {/*             autoComplete="on"/>*/}
+                {/*<MyTextField label={`${t('surname')}...`}*/}
+                {/*             type="text"*/}
+                {/*             value={surname.value}*/}
+                {/*             onChange={surname.onChange}*/}
+                {/*             autoComplete="on"/>*/}
                 <MyTextField label={`${t('email')}...`}
                              type="email"
                              InputProps={{endAdornment: <EmailIcon position="start"/>}}
@@ -95,8 +95,8 @@ export default function SignUp(props) {
                              autoComplete="off"/>
                 <MyBtn color="primary"
                           variant="contained"
-                          disabled={!name.value || !surname.value || !email.value || !password.value}
-                          onClick={signIn}>{t('signUp')}</MyBtn>
+                          disabled={!email.value || !password.value}
+                          onClick={signUp}>{t('signUp')}</MyBtn>
             </form>
         </div>
     )

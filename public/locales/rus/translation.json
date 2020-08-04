@@ -11,7 +11,7 @@
   "signIn": "Войти в систему",
   "signUp": "Регистрироваться",
   "createAccount": "Создать аккаунт",
-  "alreadyHaveAnAccount": "Уже есть аккаунт?",
+  "alreadyHaveAccount": "Уже есть аккаунт?",
   "forgotPassword": "Забыли пароль?",
   "useYourAccount": "или используйте свой аккаунт",
   "useYourEmailForRegistration": "или используйте свой эл. адрес для регистрации"

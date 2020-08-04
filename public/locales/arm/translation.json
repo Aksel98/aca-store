@@ -9,9 +9,9 @@
   "email": "Էլ․ փոստ",
   "password": "Գաղտնաբառ",
   "signIn": "Մուտք գործել",
-  "signUp": "Գրանցվե",
+  "signUp": "Գրանցվել",
   "createAccount": "Ստեղծել հաշիվ",
-  "alreadyHaveAnAccount": "Արդեն ունե՞ք հաշիվ",
+  "alreadyHaveAccount": "Արդեն ունե՞ք հաշիվ",
   "forgotPassword": "Մոռացել եք գաղտնաբառը?",
   "useYourAccount": "կամ օգտագործեք ձեր հաշիվը",
   "useYourEmailForRegistration": "կամ օգտագործեք ձեր Էլ․փոստը գրանցման համար"

@@ -2,12 +2,26 @@ import React, {useState} from "react"
 import SignIn from "./SignIn"
 import useInput from "../main/hooks/useInput"
 import {makeStyles} from "@material-ui/core/styles"
-import {MyButton, ORANGE, WHITE} from "../main/Styles"
+import {BLACK, MyButton, ORANGE, WHITE} from "../main/Styles"
 import SignUp from "./SignUp";
 import {useMediaQuery} from "@material-ui/core";
 import {useTranslation} from "react-i18next";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import {Link} from "react-router-dom";
+import {auth} from "../services/Firebase";
 
 const useStyles = makeStyles({
+    backIcon: {
+        position: 'absolute',
+        zIndex: 5,
+        display: 'flex',
+        margin: '20px',
+        padding: '5px',
+        border: `1px solid ${BLACK}`,
+        borderRadius: '50%',
+        color: BLACK,
+        cursor: 'pointer',
+    },
     container: {
         backgroundColor: '#fff',
         borderRadius: '10px',
@@ -27,7 +41,7 @@ const useStyles = makeStyles({
             backgroundColor: WHITE,
             display: 'flex',
             flexDirection: 'column',
-            padding: props => props.media ? '0 30px' : '0 10px',
+            padding: props => props.media ? '0 30px' : '0 5px',
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
@@ -43,7 +57,7 @@ const useStyles = makeStyles({
         height: '100%',
         overflow: 'hidden',
         transition: 'transform 0.6s ease-in-out',
-        zIndex: '100',
+        zIndex: '4',
     },
     overlay: {
         transform: props => props.rightPanel ? 'translateX(50%)' : 'translateX(0)',
@@ -94,6 +108,9 @@ export default function Login() {
 
     function signUp(e) {
         e.preventDefault()
+        auth.createUserWithEmailAndPassword(email.bind.value, password.bind.value).then(res => {
+            console.log(res)
+        }).catch(err => console.log(err.message))
     }
 
     function signUpPageHandler() {
@@ -111,39 +128,40 @@ export default function Login() {
     }
 
     return (
-        <div className={classes.container}>
-            <SignUp name={name.bind}
-                    surname={surname.bind}
-                    email={email.bind}
-                    password={password.bind}
-                    error={error}
-                    signIn={signUp}
-                    rightPanel={rightPanel}
-                    classFormContainer={classes.formContainer}
-                    media={media}/>
-            <SignIn email={email.bind}
-                    password={password.bind}
-                    error={error}
-                    signIn={signIn}
-                    rightPanel={rightPanel}
-                    classFormContainer={classes.formContainer}
-                    media={media}/>
-            <div className={classes.overlayContainer}>
-                <div className={classes.overlay}>
-                    <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
-                        {media ? <h1>{t('alreadyHaveAnAccount')}</h1> : <h3>{t('alreadyHaveAnAccount')}</h3>}
-                        <MyButton color="primary"
-                                  variant="contained"
-                                  onClick={signInPageHandler}>{t('signIn')}</MyButton>
-                    </div>
-                    <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
-                        {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
-                        <MyButton color="primary"
-                                  variant="contained"
-                                  onClick={signUpPageHandler}>{t('signUp')}</MyButton>
+            <div className={classes.container}>
+                <Link to="/dashboard" className={classes.backIcon}><ArrowBackIcon/></Link>
+                <SignUp name={name.bind}
+                        surname={surname.bind}
+                        email={email.bind}
+                        password={password.bind}
+                        error={error}
+                        signUp={signUp}
+                        rightPanel={rightPanel}
+                        classFormContainer={classes.formContainer}
+                        media={media}/>
+                <SignIn email={email.bind}
+                        password={password.bind}
+                        error={error}
+                        signIn={signIn}
+                        rightPanel={rightPanel}
+                        classFormContainer={classes.formContainer}
+                        media={media}/>
+                <div className={classes.overlayContainer}>
+                    <div className={classes.overlay}>
+                        <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
+                            {media ? <h1>{t('alreadyHaveAccount')}</h1> : <h3>{t('alreadyHaveAccount')}</h3>}
+                            <MyButton color="primary"
+                                      variant="contained"
+                                      onClick={signInPageHandler}>{t('signIn')}</MyButton>
+                        </div>
+                        <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
+                            {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
+                            <MyButton color="primary"
+                                      variant="contained"
+                                      onClick={signUpPageHandler}>{t('signUp')}</MyButton>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
