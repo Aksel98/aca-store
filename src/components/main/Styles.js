@@ -7,7 +7,7 @@ export const ORANGE = 'linear-gradient(to right, #02bbec, #0642ba) no-repeat 0 0
 
 export const MyButton = styled(Button)({
     width: '100%',
-    maxWidth: '80%',
+    maxWidth: '90%',
     '&:disabled': {
         border: `1px solid ${BLACK}`
     }

@@ -5,6 +5,7 @@ import {makeStyles} from "@material-ui/core/styles"
 import {MyButton, ORANGE, WHITE} from "../main/Styles"
 import SignUp from "./SignUp";
 import {useMediaQuery} from "@material-ui/core";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     container: {
@@ -85,6 +86,7 @@ export default function Login() {
     const [rightPanel, setRightPanel] = useState(false)
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles({rightPanel, media})
+    const {t} = useTranslation()
 
     function signIn(e) {
         e.preventDefault()
@@ -102,6 +104,8 @@ export default function Login() {
 
     function signInPageHandler() {
         setRightPanel(false)
+        name.reset()
+        surname.reset()
         email.reset()
         password.reset()
     }
@@ -127,16 +131,16 @@ export default function Login() {
             <div className={classes.overlayContainer}>
                 <div className={classes.overlay}>
                     <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
-                        {media ? <h1>Already have Account</h1> : <h3>Already have Account</h3>}
+                        {media ? <h1>{t('alreadyHaveAnAccount')}</h1> : <h3>{t('alreadyHaveAnAccount')}</h3>}
                         <MyButton color="primary"
                                   variant="contained"
-                                  onClick={signInPageHandler}>Sign In</MyButton>
+                                  onClick={signInPageHandler}>{t('signIn')}</MyButton>
                     </div>
                     <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
-                        {media ? <h1>Create Account</h1> : <h3>Create Account</h3>}
+                        {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
                         <MyButton color="primary"
                                   variant="contained"
-                                  onClick={signUpPageHandler}>Sign Up</MyButton>
+                                  onClick={signUpPageHandler}>{t('signUp')}</MyButton>
                     </div>
                 </div>
             </div>

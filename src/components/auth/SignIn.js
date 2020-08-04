@@ -9,20 +9,18 @@ import {makeStyles, styled} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {BLACK} from "../main/Styles";
 import {MyButton} from "../main/Styles"
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
-
     signInContainer: {
         transform: props => props.rightPanel && 'translateX(100%)',
         left: '0',
         width: '50%',
         zIndex: 2,
     },
-
     socialContainer: {
         margin: '20px 0',
     },
-
     social: {
         border: props => props.media && `1px solid ${BLACK}`,
         borderRadius: '50%',
@@ -55,18 +53,19 @@ export default function SignIn(props) {
     const [showPassword, setShowPassword] = useState(false)
     const {error, email, password, signIn, classFormContainer, media} = props
     const classes = useStyles(props)
+    const {t} = useTranslation()
 
     return (
             <div className={`${classFormContainer} ${classes.signInContainer}`}>
                 <form>
-                    {media ? <h1>Sign in</h1>:  <h3>Sign in</h3>}
+                    {media ? <h2>{t('signIn')}</h2>:  <h3>{t('signIn')}</h3>}
                     <div className={classes.socialContainer}>
                         <a className={classes.social}><FacebookIcon/></a>
                         <a className={classes.social}><GitHubIcon/></a>
                         <a className={classes.social}><MailIcon/></a>
                     </div>
-                    <span>or use your account</span>
-                    <MyTextField label="Email..."
+                    <span>{t('useYourAccount')}</span>
+                    <MyTextField label={`${t('email')}...`}
                                  type="email"
                                  InputProps={{endAdornment: <EmailIcon position="start"/>}}
                                  value={email.value}
@@ -74,7 +73,7 @@ export default function SignIn(props) {
                                  autoComplete="on"
                                  error={!!error}
                                  helperText={error}/>
-                    <MyTextField label="Password..."
+                    <MyTextField label={`${t('password')}...`}
                                  type={showPassword ? 'text' : 'password'}
                                  InputProps={{
                                      endAdornment: (
@@ -89,11 +88,11 @@ export default function SignIn(props) {
                                  autoComplete="off"
                                  error={!!error}
                                  helperText={error}/>
-                    <div className={classes.forgotPassword}>Forgot your password?</div>
+                    <div className={classes.forgotPassword}>{t('forgotPassword')}</div>
                     <MyButton color="primary"
                               variant="contained"
                               disabled={!email.value || !password.value}
-                              onClick={signIn}>Sign in</MyButton>
+                              onClick={signIn}>{t('signIn')}</MyButton>
                 </form>
         </div>
     )
