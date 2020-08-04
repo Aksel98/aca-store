@@ -92,18 +92,30 @@ export default function Login() {
         e.preventDefault()
     }
 
+    function signUpPageHandler() {
+        setRightPanel(true)
+        email.reset()
+        password.reset()
+    }
+
+    function signInPageHandler() {
+        setRightPanel(false)
+        email.reset()
+        password.reset()
+    }
+
     return (
         <div className={classes.container}>
-            <SignUp name={name}
-                    surname={surname}
-                email={email}
-                    password={password}
+            <SignUp name={name.bind}
+                    surname={surname.bind}
+                    email={email.bind}
+                    password={password.bind}
                     error={error}
                     signIn={signUp}
                     rightPanel={rightPanel}
                     classFormContainer={classes.formContainer}/>
-            <SignIn  email={email}
-                    password={password}
+            <SignIn email={email.bind}
+                    password={password.bind}
                     error={error}
                     signIn={signIn}
                     rightPanel={rightPanel}
@@ -114,13 +126,13 @@ export default function Login() {
                         <h1>Already have Account</h1>
                         <MyButton color="primary"
                                   variant="contained"
-                                  onClick={() => setRightPanel(false)}>Sign In</MyButton>
+                                  onClick={signInPageHandler}>Sign In</MyButton>
                     </div>
                     <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
                         <h1>Create Account</h1>
                         <MyButton color="primary"
                                   variant="contained"
-                                  onClick={() => setRightPanel(true)}>Sign Up</MyButton>
+                                  onClick={signUpPageHandler}>Sign Up</MyButton>
                     </div>
                 </div>
             </div>

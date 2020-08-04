@@ -93,7 +93,7 @@ export default function SignUp(props) {
                              autoComplete="off"/>
                 <MyBtn color="primary"
                           variant="contained"
-                          disabled={!email.value || !password.value}
+                          disabled={!name.value || !surname.value || !email.value || !password.value}
                           onClick={signIn}>Sign up</MyBtn>
             </form>
         </div>
