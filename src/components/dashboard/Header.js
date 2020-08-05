@@ -115,7 +115,6 @@ export default function Header() {
                         <ShoppingCartIcon className={classes.menuItem}/>
                         {!currentUser && <Link to="/login" className={classes.menuItem}> {t('login')}</Link>}
                         {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
-
                     </>}
                 </div>
                 {!media ? <div className={classes.subMenu}>
