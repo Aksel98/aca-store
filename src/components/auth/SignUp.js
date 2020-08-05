@@ -1,23 +1,23 @@
-import React, {useState} from "react"
-import EmailIcon from '@material-ui/icons/Email';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import MailIcon from '@material-ui/icons/Mail';
-import {makeStyles, styled} from '@material-ui/core/styles';
+import React, {useState} from "react";
+import {makeStyles, styled} from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
-import {BLACK} from "../main/Styles";
-import {MyButton} from "../main/Styles"
+import FacebookIcon from "@material-ui/icons/Facebook";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import MailIcon from "@material-ui/icons/Mail";
+import PhoneIcon from '@material-ui/icons/Phone';
+import {BLACK, MyButton} from "../main/Styles";
+import EmailIcon from '@material-ui/icons/Email';
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import {useTranslation} from "react-i18next";
-import PhoneIcon from "@material-ui/icons/Phone";
 
 const useStyles = makeStyles({
-    signInContainer: {
+    signUpContainer: {
         transform: props => props.rightPanel && 'translateX(100%)',
-        left: '0',
-        width: '50%',
-        zIndex: 2,
+        opacity: props => props.rightPanel ? 1 : 0,
+        zIndex: props => props.rightPanel ? 3 : 1,
+        left: 0,
+        width: '50%'
     },
     socialContainer: {
         margin: '20px 0',
@@ -33,13 +33,6 @@ const useStyles = makeStyles({
         width: props => props.media && '40px',
         cursor: "pointer"
     },
-    forgotPassword: {
-        fontSize: '11px',
-        width: '100%',
-        textAlign: 'end',
-        margin: '5px 0',
-        cursor: 'pointer'
-    },
     cursor: {
         cursor: 'pointer'
     }
@@ -50,23 +43,27 @@ const MyTextField = styled(TextField)({
     marginTop: '10px'
 })
 
-export default function SignIn(props) {
+const MyBtn = styled(MyButton)({
+    margin: '20px 0'
+})
+
+export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {email, password, error, onValueChange, signIn, signInProvider, classFormContainer, media} = props
-    const classes = useStyles(props)
+    const {email, password, error, onValueChange, signUp, signInProvider, rightPanel, classFormContainer, media} = props
+    const classes = useStyles({rightPanel, media})
     const {t} = useTranslation()
 
     return (
-            <div className={`${classFormContainer} ${classes.signInContainer}`}>
+            <div className={`${classFormContainer} ${classes.signUpContainer}`}>
                 <form>
-                    {media ? <h2>{t('signIn')}</h2>:  <h3>{t('signIn')}</h3>}
+                    {media ? <h2>{t('createAccount')}</h2> : <h3>{t('createAccount')}</h3>}
                     <div className={classes.socialContainer}>
                         <div onClick={signInProvider.signInGoogle} className={classes.social}><MailIcon/></div>
                         <div onClick={signInProvider.signInFacebook} className={classes.social}><FacebookIcon/></div>
                         <div onClick={signInProvider.signInGithub} className={classes.social}><GitHubIcon/></div>
                         <div onClick={signInProvider.signInPhoneNumber} className={classes.social}><PhoneIcon/></div>
                     </div>
-                    <span>{t('useYourAccount')}</span>
+                    <span>{t('useYourEmailForRegistration')}</span>
                     <MyTextField label={`${t('email')}...`}
                                  type="email"
                                  InputProps={{endAdornment: <EmailIcon position="start"/>}}
@@ -79,7 +76,8 @@ export default function SignIn(props) {
                                  InputProps={{
                                      endAdornment: (
                                          <div className={classes.cursor}> {showPassword ?
-                                             <VisibilityIcon position="start" onClick={() => setShowPassword(!showPassword)}/> :
+                                             <VisibilityIcon position="start"
+                                                             onClick={() => setShowPassword(!showPassword)}/> :
                                              <VisibilityOffIcon position="start"
                                                                 onClick={() => setShowPassword(!showPassword)}/>}
                                          </div>)
@@ -88,11 +86,10 @@ export default function SignIn(props) {
                                  onChange={onValueChange}
                                  autoComplete="off"
                                  error={!!error}/>
-                    <div className={classes.forgotPassword}>{t('forgotPassword')}</div>
-                    <MyButton color="primary"
-                              variant="contained"
-                              disabled={!email || !password}
-                              onClick={signIn}>{t('signIn')}</MyButton>
+                    <MyBtn color="primary"
+                           variant="contained"
+                           disabled={!email || !password}
+                           onClick={signUp}>{t('signUp')}</MyBtn>
                 </form>
         </div>
     )

@@ -1,7 +1,19 @@
 {
   "login": "Login",
+  "logout": "Logout",
   "languages": "Languages",
   "english": "English",
   "russian": "Russian",
-  "armenian": "Armenian"
+  "armenian": "Armenian",
+  "name": "Name",
+  "surname": "Surname",
+  "email": "Email",
+  "password": "Password",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "createAccount": "Create Account",
+  "alreadyHaveAccount": "Already have account?",
+  "forgotPassword": "Forgot password?",
+  "useYourAccount": "or use your account",
+  "useYourEmailForRegistration": "or use your email for registration"
 }

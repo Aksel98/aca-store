@@ -1,7 +1,19 @@
 {
   "login": "Войти",
+  "logout": "Выйти",
   "languages": "Языки",
   "english": "Английский",
   "russian": "Русский",
-  "armenian": "Армянин"
+  "armenian": "Армянин",
+  "name": "Имя",
+  "surname": "Фамилия",
+  "email": "Эл. адрес",
+  "password": "Пароль",
+  "signIn": "Войти в систему",
+  "signUp": "Регистрироваться",
+  "createAccount": "Создать аккаунт",
+  "alreadyHaveAccount": "Уже есть аккаунт?",
+  "forgotPassword": "Забыли пароль?",
+  "useYourAccount": "или используйте свой аккаунт",
+  "useYourEmailForRegistration": "или используйте свой эл. адрес для регистрации"
 }

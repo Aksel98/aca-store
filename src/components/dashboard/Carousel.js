@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
 import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
-import { makeStyles } from "@material-ui/core/styles";
-import { storageRef } from "../services/Firebase";
+import {makeStyles} from "@material-ui/core/styles";
+import {storageRef} from "../services/Firebase";
 import Loader from "../main/Loader";
+import {WHITE} from "../main/Styles";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
     display: {
         display: 'grid',
         gridTemplateColumns: 'repeat(20, 1fr)',
-        gridTemplateRows: 'repeat(9, 1fr)',
     },
     carouselImg: {
         width: '100%',
@@ -41,17 +41,23 @@ const useStyles = makeStyles(() => ({
         gridColumnStart: '20',
         gridColumnEnd: '21',
         gridRowStart: '5',
+    },
+    loaderParent: {
+        position: 'absolute',
+        width: '100%',
+        height: '100vh',
+        zIndex: 1,
+        background: WHITE,
     }
-}));
+});
 
 export default function Carousel() {
     const [index, setIndex] = useState(0);
-    const [imagesList, setImagesList] = useState([])
+    const [imagesList, setImagesList] = useState(JSON.parse(localStorage.getItem('imagesList')) || [])
     const classes = useStyles()
 
     useEffect(() => {
         getImageRefs();
-        console.log(imagesList);
     }, [])
 
     useEffect(() => {
@@ -64,13 +70,14 @@ export default function Carousel() {
     })
 
     async function getImageRefs() {
+        const newImagesList = [...imagesList]
         try {
             const imageListRef = await storageRef.child('/images/carousel/');
-            const newImagesList = [...imagesList]
             imageListRef.listAll().then((res) => {
                 res.items.forEach((itemRef) => {
                     (itemRef.getDownloadURL().then((url) => {
                         newImagesList.push(url);
+                        localStorage.setItem('imagesList', JSON.stringify(newImagesList))
                     }));
                 })
                 setImagesList(newImagesList)
@@ -78,7 +85,6 @@ export default function Carousel() {
         } catch (e) {
             console.log(e)
         }
-
     }
 
     const Forward = () => {
@@ -96,9 +102,9 @@ export default function Carousel() {
     return (
         imagesList.length ?
             <div className={classes.display}>
-                <ArrowBackIosSharpIcon className={`${classes.arrowIcon} ${classes.leftArrowIcon}`} onClick={Backward} />
-                <img src={imagesList[index]} className={classes.carouselImg} alt='' />
-                <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightArrowIcon}`} onClick={Forward} />
-            </div> : <Loader />
+                <ArrowBackIosSharpIcon className={`${classes.arrowIcon} ${classes.leftArrowIcon}`} onClick={Backward}/>
+                <img src={imagesList[index]} className={classes.carouselImg} alt=''/>
+                <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightArrowIcon}`} onClick={Forward}/>
+            </div> : <div className={classes.loaderParent}><Loader/></div>
     )
 }

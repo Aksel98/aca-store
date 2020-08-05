@@ -4,20 +4,17 @@ import ArrowDropDownRoundedIcon from "@material-ui/icons/ArrowDropDownRounded";
 import { BLACK, WHITE,} from "./Styles";
 
 const useStyles = makeStyles(() => ({
-
     root: {
-
         position: 'relative',
     },
-
     dropdownTitle: {
         display: 'flex',
         alignItems: 'center',
     },
-
     dropdown: {
         background: BLACK,
         width: 'max-content',
+        minWidth: 110,
         borderRadius: '7px',
         position: 'absolute',
         top: 20,
@@ -25,20 +22,6 @@ const useStyles = makeStyles(() => ({
         left: 0,
         zIndex: 1,
         boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
-
-        '& :not(selector)': {
-            color: WHITE,
-            margin: '20px 15px 20px 2px',
-            borderBottom: '2px solid transparent'
-        },
-
-        '& :not(selector):hover': {
-            borderBottom: '2px solid'
-        },
-
-        '& :first-child': {
-            marginTop: '35px',
-        },
     },
 }));
 

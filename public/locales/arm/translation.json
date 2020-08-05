@@ -1,7 +1,19 @@
 {
   "login": "Մուտք",
+  "logout": "Դուրս գալ",
   "languages": "Լեզուներ",
   "english": "Անգլերեն",
   "russian": "Ռուսերեն",
-  "armenian": "Հայերեն"
+  "armenian": "Հայերեն",
+  "name": "Անուն",
+  "surname": "Ազգանուն",
+  "email": "Էլ․ փոստ",
+  "password": "Գաղտնաբառ",
+  "signIn": "Մուտք գործել",
+  "signUp": "Գրանցվել",
+  "createAccount": "Ստեղծել հաշիվ",
+  "alreadyHaveAccount": "Արդեն ունե՞ք հաշիվ",
+  "forgotPassword": "Մոռացել եք գաղտնաբառը?",
+  "useYourAccount": "կամ օգտագործեք ձեր հաշիվը",
+  "useYourEmailForRegistration": "կամ օգտագործեք ձեր Էլ․փոստը գրանցման համար"
 }
