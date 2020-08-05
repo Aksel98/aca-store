@@ -20,7 +20,7 @@ const Button = styled.button`
  
   &:hover{
     transition: 0.5s all ease-out;
-    
+    cursor:pointer;
     box-shadow:-1px -1px 3px 3px ${GREY};
     
   }
