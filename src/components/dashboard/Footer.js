@@ -136,15 +136,6 @@ function Footer() {
                     </div>
                 </div>
                 <div className={classes.itemsParent}>
-                    <h3 className={classes.subTitle}>Products</h3>
-                    <div>
-                        <Link className={classes.item}>Mobiles</Link>
-                        <Link className={classes.item}>Laptops</Link>
-                        <Link className={classes.item}>Tablets</Link>
-                        <Link className={classes.item}>Watches</Link>
-                    </div>
-                </div>
-                <div className={classes.itemsParent}>
                     <h3 className={classes.subTitle}>Helpful links</h3>
                     <div>
                         <Link className={classes.item}>Services</Link>
