@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Carousel() {
     const [index, setIndex] = useState(0);
-    const [imagesList, setImagesList] = useState([])
+    const [imagesList, setImagesList] = useState(JSON.parse(localStorage.getItem('imagesList')) || [])
     const classes = useStyles()
 
     useEffect(() => {
@@ -63,13 +63,14 @@ export default function Carousel() {
     })
 
     async function getImageRefs() {
+        const newImagesList = [...imagesList]
         try {
             const imageListRef = await storageRef.child('/images/carousel/');
-            const newImagesList = [...imagesList]
             imageListRef.listAll().then((res) => {
                 res.items.forEach((itemRef) => {
                     (itemRef.getDownloadURL().then((url) => {
                         newImagesList.push(url);
+                        localStorage.setItem('imagesList', JSON.stringify(newImagesList))
                     }));
                 })
                 setImagesList(newImagesList)
@@ -77,7 +78,6 @@ export default function Carousel() {
         } catch (e) {
             console.log(e)
         }
-
     }
 
     const Forward = () => {

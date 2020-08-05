@@ -1,13 +1,14 @@
 import React, {useContext} from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK, WHITE} from "../main/Styles";
+import {BLACK, ORANGE, WHITE} from "../main/Styles";
 import DropDown from "../main/Dropdown";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import {UserContext} from "../main/context/UserContext";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {auth} from "../services/Firebase";
+import {LOGO} from "../constants/Constants";
 
 const useStyles = makeStyles(() => ({
     loginBg: {
@@ -46,6 +47,7 @@ const useStyles = makeStyles(() => ({
     },
     title: {
         fontStyle: 'italic',
+        color: ORANGE,
         padding: '0 10px',
     }
 }));
@@ -73,7 +75,7 @@ export default function Header() {
         <MyAppBar>
             <div className={classes.menu}>
                 <div className={classes.subMenu}>
-                    <img src="/images/logo.png" width={20} height={20} alt=""/>
+                    <img src={LOGO} width={40} height={30} alt=""/>
                     <h2 className={classes.title}>Online Shop</h2>
                 </div>
                 <div className={classes.subMenu}>

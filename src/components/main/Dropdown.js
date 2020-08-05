@@ -52,7 +52,7 @@ export default function DropDown(props) {
                 <div>{props.name}</div>
                 <ArrowDropDownRoundedIcon />
             </div>
-            {hover && (<div className={classes.dropdown}>
+            {(<div className={classes.dropdown}>
                 {props.dropdownContent}
             </div>)
             }

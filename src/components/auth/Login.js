@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import SignIn from "./SignIn"
 import {makeStyles} from "@material-ui/core/styles"
-import {BLACK, MyButton, ORANGE, WHITE} from "../main/Styles"
+import {BLACK, BLUE, MyButton, WHITE} from "../main/Styles"
 import SignUp from "./SignUp";
 import {useMediaQuery} from "@material-ui/core";
 import {useTranslation} from "react-i18next";
@@ -63,7 +63,7 @@ const useStyles = makeStyles({
     },
     overlay: {
         transform: props => props.rightPanel ? 'translateX(50%)' : 'translateX(0)',
-        background: ORANGE,
+        background: BLUE,
         color: '#fff',
         position: 'relative',
         left: '-100%',

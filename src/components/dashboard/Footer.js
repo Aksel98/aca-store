@@ -11,6 +11,7 @@ import {BrowserRouter as Router, Link} from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
+import {LOGO} from "../constants/Constants";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -124,7 +125,7 @@ function Footer() {
             <div className={classes.container}>
                 <div className={classes.container_div}>
                     <div className={classes.logo}>
-                        <img src="/images/logo.png" width={20} height={20} alt=""/>
+                        <img src={LOGO} width={40} height={30} alt=""/>
                         <h2 className={classes.title1}>Online Shop</h2>
                     </div>
                     <h3 className={classes.container_h3}><Link className={classes.container_link} to="/">About Us</Link>
