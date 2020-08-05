@@ -3,11 +3,12 @@ import { makeStyles, styled } from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
 import { BLACK, WHITE } from "../main/Styles";
 import DropDown from "../main/Dropdown";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
 
     menu: {
+        height: '80px',
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: "center",
@@ -43,7 +44,7 @@ const MyAppBar = styled(AppBar)({
 
 export default function Header() {
     const classes = useStyles();
-    const {t, i18n} = useTranslation()
+    const { t, i18n } = useTranslation()
 
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
@@ -61,7 +62,7 @@ export default function Header() {
                         <div onClick={() => handleClick('en')}>{t('english')}</div>
                         <div onClick={() => handleClick('rus')}>{t('russian')}</div>
                         <div onClick={() => handleClick('arm')}>{t('armenian')}</div>
-                    </>}/>
+                    </>} />
                     </div>
                     <div className={classes.dropdownItem}>{t('login')}</div>
                 </div>

@@ -51,6 +51,7 @@ export default function Carousel() {
 
     useEffect(() => {
         getImageRefs();
+        console.log(imagesList);
     }, [])
 
     useEffect(() => {

@@ -1,67 +1,70 @@
-import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import { ORANGE, GREY } from '../main/Styles';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-// import { db } from '../services/Firebase';
-// import uniqid from 'uniqid'
+import { GREY } from '../main/Styles';
+import Button from '../main/Button'
+import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 
-const useStyles = makeStyles((theme) => ({
+
+
+
+const useStyles = makeStyles(() => ({
     root: {
-        // '& > *': {
-        //     margin: theme.spacing(1),
-        // },
         width: '240px',
         height: '320px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gridTemplateRows: 'repeat(8, 1fr)',
-        gridGap: '10px 5px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         margin: '5px',
         border: `1px solid ${GREY}`,
         borderRadius: '3px'
 
     },
-    modelImage: {
-        gridColumnStart: '1/3',
-        gridRow: '1/7',
+    modelInfo: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly'
     },
-    modelName: {
-        gridColumn: '3',
-        gridRow: '1/2',
+    infoWithImage: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
     },
-    specInfo: {
-        gridColumn: '3',
-        gridRow: '2/5',
-    },
-    price: {
-        gridColumn: '3',
-        gridRow: '5/6',
+    btnWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        '&hover': {
+            transition: '1s all ease-out'
 
-    },
-    addButton: {
-        gridColumn: '2/5',
-        gridRow: '8/9',
-    },
-    wishButton: {
-        gridColumn: '1/2',
-        gridRow: '8/9',
+        }
     }
+
+
+
 }));
 
 export default function Product(props) {
     const classes = useStyles();
+    const [hover, setHover] = useState(false);
     return (
-        <div className={classes.root} >
-            <div className={classes.modelImage}>
+        <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <div className={classes.infoWithImage}>
                 <img src={props.image} alt="got nothing yet :)" />
+                <div className={classes.modelInfo}>
+                    <div >{props.name}</div>
+                    <div >{props.info}</div>
+                    <div >{props.price}</div>
+                </div>
             </div>
-            <div className={classes.modelName}>{props.name}</div>
-            <div className={classes.specInfo}>{props.info}</div>
-            <div className={classes.price}>{props.price}</div>
-            <Button className={classes.addButton} variant="outlined">Add </Button>
-            <Button className={classes.wishButton} variant="outlined" >Wish</Button>
-        </div>
+            {hover && (
+                <div className={classes.btnWrapper}>
+                    <Button ><FavoriteTwoToneIcon /></Button>
+                    <Button width='10rem'>ADD TO CARD</Button>
+                </div>
+            )}
+
+        </div >
     )
 
 }

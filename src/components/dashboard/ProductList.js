@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Product from './Product';
 import uniqid from 'uniqid';
 import { db } from '../services/Firebase';
+import { useLocation } from 'react-router-dom';
 
 export default function ProductList() {
+    const chosenCat = useLocation();
     const [prod, setProd] = useState([]);
     useEffect(() => {
         getAllProductInfo();
@@ -13,8 +15,9 @@ export default function ProductList() {
             const tempArr = [];
             const getModelInfoRef = (await db.collection('product').get()).docs;
             getModelInfoRef.forEach(doc => {
-                let temp = doc.data();
-                tempArr.push({ ...temp })
+                let temp = doc.data(); if (temp.device === chosenCat.state.filter) {
+                    tempArr.push({ ...temp })
+                }
             });
             setProd(tempArr);
         } catch (e) {
@@ -28,6 +31,7 @@ export default function ProductList() {
                 display: 'flex',
                 flexDirection: 'row',
                 flexFlow: 'wrap',
+                marginTop: '80px'
             }}>
 
             {
