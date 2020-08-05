@@ -4,12 +4,12 @@ import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
 import {makeStyles} from "@material-ui/core/styles";
 import {storageRef} from "../services/Firebase";
 import Loader from "../main/Loader";
+import {WHITE} from "../main/Styles";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
     display: {
         display: 'grid',
         gridTemplateColumns: 'repeat(20, 1fr)',
-        gridTemplateRows: 'repeat(9, 1fr)',
     },
     carouselImg: {
         width: '100%',
@@ -41,8 +41,15 @@ const useStyles = makeStyles(() => ({
         gridColumnStart: '20',
         gridColumnEnd: '21',
         gridRowStart: '5',
+    },
+    loaderParent: {
+        position: 'absolute',
+        width: '100%',
+        height: '100vh',
+        zIndex: 1,
+        background: WHITE,
     }
-}));
+});
 
 export default function Carousel() {
     const [index, setIndex] = useState(0);
@@ -98,6 +105,6 @@ export default function Carousel() {
                 <ArrowBackIosSharpIcon className={`${classes.arrowIcon} ${classes.leftArrowIcon}`} onClick={Backward}/>
                 <img src={imagesList[index]} className={classes.carouselImg} alt=''/>
                 <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightArrowIcon}`} onClick={Forward}/>
-            </div> : <Loader/>
+            </div> : <div className={classes.loaderParent}><Loader/></div>
     )
 }
