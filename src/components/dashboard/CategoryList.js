@@ -3,6 +3,7 @@ import { db } from '../services/Firebase';
 import Category from './Category';
 import uniqid from 'uniqid';
 import { makeStyles } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
     categoryView: {
@@ -14,7 +15,8 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'row',
         flexFlow: 'wrap',
         justifyContent: 'space-around'
-    }
+    },
+
 }))
 
 export default function CategoryList() {
@@ -41,8 +43,14 @@ export default function CategoryList() {
         <div className={classes.categoryView} >
             {
                 category.map((item) => {
-                    return (
+                    return (<Link to={{
+                        pathname: `/:${item.name}`,
+                        state: { filter: item.name }
+                    }}
+                        key={uniqid()}
+                        style={{ textDecoration: 'none', margin: '5px', marginTop: '10px' }}>
                         <Category key={uniqid()} name={item.name} image={item.image} />
+                    </Link>
                     )
                 }
                 )
