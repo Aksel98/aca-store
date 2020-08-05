@@ -1,6 +1,5 @@
 import React, {useState} from "react"
 import SignIn from "./SignIn"
-import useInput from "../main/hooks/useInput"
 import {makeStyles} from "@material-ui/core/styles"
 import {BLACK, MyButton, ORANGE, WHITE} from "../main/Styles"
 import SignUp from "./SignUp";
@@ -9,6 +8,9 @@ import {useTranslation} from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {Link} from "react-router-dom";
 import {auth} from "../services/Firebase";
+import firebase from "firebase";
+import {useHistory} from "react-router-dom";
+import SnackBar from "../main/SnackBar";
 
 const useStyles = makeStyles({
     backIcon: {
@@ -92,76 +94,126 @@ const useStyles = makeStyles({
 })
 
 export default function Login() {
-    const name = useInput('')
-    const surname = useInput('')
-    const email = useInput('')
-    const password = useInput('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [rightPanel, setRightPanel] = useState(false)
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles({rightPanel, media})
     const {t} = useTranslation()
-
-    function signIn(e) {
-        e.preventDefault()
-    }
-
-    function signUp(e) {
-        e.preventDefault()
-        auth.createUserWithEmailAndPassword(email.bind.value, password.bind.value).then(res => {
-            console.log(res)
-        }).catch(err => console.log(err.message))
-    }
+    const history = useHistory();
 
     function signUpPageHandler() {
         setRightPanel(true)
-        email.reset()
-        password.reset()
+        changePage()
     }
 
     function signInPageHandler() {
         setRightPanel(false)
-        name.reset()
-        surname.reset()
-        email.reset()
-        password.reset()
+        changePage()
+
+    }
+
+    function changePage() {
+        setError('')
+        setEmail('')
+        setPassword('')
+    }
+
+    function signIn(e) {
+        e.preventDefault()
+        auth.signInWithEmailAndPassword(email, password).then(() => {
+            setEmail('')
+            history.push('/dashboard')
+        }).catch(err => {
+            setError(err.message)
+        }).finally(() => {
+            setPassword('')
+        })
+    }
+
+    function signUp(e) {
+        e.preventDefault()
+        auth.createUserWithEmailAndPassword(email, password).then((result) => {
+            setEmail('')
+            history.push('/dashboard')
+            return result.user.updateProfile({
+                displayName: ''
+            })
+        }).catch(err => {
+            setError(err.message)
+        }).finally(() => {
+            setPassword('')
+        })
+    }
+
+    function signInGoogle() {
+        auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
+            history.push('/dashboard')
+        })
+    }
+
+    function signInFacebook() {
+        auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(() => {
+            history.push('/dashboard')
+        })
+    }
+
+    function signInGithub() {
+        auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(() => {
+            history.push('/dashboard')
+        })
+    }
+
+    function signInPhoneNumber() {
+        auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(() => {
+            history.push('/dashboard')
+        })
+    }
+
+    function onValueChange(e) {
+        e.target.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)
+        setError('')
     }
 
     return (
-            <div className={classes.container}>
-                <Link to="/dashboard" className={classes.backIcon}><ArrowBackIcon/></Link>
-                <SignUp name={name.bind}
-                        surname={surname.bind}
-                        email={email.bind}
-                        password={password.bind}
-                        error={error}
-                        signUp={signUp}
-                        rightPanel={rightPanel}
-                        classFormContainer={classes.formContainer}
-                        media={media}/>
-                <SignIn email={email.bind}
-                        password={password.bind}
-                        error={error}
-                        signIn={signIn}
-                        rightPanel={rightPanel}
-                        classFormContainer={classes.formContainer}
-                        media={media}/>
-                <div className={classes.overlayContainer}>
-                    <div className={classes.overlay}>
-                        <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
-                            {media ? <h1>{t('alreadyHaveAccount')}</h1> : <h3>{t('alreadyHaveAccount')}</h3>}
-                            <MyButton color="primary"
-                                      variant="contained"
-                                      onClick={signInPageHandler}>{t('signIn')}</MyButton>
-                        </div>
-                        <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
-                            {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
-                            <MyButton color="primary"
-                                      variant="contained"
-                                      onClick={signUpPageHandler}>{t('signUp')}</MyButton>
-                        </div>
+        <div className={classes.container}>
+            <Link to="/dashboard" className={classes.backIcon}><ArrowBackIcon/></Link>
+            <SignUp email={email}
+                    password={password}
+                    error={error}
+                    onValueChange={onValueChange}
+                    signUp={signUp}
+                    signInProvider={{signInGoogle, signInFacebook, signInGithub, signInPhoneNumber}}
+                    rightPanel={rightPanel} a
+                    classFormContainer={classes.formContainer}
+                    media={media}/>
+            <SignIn email={email}
+                    password={password}
+                    error={error}
+                    onValueChange={onValueChange}
+                    signIn={signIn}
+                    signInProvider={{signInGoogle, signInFacebook, signInGithub, signInPhoneNumber}}
+                    rightPanel={rightPanel}
+                    classFormContainer={classes.formContainer}
+                    media={media}/>
+            <div className={classes.overlayContainer}>
+                <div className={classes.overlay}>
+                    <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
+                        {media ? <h1>{t('alreadyHaveAccount')}</h1> : <h3>{t('alreadyHaveAccount')}</h3>}
+                        <MyButton color="primary"
+                                  variant="contained"
+                                  onClick={signInPageHandler}>{t('signIn')}</MyButton>
+                    </div>
+                    <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
+                        {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
+                        <MyButton color="primary"
+                                  variant="contained"
+                                  onClick={signUpPageHandler}>{t('signUp')}</MyButton>
                     </div>
                 </div>
             </div>
+            {error && <SnackBar message={error} error/>}
+        </div>
     )
 }

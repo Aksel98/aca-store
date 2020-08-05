@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
 import {BLACK, WHITE} from "../main/Styles";
 import DropDown from "../main/Dropdown";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
+import {UserContext} from "../main/context/UserContext";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import {auth} from "../services/Firebase";
 
 const useStyles = makeStyles(() => ({
     loginBg: {
@@ -54,10 +57,16 @@ const MyAppBar = styled(AppBar)({
 
 export default function Header() {
     const classes = useStyles();
+    const currentUser = useContext(UserContext)
     const {t, i18n} = useTranslation()
+    console.log(currentUser)
 
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
+    }
+
+    function logOut() {
+        auth.signOut().then()
     }
 
     return (
@@ -74,7 +83,9 @@ export default function Header() {
                         <div onClick={() => handleClick('arm')}>{t('armenian')}</div>
                     </>}/>
                     </div>
-                    <Link to="/login" className={classes.dropdownItem}> {t('login')}</Link>
+                    <ShoppingCartIcon style={{cursor: 'pointer'}}/>
+                    {!currentUser && <Link to="/login" className={classes.dropdownItem}> {t('login')}</Link>}
+                    {currentUser && <div onClick={logOut} className={classes.dropdownItem}>{t('logout')}</div>}
                 </div>
             </div>
         </MyAppBar>
