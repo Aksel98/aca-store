@@ -7,11 +7,12 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import {BLACK, WHITE, ORANGE} from "../main/Styles";
 import MailIcon from '@material-ui/icons/Mail';
-import {BrowserRouter as Router, Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import {LOGO} from "../constants/Constants";
+import {HOME_URL} from "../api/Navigations";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -38,9 +39,13 @@ const useStyles = makeStyles(() => ({
         alignItems: "center",
     },
     title: {
+        fontSize: 24,
+        fontWeight: 'bold',
         fontStyle: 'italic',
-        padding: '0 10px',
-        margin: 5
+        color: WHITE,
+        textDecoration: 'none',
+        margin: 5,
+        cursor: props => props && 'unset'
     },
     subTitle: {
         color: ORANGE,
@@ -115,15 +120,16 @@ const useStyles = makeStyles(() => ({
 }));
 
 function Footer() {
-    const classes = useStyles();
+    const location = useLocation();
+    const classes = useStyles(location.pathname === HOME_URL);
 
     return (
-        <Router>
+        <div >
             <div className={classes.container}>
                 <div className={classes.itemsParent}>
                     <div className={classes.logo}>
                         <img src={LOGO} width={40} height={30} alt=""/>
-                        <h2 className={classes.title}>Online Shop</h2>
+                        <Link to={HOME_URL} className={classes.title}>Online Shop</Link>
                     </div>
                     <h3 className={classes.subTitle}>Contact Us</h3>
                     <div className={classes.logo}>
@@ -138,10 +144,10 @@ function Footer() {
                 <div className={classes.itemsParent}>
                     <h3 className={classes.subTitle}>Helpful links</h3>
                     <div>
-                        <Link className={classes.item}>Services</Link>
-                        <Link className={classes.item}>Supports</Link>
-                        <Link className={classes.item}>Terms & conditions</Link>
-                        <Link className={classes.item}>Privacy Policy</Link>
+                        <Link to="" className={classes.item}>Services</Link>
+                        <Link to="" className={classes.item}>Supports</Link>
+                        <Link to="" className={classes.item}>Terms & conditions</Link>
+                        <Link to="" className={classes.item}>Privacy Policy</Link>
                     </div>
                 </div>
                 <div className={classes.itemsParent}>
@@ -176,7 +182,7 @@ function Footer() {
                     <p className={classes.contactInfo}>2020 Online Shop LLC ALL right reserved</p>
                 </div>
             </div>
-        </Router>
+        </div>
     );
 }
 

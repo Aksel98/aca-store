@@ -11,6 +11,7 @@ import {auth} from "../services/Firebase";
 import firebase from "firebase";
 import {useHistory} from "react-router-dom";
 import SnackBar from "../main/SnackBar";
+import {HOME_URL} from "../api/Navigations";
 
 const useStyles = makeStyles({
     backIcon: {
@@ -124,7 +125,7 @@ export default function Login() {
         e.preventDefault()
         auth.signInWithEmailAndPassword(email, password).then(() => {
             setEmail('')
-            history.push('/dashboard')
+            history.push(HOME_URL)
         }).catch(err => {
             setError(err.message)
         }).finally(() => {
@@ -136,7 +137,7 @@ export default function Login() {
         e.preventDefault()
         auth.createUserWithEmailAndPassword(email, password).then((result) => {
             setEmail('')
-            history.push('/dashboard')
+            history.push(HOME_URL)
             return result.user.updateProfile({
                 displayName: ''
             })
@@ -149,25 +150,25 @@ export default function Login() {
 
     function signInGoogle() {
         auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
-            history.push('/dashboard')
+            history.push(HOME_URL)
         })
     }
 
     function signInFacebook() {
         auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(() => {
-            history.push('/dashboard')
+            history.push(HOME_URL)
         })
     }
 
     function signInGithub() {
         auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(() => {
-            history.push('/dashboard')
+            history.push(HOME_URL)
         })
     }
 
     function signInPhoneNumber() {
         auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(() => {
-            history.push('/dashboard')
+            history.push(HOME_URL)
         })
     }
 
@@ -178,7 +179,7 @@ export default function Login() {
 
     return (
         <div className={classes.container}>
-            <Link to="/dashboard" className={classes.backIcon}><ArrowBackIcon/></Link>
+            <Link to={HOME_URL} className={classes.backIcon}><ArrowBackIcon/></Link>
             <SignUp email={email}
                     password={password}
                     error={error}
@@ -202,12 +203,14 @@ export default function Login() {
                     <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
                         {media ? <h1>{t('alreadyHaveAccount')}</h1> : <h3>{t('alreadyHaveAccount')}</h3>}
                         <MyButton color="primary"
+                                  maxWidth="90%"
                                   variant="contained"
                                   onClick={signInPageHandler}>{t('signIn')}</MyButton>
                     </div>
                     <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
                         {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
                         <MyButton color="primary"
+                                  maxWidth="90%"
                                   variant="contained"
                                   onClick={signUpPageHandler}>{t('signUp')}</MyButton>
                     </div>

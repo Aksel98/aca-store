@@ -71,13 +71,16 @@ export default function Carousel() {
 
     async function getImageRefs() {
         const newImagesList = [...imagesList]
+        const storageData = JSON.parse(localStorage.getItem('imagesList'))
         try {
             const imageListRef = await storageRef.child('/images/carousel/');
             imageListRef.listAll().then((res) => {
                 res.items.forEach((itemRef) => {
                     (itemRef.getDownloadURL().then((url) => {
                         newImagesList.push(url);
-                        localStorage.setItem('imagesList', JSON.stringify(newImagesList))
+                        if (!storageData) {
+                            localStorage.setItem('imagesList', JSON.stringify(newImagesList))
+                        }
                     }));
                 })
                 setImagesList(newImagesList)

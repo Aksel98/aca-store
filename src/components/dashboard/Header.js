@@ -4,12 +4,13 @@ import AppBar from "@material-ui/core/AppBar";
 import {BLACK, ORANGE, WHITE} from "../main/Styles";
 import DropDown from "../main/Dropdown";
 import {useTranslation} from "react-i18next";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {UserContext} from "../main/context/UserContext";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {auth} from "../services/Firebase";
 import {LOGO} from "../constants/Constants";
 import {useMediaQuery} from "@material-ui/core";
+import {HOME_URL, LOGIN_URL} from "../api/Navigations";
 
 const useStyles = makeStyles({
     menu: {
@@ -59,9 +60,13 @@ const useStyles = makeStyles({
         },
     },
     title: {
-        fontStyle: 'italic',
+        fontSize: props => props.media ? 15 : 24,
+        fontWeight: 'bold',
         color: ORANGE,
-        padding: '0 10px',
+        fontStyle: 'italic',
+        textDecoration: 'none',
+        margin: '10px',
+        cursor: props => props.pathName && 'unset'
     },
     flagsImg: {
         width: 25,
@@ -94,9 +99,10 @@ const MyAppBar = styled(AppBar)({
 export default function Header() {
     const currentUser = useContext(UserContext)
     const media = useMediaQuery('(max-width:600px)');
-    const classes = useStyles();
+    const location = useLocation();
+    const classes = useStyles({media, pathName: location.pathname === HOME_URL});
     const {t, i18n} = useTranslation()
-
+    console.log()
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
     }
@@ -110,10 +116,12 @@ export default function Header() {
             <div className={classes.menu}>
                 <div className={classes.display}>
                     <img src={LOGO} width={40} height={30} alt=""/>
-                    {media ? <h3 className={classes.title}>Online Shop</h3>  : <h2 className={classes.title}>Online Shop</h2>}
+                    {media ?
+                        <Link to={HOME_URL} className={classes.title}>Online Shop</Link> :
+                        <Link to={HOME_URL} className={classes.title}>Online Shop</Link>}
                     {media && <>
                         <ShoppingCartIcon className={classes.menuItem}/>
-                        {!currentUser && <Link to="/login" className={classes.menuItem}> {t('login')}</Link>}
+                        {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                         {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
                     </>}
                 </div>
@@ -132,12 +140,15 @@ export default function Header() {
                     </>}/>
                     </div>
                     <ShoppingCartIcon className={classes.menuItem}/>
-                    {!currentUser && <Link to="/login" className={classes.menuItem}> {t('login')}</Link>}
+                    {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
                 </div> : <div style={{display: 'flex', padding: '5px 0'}}>
-                    <img onClick={() => handleClick('en')}  className={`${classes.flagsImgMedia} ${classes.menuItem}`} src="/images/english-flag.png"/>
-                    <img onClick={() => handleClick('arm')} className={`${classes.flagsImgMedia} ${classes.menuItem}`} src="/images/armenian-flag.png"/>
-                    <img onClick={() => handleClick('rus')} className={`${classes.flagsImgMedia} ${classes.menuItem}`} src="/images/russian-flag.png"/>
+                    <img onClick={() => handleClick('en')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
+                         src="/images/english-flag.png"/>
+                    <img onClick={() => handleClick('arm')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
+                         src="/images/armenian-flag.png"/>
+                    <img onClick={() => handleClick('rus')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
+                         src="/images/russian-flag.png"/>
                 </div>}
 
             </div>
