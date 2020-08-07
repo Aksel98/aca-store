@@ -80,24 +80,26 @@ export default function Product(props) {
     const classes = useStyles({mediaTablet, mediaMobile});
 
     return (
-        <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <div className={classes.infoWithImage}>
-                <img className={classes.productImage} src={props.image} alt="got nothing yet :)"/>
-                <div className={classes.modelInfo}>
-                    <div className={classes.productName}>{props.name}</div>
-                    <div>{props.info}</div>
-                    <div className={classes.price}>{props.price}</div>
+        <div>
+            <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                <div className={classes.infoWithImage}>
+                    <img className={classes.productImage} src={props.image} alt="got nothing yet :)"/>
+                    <div className={classes.modelInfo}>
+                        <div className={classes.productName}>{props.name}</div>
+                        <div>{props.info}</div>
+                        <div className={classes.price}>{props.price}</div>
+                    </div>
                 </div>
+                {hover && (<div className={classes.btnWrapper}>
+                        <div style={{display: 'flex'}}>
+                            <MyButton color={ORANGE}><FavoriteTwoToneIcon/></MyButton>
+                        </div>
+                        <div className={classes.btnParent}>
+                            <MyButton color={ORANGE} className={classes.btn}>ADD TO CARD</MyButton>
+                        </div>
+                    </div>
+                )}
             </div>
-            {(<div className={classes.btnWrapper}>
-                    <div style={{display: 'flex'}}>
-                        <MyButton color={ORANGE}><FavoriteTwoToneIcon/></MyButton>
-                    </div>
-                    <div className={classes.btnParent}>
-                        <MyButton color={ORANGE} className={classes.btn}>ADD TO CARD</MyButton>
-                    </div>
-                </div>
-            )}
         </div>
     )
 }
