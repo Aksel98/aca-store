@@ -11,8 +11,10 @@ export const PURPLE = '#942FB8';
 
 export const MyButton = styled(Button)({
     width: '100%',
-    maxWidth: '90%',
+    color: props => props.color,
+    maxWidth: props => props.maxWidth,
+    minWidth: props => props.minWidth || 'unset',
     '&:disabled': {
         border: `1px solid ${BLACK}`
-    }
+    },
 })
