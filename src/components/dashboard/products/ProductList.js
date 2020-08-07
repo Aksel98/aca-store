@@ -6,6 +6,7 @@ import {useLocation, useHistory} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import ModalDialog from "../../main/modal/ModalDialog";
 import {LOGIN_URL} from "../../api/Navigations";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -41,6 +42,7 @@ export default function ProductList() {
     const [modal, setModal] = useState({open: false, title: '', text: ''});
     const location = useLocation();
     const history = useHistory();
+    const {t} = useTranslation()
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles(media);
 
@@ -93,7 +95,7 @@ export default function ProductList() {
                          title={modal.title}
                          text={modal.text}
                          doneButton={() => history.push(LOGIN_URL)}
-                         doneButtonName={'Login'}
+                         doneButtonName={t('login')}
                          close={() => setModal({...modal, open: false})}/>
         </div>
     )

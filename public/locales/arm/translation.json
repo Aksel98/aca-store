@@ -15,5 +15,9 @@
   "alreadyHaveAccount": "Արդեն ունե՞ք հաշիվ",
   "forgotPassword": "Մոռացել եք գաղտնաբառը?",
   "useYourAccount": "կամ օգտագործեք ձեր հաշիվը",
-  "useYourEmailForRegistration": "կամ օգտագործեք ձեր Էլ․փոստը գրանցման համար"
+  "useYourEmailForRegistration": "կամ օգտագործեք ձեր Էլ․փոստը գրանցման համար",
+  "modalTitleForAddFavoriteItems": "Եթե ցանկանում եք ունենալ սիրված իրեր, խնդրում ենք մուտք գործել",
+  "addToCart": "Ավելացնել քարտին",
+  "yes": "Այո",
+  "cancel": "Չեղարկել"
 }

@@ -6,8 +6,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {BLACK, MyButton, ORANGE} from "../Styles";
+import {useTranslation} from "react-i18next";
 
 export default function ModalDialog(props) {
+    const {t} = useTranslation()
 
     return (
         <div>
@@ -24,12 +26,12 @@ export default function ModalDialog(props) {
                     <MyButton color={BLACK}
                               variant="contained"
                               autoFocus
-                              onClick={props.close}>Cancel
+                              onClick={props.close}>{t('cancel')}
                     </MyButton>
                     <MyButton color={ORANGE}
                               variant="contained"
                               autoFocus
-                              onClick={props.doneButton}>{props.doneButtonName || 'Yes'}
+                              onClick={props.doneButton}>{props.doneButtonName || t('yes')}
                     </MyButton>
                 </DialogActions>
             </Dialog>

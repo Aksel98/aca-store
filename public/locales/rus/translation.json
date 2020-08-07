@@ -15,5 +15,9 @@
   "alreadyHaveAccount": "Уже есть аккаунт?",
   "forgotPassword": "Забыли пароль?",
   "useYourAccount": "или используйте свой аккаунт",
-  "useYourEmailForRegistration": "или используйте свой эл. адрес для регистрации"
+  "useYourEmailForRegistration": "или используйте свой эл. адрес для регистрации",
+  "modalTitleForAddFavoriteItems": "Если вы хотите иметь любимые предметы, пожалуйста, авторизуйтесь",
+  "addToCart": "Добавить в корзину",
+  "yes": "Да",
+  "cancel": "Отмена"
 }
