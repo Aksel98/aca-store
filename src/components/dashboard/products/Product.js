@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/Styles';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import {useMediaQuery} from "@material-ui/core";
+import {UserContext} from "../../main/context/UserContext";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -75,6 +76,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Product(props) {
     const [hover, setHover] = useState(false);
+    const currentUser = useContext(UserContext)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:460px)');
     const classes = useStyles({mediaTablet, mediaMobile});
@@ -92,7 +94,7 @@ export default function Product(props) {
                 </div>
                 {hover && (<div className={classes.btnWrapper}>
                         <div style={{display: 'flex'}}>
-                            <MyButton color={ORANGE}><FavoriteTwoToneIcon/></MyButton>
+                            <MyButton color={ORANGE} onClick={() => !currentUser && props.openModal('asd', 'dasdasasd')}><FavoriteTwoToneIcon/></MyButton>
                         </div>
                         <div className={classes.btnParent}>
                             <MyButton color={ORANGE} className={classes.btn}>ADD TO CARD</MyButton>

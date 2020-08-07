@@ -2,8 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Product from './Product';
 import uniqId from 'uniqid';
 import {db} from '../../services/Firebase';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useHistory} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from "@material-ui/core";
+import ModalDialog from "../../main/modal/ModalDialog";
+import {LOGIN_URL} from "../../api/Navigations";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -36,13 +38,19 @@ const useStyles = makeStyles(() => ({
 
 export default function ProductList() {
     const [prod, setProd] = useState([]);
+    const [modal, setModal] = useState({open: false, title: '', text: ''});
     const location = useLocation();
+    const history = useHistory();
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles(media);
 
     useEffect(() => {
         getAllProductInfo();
     }, []);
+
+    function openModal(title, text) {
+            setModal({open: true, title, text})
+    }
 
     async function getAllProductInfo() {
         try {
@@ -75,11 +83,18 @@ export default function ProductList() {
             <div style={{width: '100%'}}>
                 <div className={classes.products}>
                     {prod.map((item) => (<Product image={item.image}
+                                                  openModal={openModal}
                                                   name={item.model}
                                                   price={item.price}
                                                   key={uniqId()}/>))}
                 </div>
             </div>
+            <ModalDialog open={modal.open}
+                         title={modal.title}
+                         text={modal.text}
+                         doneButton={() => history.push(LOGIN_URL)}
+                         doneButtonName={'Login'}
+                         close={() => setModal({...modal, open: false})}/>
         </div>
     )
 }

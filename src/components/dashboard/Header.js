@@ -102,7 +102,6 @@ export default function Header() {
     const location = useLocation();
     const classes = useStyles({media, pathName: location.pathname === HOME_URL});
     const {t, i18n} = useTranslation()
-    console.log()
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
     }
