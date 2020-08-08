@@ -16,7 +16,7 @@ import {HOME_URL} from "../api/Navigations";
 
 const useStyles = makeStyles(() => ({
     container: {
-        paddingTop: 20,
+        paddingTop: 10,
         display: "flex",
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -74,7 +74,7 @@ const useStyles = makeStyles(() => ({
         margin: 5,
     },
     root: {
-        marginTop: 20,
+        marginTop: 5,
         color: 'red',
         backgroundColor: WHITE,
         borderRadius: 10,
@@ -110,7 +110,6 @@ const useStyles = makeStyles(() => ({
     },
     socialIconsParent: {
         textAlign: "center",
-        paddingBottom: 20
     },
     socialIcons: {
         margin: '10px 0 0 10px',

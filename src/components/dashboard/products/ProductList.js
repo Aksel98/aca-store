@@ -10,8 +10,13 @@ import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     container: {
-        margin: props => props ? '100px 30px 10px' : 10,
+        margin: props => props ? '60px 30px 10px' : 10,
         display: props => props && 'flex',
+    },
+    productsParent: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center'
     },
     products: {
         justifyContent: 'center',
@@ -38,32 +43,34 @@ const useStyles = makeStyles(() => ({
 }))
 
 export default function ProductList() {
-    const [prod, setProd] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [priceFilter, setPriceFilter] = useState(0);
     const [modal, setModal] = useState({open: false, title: '', text: ''});
     const location = useLocation();
     const history = useHistory();
     const {t} = useTranslation()
-    const media = useMediaQuery('(min-width:600px)');
+    const media = useMediaQuery('(min-width:670px)');
     const classes = useStyles(media);
 
     useEffect(() => {
         getAllProductInfo();
-    }, []);
+    }, [priceFilter]);
 
     function openModal(title, text) {
-            setModal({open: true, title, text})
+        setModal({open: true, title, text})
     }
 
-    async function getAllProductInfo() {
+    function getAllProductInfo() {
         try {
             const pathName = location.pathname.substr(1)
-            let tempArr = [];
-            const getModelInfoRef = (await db.collection('product').get()).docs;
-            getModelInfoRef.forEach(doc => {
-                let temp = doc.data();
-                tempArr.push({...temp})
-            });
-            setProd(tempArr.filter(el => el.device === pathName));
+            db.collection('product').where('device', '==', pathName).where('price', '>', priceFilter).get().then(snapshot => {
+                let tempArr = [];
+                snapshot.docs.forEach(doc => {
+                    let temp = doc.data();
+                    tempArr.push({...temp, id: doc.id})
+                })
+                setProducts(tempArr);
+            }).catch(err => console.log(err));
         } catch (e) {
             console.log("can not  get the docs:", e);
         }
@@ -79,16 +86,24 @@ export default function ProductList() {
                     </div>
                     <div className={classes.filterType}>
                         <div className={classes.filtersTitle}>Price</div>
+                        <input type="range"
+                               defaultValue={0}
+                               onChange={(e) => setPriceFilter(+e.target.value)}
+                               step={50}
+                               min={0}
+                               max={1500}/>
+                        <div className={classes.filtersTitle}>{priceFilter ? priceFilter + '$' : ''}</div>
                     </div>
                 </div>
             </div>
-            <div style={{width: '100%'}}>
+            <div className={classes.productsParent}>
                 <div className={classes.products}>
-                    {prod.map((item) => (<Product image={item.image}
-                                                  openModal={openModal}
-                                                  name={item.model}
-                                                  price={item.price}
-                                                  key={uniqId()}/>))}
+                    {products.map((item) => (<Product image={item.image}
+                                                      openModal={openModal}
+                                                      name={item.model}
+                                                      id={item.id}
+                                                      price={item.price}
+                                                      key={uniqId()}/>))}
                 </div>
             </div>
             <ModalDialog open={modal.open}

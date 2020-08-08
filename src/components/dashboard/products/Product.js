@@ -5,12 +5,13 @@ import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import {useMediaQuery} from "@material-ui/core";
 import {UserContext} from "../../main/context/UserContext";
 import {useTranslation} from "react-i18next";
+import {db} from "../../services/Firebase";
 
 const useStyles = makeStyles(() => ({
     root: {
         position: 'relative',
         width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 210,
-        height: props => props.mediaTablet ? (props.mediaMobile ? 215 : 255) : 320,
+        height: props => props.mediaTablet ? (props.mediaMobile ? 215 : 255) : 300,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -24,7 +25,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     productImage: {
-        width: props => props.mediaTablet && '60%'
+        width: props => props.mediaTablet ? '60%' : '75%'
     },
     modelInfo: {
         display: 'flex',
@@ -83,15 +84,21 @@ export default function Product(props) {
     const classes = useStyles({mediaTablet, mediaMobile});
     const {t} = useTranslation()
 
+    function clickHandler(id) {
+        db.collection('product').doc(id).get().then(doc => {
+            console.log(doc.data())
+        })
+    }
+
     return (
         <div>
-            <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <div onClick={() => clickHandler(props.id)} className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
                 <div className={classes.infoWithImage}>
                     <img className={classes.productImage} src={props.image} alt="got nothing yet :)"/>
                     <div className={classes.modelInfo}>
                         <div className={classes.productName}>{props.name}</div>
                         <div>{props.info}</div>
-                        <div className={classes.price}>{props.price}</div>
+                        <div className={classes.price}>{props.price}$</div>
                     </div>
                 </div>
                 {hover && (<div className={classes.btnWrapper}>

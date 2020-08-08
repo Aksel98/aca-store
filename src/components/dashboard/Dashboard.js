@@ -28,7 +28,7 @@ const useStyles = makeStyles({
         opacity: '0.6',
     },
     mainContent: {
-        minHeight: 565
+        minHeight: 640
     }
 })
 
