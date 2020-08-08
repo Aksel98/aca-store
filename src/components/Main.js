@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Dashboard from "./dashboard/Dashboard";
+import Dashboard from "./dashboard/dashboard/Dashboard";
 import {auth} from "./services/Firebase";
 import {UserContext} from "./main/context/UserContext";
 import Loader from "./main/Loader";

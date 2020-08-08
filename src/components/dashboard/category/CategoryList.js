@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Category from './Category';
 import uniqId from 'uniqid';
 import {makeStyles} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 import {WHITE} from "../../main/Styles";
+import {db} from "../../services/Firebase";
 
 const useStyles = makeStyles(() => ({
     categoryView: {
@@ -17,13 +18,32 @@ const useStyles = makeStyles(() => ({
 
 }))
 
-export default function CategoryList(props) {
+export default function CategoryList() {
+    const [category, setCategory] = useState([]);
     const classes = useStyles();
+
+    useEffect(() => {
+        getAllCategoryInfo();
+    }, []);
+
+    async function getAllCategoryInfo() {
+        try {
+            const tempArr = [];
+            const getCategory = (await db.collection('categories').get()).docs;
+            getCategory.forEach((doc) => {
+                let temp = doc.data();
+                tempArr.push({...temp});
+            });
+            setCategory(tempArr);
+        } catch (e) {
+            console.log("can not  get the docs:", e);
+        }
+    }
 
     return (
         <div className={classes.categoryView}>{
-            props.category.map((item) => {
-                    return (<Link to={{pathname: `/${item.name}`}}
+            category.map((item) => {
+                    return (<Link to={{pathname: `/categories/${item.name}`}}
                                   key={uniqId()}
                                   style={{textDecoration: 'none', margin: '5px', marginTop: '10px'}}>
                             <Category key={uniqId()} name={item.name} image={item.image}/>

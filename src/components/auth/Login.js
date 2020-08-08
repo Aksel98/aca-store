@@ -148,30 +148,6 @@ export default function Login() {
         })
     }
 
-    function signInGoogle() {
-        auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
-    function signInFacebook() {
-        auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
-    function signInGithub() {
-        auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
-    function signInPhoneNumber() {
-        auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
     function onValueChange(e) {
         e.target.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)
         setError('')
@@ -185,7 +161,6 @@ export default function Login() {
                     error={error}
                     onValueChange={onValueChange}
                     signUp={signUp}
-                    signInProvider={{signInGoogle, signInFacebook, signInGithub, signInPhoneNumber}}
                     rightPanel={rightPanel} a
                     classFormContainer={classes.formContainer}
                     media={media}/>
@@ -194,7 +169,6 @@ export default function Login() {
                     error={error}
                     onValueChange={onValueChange}
                     signIn={signIn}
-                    signInProvider={{signInGoogle, signInFacebook, signInGithub, signInPhoneNumber}}
                     rightPanel={rightPanel}
                     classFormContainer={classes.formContainer}
                     media={media}/>

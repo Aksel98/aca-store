@@ -62,7 +62,7 @@ export default function ProductList() {
 
     function getAllProductInfo() {
         try {
-            const pathName = location.pathname.substr(1)
+            const pathName = location.pathname.split('/')[2];
             db.collection('product').where('device', '==', pathName).where('price', '>', priceFilter).get().then(snapshot => {
                 let tempArr = [];
                 snapshot.docs.forEach(doc => {
