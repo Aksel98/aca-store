@@ -3,8 +3,8 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import Login from "../../auth/Login";
 import {UserContext} from "../../main/context/UserContext";
-import {BLACK} from "../../main/Styles";
-import {LOGIN_URL} from "../../api/Navigations";
+import {BLACK} from "../../main/constants/Constants"
+import {LOGIN_URL} from "../../services/api/Navigations";
 import GeneralRoutes from "./generalRoutes";
 
 const useStyles = makeStyles({

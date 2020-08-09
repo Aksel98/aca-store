@@ -1,16 +1,16 @@
 import React, {useContext} from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK, ORANGE, WHITE} from "../main/Styles";
+import {BLACK, ORANGE, WHITE} from "../main/constants/Constants"
 import DropDown from "../main/Dropdown";
 import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
 import {UserContext} from "../main/context/UserContext";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import {auth} from "../services/Firebase";
-import {LOGO} from "../constants/Constants";
+import {auth} from "../services/firebase/Firebase";
+import {LOGO} from "../main/constants/Constants";
 import {useMediaQuery} from "@material-ui/core";
-import {HOME_URL, LOGIN_URL} from "../api/Navigations";
+import {HOME_URL, LOGIN_URL} from "../services/api/Navigations";
 
 const useStyles = makeStyles({
     menu: {

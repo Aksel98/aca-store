@@ -7,12 +7,12 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import MailIcon from '@material-ui/icons/Mail';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import {BLACK} from "../main/Styles";
-import {MyButton} from "../main/Styles"
+import {BLACK} from "../main/constants/Constants"
+import {MyButton} from "../main/constants/Constants"
 import {useTranslation} from "react-i18next";
 import PhoneIcon from "@material-ui/icons/Phone";
 import {useHistory} from "react-router-dom";
-import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../api/SignInPopups";
+import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../services/api/SignInPopups";
 
 const useStyles = makeStyles({
     signInContainer: {

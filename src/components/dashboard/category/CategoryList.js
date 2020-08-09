@@ -3,8 +3,8 @@ import Category from './Category';
 import uniqId from 'uniqid';
 import {makeStyles} from '@material-ui/core';
 import {Link} from 'react-router-dom';
-import {WHITE} from "../../main/Styles";
-import {db} from "../../services/Firebase";
+import {WHITE} from "../../main/constants/Constants"
+import {db} from "../../services/firebase/Firebase";
 
 const useStyles = makeStyles(() => ({
     categoryView: {

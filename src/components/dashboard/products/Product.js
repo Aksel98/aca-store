@@ -1,11 +1,11 @@
 import React, {useContext, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/Styles';
+import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/constants/Constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import {useMediaQuery} from "@material-ui/core";
 import {UserContext} from "../../main/context/UserContext";
 import {useTranslation} from "react-i18next";
-import {db} from "../../services/Firebase";
+import {db} from "../../services/firebase/Firebase";
 
 const useStyles = makeStyles(() => ({
     root: {

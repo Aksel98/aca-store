@@ -1,5 +1,5 @@
 import React from 'react';
-import { LIGHTGREY } from '../../main/Styles';
+import { LIGHTGREY } from '../../main/constants/Constants'
 
 export default function Category(props) {
     return (

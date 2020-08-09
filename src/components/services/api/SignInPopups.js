@@ -1,4 +1,4 @@
-import {auth} from "../services/Firebase";
+import {auth} from "../firebase/Firebase";
 import firebase from "firebase";
 import {HOME_URL} from "./Navigations";
 

@@ -5,12 +5,12 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import MailIcon from "@material-ui/icons/Mail";
 import PhoneIcon from '@material-ui/icons/Phone';
-import {BLACK, MyButton} from "../main/Styles";
+import {BLACK, MyButton} from "../main/constants/Constants"
 import EmailIcon from '@material-ui/icons/Email';
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import {useTranslation} from "react-i18next";
-import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../api/SignInPopups";
+import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../services/api/SignInPopups";
 import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles({

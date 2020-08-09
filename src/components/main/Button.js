@@ -1,6 +1,6 @@
 
 import styled from 'styled-components';
-import { GREY, ORANGE } from './Styles';
+import { GREY, ORANGE } from "./constants/Constants"
 
 const Button = styled.button`
 

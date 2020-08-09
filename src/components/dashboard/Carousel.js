@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
 import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
 import {makeStyles} from "@material-ui/core/styles";
-import {storageRef} from "../services/Firebase";
+import {storageRef} from "../services/firebase/Firebase";
 import Loader from "../main/Loader";
-import {WHITE} from "../main/Styles";
+import {WHITE} from "../main/constants/Constants"
 
 const useStyles = makeStyles({
     display: {
@@ -94,8 +94,7 @@ export default function Carousel() {
             <div className={classes.display}>
                 <ArrowBackIosSharpIcon className={`${classes.arrowIcon} ${classes.leftArrowIcon}`} onClick={backward}/>
                 <img src={imagesList[index]} className={classes.carouselImg} alt=''/>
-                <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightArrowIcon}`}
-                                          onClick={forward}/>
+                <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightArrowIcon}`} onClick={forward}/>
             </div> : <div className={classes.loaderParent}><Loader/></div>
     )
 }

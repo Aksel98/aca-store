@@ -5,14 +5,13 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import {BLACK, WHITE, ORANGE} from "../main/Styles";
+import {BLACK, WHITE, ORANGE} from "../main/constants/Constants";
 import MailIcon from '@material-ui/icons/Mail';
 import {Link, useLocation} from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Button from '@material-ui/core/Button';
-import {LOGO} from "../constants/Constants";
-import {HOME_URL} from "../api/Navigations";
+import {LOGO, MyButton} from "../main/constants/Constants";
+import {HOME_URL} from "../services/api/Navigations";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -165,10 +164,10 @@ function Footer() {
                                        ),
                                    }}/>
                     </form>
-                    <Button className={classes.containerButton} variant="contained" color="primary"
+                    <MyButton className={classes.containerButton} variant="contained" color="primary"
                             href="#contained-buttons">
                         Subscribe
-                    </Button>
+                    </MyButton>
                 </div>
             </div>
             <div className={classes.container}>

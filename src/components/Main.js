@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Dashboard from "./dashboard/dashboard/Dashboard";
-import {auth} from "./services/Firebase";
+import {auth} from "./services/firebase/Firebase";
 import {UserContext} from "./main/context/UserContext";
 
 export default function Main() {

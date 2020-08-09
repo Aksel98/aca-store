@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Product from './Product';
 import uniqId from 'uniqid';
-import {db} from '../../services/Firebase';
+import {db} from '../../services/firebase/Firebase';
 import {useLocation, useHistory} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import ModalDialog from "../../main/modal/ModalDialog";
-import {LOGIN_URL} from "../../api/Navigations";
+import {LOGIN_URL} from "../../services/api/Navigations";
 import {useTranslation} from "react-i18next";
 import Slider from "@material-ui/core/Slider";
 import TextField from "@material-ui/core/TextField";
