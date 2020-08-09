@@ -19,5 +19,10 @@
   "modalTitleForAddFavoriteItems": "Եթե ցանկանում եք ունենալ սիրված իրեր, խնդրում ենք մուտք գործել",
   "addToCart": "Ավելացնել քարտին",
   "yes": "Այո",
-  "cancel": "Չեղարկել"
+  "cancel": "Չեղարկել",
+  "search": "Որոնել",
+  "price": "Գինը",
+  "orderBy": "Դասավորել ըստ",
+  "ascending": "Աճման",
+  "descending": "Նվազման"
 }

@@ -103,10 +103,10 @@ export default function Product(props) {
                 </div>
                 {hover && (<div className={classes.btnWrapper}>
                         <div style={{display: 'flex'}}>
-                            <MyButton color={ORANGE} onClick={() => !currentUser && props.openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
+                            <MyButton newcolor={ORANGE} onClick={() => !currentUser && props.openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
                         </div>
                         <div className={classes.btnParent}>
-                            <MyButton color={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
+                            <MyButton newcolor={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
                         </div>
                     </div>
                 )}

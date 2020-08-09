@@ -54,7 +54,7 @@ const MyTextField = styled(TextField)({
 
 export default function SignIn(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {email, password, error, onValueChange, signIn, signInProvider, classFormContainer, media} = props
+    const {email, password, error, onValueChange, signIn, classFormContainer, media} = props
     const history = useHistory()
     const classes = useStyles(props)
     const {t} = useTranslation();

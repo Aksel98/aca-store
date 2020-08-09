@@ -51,7 +51,7 @@ const MyBtn = styled(MyButton)({
 
 export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {email, password, error, onValueChange, signUp, signInProvider, rightPanel, classFormContainer, media} = props
+    const {email, password, error, onValueChange, signUp, rightPanel, classFormContainer, media} = props
     const history = useHistory()
     const classes = useStyles({rightPanel, media})
     const {t} = useTranslation()

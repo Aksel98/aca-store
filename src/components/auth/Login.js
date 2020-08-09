@@ -8,7 +8,6 @@ import {useTranslation} from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {Link} from "react-router-dom";
 import {auth} from "../services/Firebase";
-import firebase from "firebase";
 import {useHistory} from "react-router-dom";
 import SnackBar from "../main/SnackBar";
 import {HOME_URL} from "../api/Navigations";
