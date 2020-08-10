@@ -1,14 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import Product from './Product';
 import uniqId from 'uniqid';
-import {db} from '../../services/Firebase';
-import {useLocation} from 'react-router-dom';
+import {db} from '../../services/firebase/Firebase';
+import {useHistory, useParams} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from "@material-ui/core";
+import ModalDialog from "../../main/modal/ModalDialog";
+import {LOGIN_URL} from "../../services/api/Navigations";
+import {useTranslation} from "react-i18next";
+import Filters from "./Filters";
 
 const useStyles = makeStyles(() => ({
     container: {
-        margin: props => props ? '100px 30px 10px' : 10,
+        margin: props => props ? '60px 30px 10px' : 10,
         display: props => props && 'flex',
+    },
+    productsParent: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center'
     },
     products: {
         justifyContent: 'center',
@@ -16,70 +25,88 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'row',
         flexFlow: 'wrap',
         marginLeft: 10
-    },
-    filters: {
-        padding: props => !props && '0 10px',
-    },
-    subFilters: {
-        display: props => !props && 'flex',
-    },
-    filterType: {
-        padding: 10
-    },
-    filtersTitle: {
-        fontSize: 20,
-        fontWeight: 700,
-        lineHeight: '30px',
-        fontStyle: 'italic',
     }
 }))
 
 export default function ProductList() {
-    const [prod, setProd] = useState([]);
-    const location = useLocation();
-    const media = useMediaQuery('(min-width:600px)');
+    const [products, setProducts] = useState([]);
+    const [priceFilter, setPriceFilter] = useState([50, 1500]);
+    const [nameFilter, setNameFilter] = useState('');
+    const [orderBy, setOrderBy] = useState('asc');
+    const [modal, setModal] = useState({open: false, title: '', text: ''});
+    const history = useHistory();
+    let {category} = useParams()
+    const {t} = useTranslation()
+    const media = useMediaQuery('(min-width:670px)');
     const classes = useStyles(media);
 
     useEffect(() => {
         getAllProductInfo();
-    }, []);
+    }, [priceFilter, nameFilter, orderBy]);
 
-    async function getAllProductInfo() {
+    function getAllProductInfo() {
         try {
-            const pathName = location.pathname.substr(1)
-            let tempArr = [];
-            const getModelInfoRef = (await db.collection('product').get()).docs;
-            getModelInfoRef.forEach(doc => {
-                let temp = doc.data();
-                tempArr.push({...temp})
-            });
-            setProd(tempArr.filter(el => el.device === pathName));
+            db.collection('product')
+                .where('device', '==', category)
+                .where('price', '>', priceFilter[0])
+                .where('price', '<', priceFilter[1])
+                .orderBy('price', orderBy)
+                .get().then(snapshot => {
+                const tempArr = [];
+                snapshot.docs.forEach(doc => {
+                    let temp = doc.data();
+                    tempArr.push({...temp, id: doc.id})
+                })
+                nameFilter ? setProducts(products.filter(product => product.model.includes(nameFilter))) : setProducts(tempArr);
+            }).catch(err => console.log(err));
         } catch (e) {
             console.log("can not  get the docs:", e);
         }
     }
 
+    function openModal(title, text) {
+        setModal({open: true, title, text})
+    }
+
+    function orderHandler(val) {
+        setOrderBy(val)
+    }
+
+    function searchHandler(e) {
+        setNameFilter(e.target.value)
+    }
+
+    function priceHandler(e, val) {
+        setPriceFilter(val)
+    }
+
     return (
         <div className={classes.container}>
-            <div className={classes.filters}>
-                <h2 className={classes.filtersTitle} style={{fontStyle: 'italic'}}>Filters</h2>
-                <div className={classes.subFilters}>
-                    <div className={classes.filterType}>
-                        <div className={classes.filtersTitle}>Brand</div>
-                    </div>
-                    <div className={classes.filterType}>
-                        <div className={classes.filtersTitle}>Price</div>
-                    </div>
-                </div>
-            </div>
-            <div style={{width: '100%'}}>
+            <Filters name={nameFilter}
+                     orderBy={orderBy}
+                     price={priceFilter}
+                     onSearch={searchHandler}
+                     onOrder={orderHandler}
+                     onPrice={priceHandler}/>
+            <div className={classes.productsParent}>
                 <div className={classes.products}>
-                    {prod.map((item) => (<Product image={item.image}
-                                                  name={item.model}
-                                                  price={item.price}
-                                                  key={uniqId()}/>))}
+                    {products.map((item) => (
+                        <Product openModal={openModal}
+                                 device={item.device}
+                                 image={item.image}
+                                 name={item.model}
+                                 id={item.id}
+                                 price={item.price}
+                                 key={uniqId()}/>
+                    ))}
                 </div>
             </div>
+            <ModalDialog open={modal.open}
+                         title={modal.title}
+                         text={modal.text}
+                         doneButton={() => history.push(LOGIN_URL)}
+                         doneButtonName={t('login')}
+                         close={() => setModal({...modal, open: false})}/>
         </div>
     )
 }

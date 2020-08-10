@@ -1,14 +1,24 @@
-import React, { Suspense } from 'react';
+import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
-import './components/services/i18next'
+import './components/services/translations/i18next'
+import {applyMiddleware, createStore} from "redux";
+import thunk from "redux-thunk"
+import logger from "redux-logger"
+import allReducers from "./components/services/redux/reducer/reducers";
+import {Provider} from "react-redux";
+import {composeWithDevTools} from "redux-devtools-extension/index";
+
+const store = createStore(allReducers, composeWithDevTools(applyMiddleware(logger, thunk)),)
 
 ReactDOM.render(
     <React.StrictMode>
         <Suspense fallback={''}>
-            <App />
+            <Provider store={store}>
+                <App/>
+            </Provider>
         </Suspense>
     </React.StrictMode>,
     document.getElementById('root')

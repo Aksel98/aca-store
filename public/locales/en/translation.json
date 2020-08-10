@@ -15,5 +15,13 @@
   "alreadyHaveAccount": "Already have account?",
   "forgotPassword": "Forgot password?",
   "useYourAccount": "or use your account",
-  "useYourEmailForRegistration": "or use your email for registration"
+  "useYourEmailForRegistration": "or use your email for registration",
+  "modalTitleForAddFavoriteItems": "If you want to have favourite items, please Logged in",
+  "addToCart": "Add to cart",
+  "yes": "Yes",
+  "cancel": "Cancel",
+  "search": "Search",
+  "orderBy": "Order By",
+  "ascending": "Ascending",
+  "descending": "Descending"
 }

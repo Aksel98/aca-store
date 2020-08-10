@@ -1,17 +1,16 @@
 import React, {useState} from "react"
 import SignIn from "./SignIn"
 import {makeStyles} from "@material-ui/core/styles"
-import {BLACK, BLUE, MyButton, WHITE} from "../main/Styles"
+import {BLACK, BLUE_GRADIENT, MyButton, WHITE} from "../main/constants/Constants"
 import SignUp from "./SignUp";
 import {useMediaQuery} from "@material-ui/core";
 import {useTranslation} from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {Link} from "react-router-dom";
-import {auth} from "../services/Firebase";
-import firebase from "firebase";
+import {auth} from "../services/firebase/Firebase";
 import {useHistory} from "react-router-dom";
 import SnackBar from "../main/SnackBar";
-import {HOME_URL} from "../api/Navigations";
+import {HOME_URL} from "../services/api/Navigations";
 
 const useStyles = makeStyles({
     backIcon: {
@@ -64,7 +63,7 @@ const useStyles = makeStyles({
     },
     overlay: {
         transform: props => props.rightPanel ? 'translateX(50%)' : 'translateX(0)',
-        background: BLUE,
+        background: BLUE_GRADIENT,
         color: '#fff',
         position: 'relative',
         left: '-100%',
@@ -112,7 +111,6 @@ export default function Login() {
     function signInPageHandler() {
         setRightPanel(false)
         changePage()
-
     }
 
     function changePage() {
@@ -148,30 +146,6 @@ export default function Login() {
         })
     }
 
-    function signInGoogle() {
-        auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
-    function signInFacebook() {
-        auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
-    function signInGithub() {
-        auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
-    function signInPhoneNumber() {
-        auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(() => {
-            history.push(HOME_URL)
-        })
-    }
-
     function onValueChange(e) {
         e.target.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)
         setError('')
@@ -185,7 +159,6 @@ export default function Login() {
                     error={error}
                     onValueChange={onValueChange}
                     signUp={signUp}
-                    signInProvider={{signInGoogle, signInFacebook, signInGithub, signInPhoneNumber}}
                     rightPanel={rightPanel} a
                     classFormContainer={classes.formContainer}
                     media={media}/>
@@ -194,7 +167,6 @@ export default function Login() {
                     error={error}
                     onValueChange={onValueChange}
                     signIn={signIn}
-                    signInProvider={{signInGoogle, signInFacebook, signInGithub, signInPhoneNumber}}
                     rightPanel={rightPanel}
                     classFormContainer={classes.formContainer}
                     media={media}/>
@@ -203,14 +175,14 @@ export default function Login() {
                     <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
                         {media ? <h1>{t('alreadyHaveAccount')}</h1> : <h3>{t('alreadyHaveAccount')}</h3>}
                         <MyButton color="primary"
-                                  maxWidth="90%"
+                                  maxwidth="90%"
                                   variant="contained"
                                   onClick={signInPageHandler}>{t('signIn')}</MyButton>
                     </div>
                     <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
                         {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
                         <MyButton color="primary"
-                                  maxWidth="90%"
+                                  maxwidth="90%"
                                   variant="contained"
                                   onClick={signUpPageHandler}>{t('signUp')}</MyButton>
                     </div>

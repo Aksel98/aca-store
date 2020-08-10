@@ -1,16 +1,16 @@
 import React, {useContext} from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK, ORANGE, WHITE} from "../main/Styles";
+import {BLACK, ORANGE, WHITE} from "../main/constants/Constants"
 import DropDown from "../main/Dropdown";
 import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
 import {UserContext} from "../main/context/UserContext";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import {auth} from "../services/Firebase";
-import {LOGO} from "../constants/Constants";
+import {auth} from "../services/firebase/Firebase";
+import {LOGO} from "../main/constants/Constants";
 import {useMediaQuery} from "@material-ui/core";
-import {HOME_URL, LOGIN_URL} from "../api/Navigations";
+import {HOME_URL, LOGIN_URL} from "../services/api/Navigations";
 
 const useStyles = makeStyles({
     menu: {
@@ -102,7 +102,6 @@ export default function Header() {
     const location = useLocation();
     const classes = useStyles({media, pathName: location.pathname === HOME_URL});
     const {t, i18n} = useTranslation()
-    console.log()
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
     }
@@ -129,13 +128,13 @@ export default function Header() {
                     <div className={classes.menuItem}><DropDown name={t('languages')} dropdownContent={<>
                         <div className={classes.dropdownItemParent} style={{marginTop: 15}}
                              onClick={() => handleClick('en')}>
-                            {t('english')}<img className={classes.flagsImg} src="/images/english-flag.png"/>
+                            {t('english')}<img className={classes.flagsImg} src="/images/english-flag.png" alt=""/>
                         </div>
                         <div className={classes.dropdownItemParent} onClick={() => handleClick('arm')}>
-                            {t('armenian')}<img className={classes.flagsImg} src="/images/armenian-flag.png"/>
+                            {t('armenian')}<img className={classes.flagsImg} src="/images/armenian-flag.png" alt=""/>
                         </div>
                         <div className={classes.dropdownItemParent} onClick={() => handleClick('rus')}>
-                            {t('russian')}<img className={classes.flagsImg} src="/images/russian-flag.png"/>
+                            {t('russian')}<img className={classes.flagsImg} src="/images/russian-flag.png" alt=""/>
                         </div>
                     </>}/>
                     </div>
@@ -144,11 +143,11 @@ export default function Header() {
                     {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
                 </div> : <div style={{display: 'flex', padding: '5px 0'}}>
                     <img onClick={() => handleClick('en')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
-                         src="/images/english-flag.png"/>
+                         src="/images/english-flag.png" alt=""/>
                     <img onClick={() => handleClick('arm')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
-                         src="/images/armenian-flag.png"/>
+                         src="/images/armenian-flag.png" alt=""/>
                     <img onClick={() => handleClick('rus')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
-                         src="/images/russian-flag.png"/>
+                         src="/images/russian-flag.png" alt=""/>
                 </div>}
 
             </div>

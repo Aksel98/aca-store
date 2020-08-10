@@ -7,10 +7,12 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import MailIcon from '@material-ui/icons/Mail';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import {BLACK} from "../main/Styles";
-import {MyButton} from "../main/Styles"
+import {BLACK} from "../main/constants/Constants"
+import {MyButton} from "../main/constants/Constants"
 import {useTranslation} from "react-i18next";
 import PhoneIcon from "@material-ui/icons/Phone";
+import {useHistory} from "react-router-dom";
+import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../services/api/SignInPopups";
 
 const useStyles = makeStyles({
     signInContainer: {
@@ -52,19 +54,21 @@ const MyTextField = styled(TextField)({
 
 export default function SignIn(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {email, password, error, onValueChange, signIn, signInProvider, classFormContainer, media} = props
+    const {email, password, error, onValueChange, signIn, classFormContainer, media} = props
+    const history = useHistory()
     const classes = useStyles(props)
-    const {t} = useTranslation()
+    const {t} = useTranslation();
+
 
     return (
             <div className={`${classFormContainer} ${classes.signInContainer}`}>
                 <form>
                     {media ? <h2>{t('signIn')}</h2>:  <h3>{t('signIn')}</h3>}
                     <div className={classes.socialContainer}>
-                        <div onClick={signInProvider.signInGoogle} className={classes.social}><MailIcon/></div>
-                        <div onClick={signInProvider.signInFacebook} className={classes.social}><FacebookIcon/></div>
-                        <div onClick={signInProvider.signInGithub} className={classes.social}><GitHubIcon/></div>
-                        <div onClick={signInProvider.signInPhoneNumber} className={classes.social}><PhoneIcon/></div>
+                        <div onClick={() => signInGoogle(history)} className={classes.social}><MailIcon/></div>
+                        <div onClick={() => signInFacebook(history)} className={classes.social}><FacebookIcon/></div>
+                        <div onClick={() => signInGithub(history)} className={classes.social}><GitHubIcon/></div>
+                        <div onClick={() => signInPhoneNumber(history)} className={classes.social}><PhoneIcon/></div>
                     </div>
                     <span>{t('useYourAccount')}</span>
                     <MyTextField label={`${t('email')}...`}
