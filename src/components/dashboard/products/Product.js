@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 const useStyles = makeStyles(() => ({
     root: {
         position: 'relative',
-        width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 210,
+        width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 205,
         height: props => props.mediaTablet ? (props.mediaMobile ? 215 : 255) : 300,
         display: 'flex',
         flexDirection: 'column',
@@ -82,7 +82,7 @@ export default function Product(props) {
     const {device, image, name, id, price, openModal} = props
     const currentUser = useContext(UserContext)
     const mediaTablet = useMediaQuery('(max-width:600px)');
-    const mediaMobile = useMediaQuery('(max-width:460px)');
+    const mediaMobile = useMediaQuery('(max-width:475px)');
     const classes = useStyles({mediaTablet, mediaMobile});
     const {t} = useTranslation()
 

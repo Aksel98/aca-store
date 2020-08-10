@@ -29,12 +29,13 @@ export default function CategoryList() {
     async function getAllCategoryInfo() {
         try {
             const tempArr = [];
-            const getCategory = (await db.collection('categories').get()).docs;
-            getCategory.forEach((doc) => {
-                let temp = doc.data();
-                tempArr.push({...temp});
+            db.collection('categories').get().then(snapshot => {
+                snapshot.docs.forEach((doc) => {
+                    let temp = doc.data();
+                    tempArr.push({...temp});
+                });
+                setCategory(tempArr);
             });
-            setCategory(tempArr);
         } catch (e) {
             console.log("can not  get the docs:", e);
         }
