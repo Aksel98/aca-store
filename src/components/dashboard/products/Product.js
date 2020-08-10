@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/constants/Constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {useMediaQuery} from "@material-ui/core";
 import {UserContext} from "../../main/context/UserContext";
 import {useTranslation} from "react-i18next";
@@ -38,6 +39,7 @@ const useStyles = makeStyles(() => ({
         fontSize: props => props.mediaMobile ? 16 : 20,
         fontWeight: 'bold',
         fontStyle: 'italic',
+        marginBottom: 25,
         paddingBottom: 25
     },
     price: {
@@ -65,6 +67,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     btn: {
+        fontSize: 13,
         '&:hover': {
             fontWeight: 700
         }
@@ -75,6 +78,10 @@ const useStyles = makeStyles(() => ({
             fontWeight: 'bold'
         }
     },
+    deleteBtn: {
+        width: 35,
+        position: 'absolute'
+    }
 }));
 
 export default function Product(props) {
@@ -87,23 +94,27 @@ export default function Product(props) {
     const {t} = useTranslation()
 
     return (
-            <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
-                    <img className={classes.productImage} src={image} alt="got nothing yet :)"/>
-                    <div className={classes.modelInfo}>
-                        <div className={classes.productName}>{name}</div>
-                        <div className={classes.price}>{price}$</div>
-                    </div>
-                </Link>
-                {hover && (<div className={classes.btnWrapper}>
-                        <div style={{display: 'flex'}}>
-                            <MyButton newcolor={ORANGE} onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
-                        </div>
-                        <div className={classes.btnParent}>
-                            <MyButton newcolor={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
-                        </div>
-                    </div>
-                )}
+        <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <div className={classes.deleteBtn}>
+                <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
             </div>
+            <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
+                <img className={classes.productImage} src={image} alt="got nothing yet :)"/>
+                <div className={classes.modelInfo}>
+                    <div className={classes.productName}>{name}</div>
+                    <div className={classes.price}>{price}$</div>
+                </div>
+            </Link>
+            {hover && (<div className={classes.btnWrapper}>
+                    <div style={{display: 'flex'}}>
+                        <MyButton newcolor={ORANGE}
+                                  onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
+                    </div>
+                    <div className={classes.btnParent}>
+                        <MyButton newcolor={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
+                    </div>
+                </div>
+            )}
+        </div>
     )
 }

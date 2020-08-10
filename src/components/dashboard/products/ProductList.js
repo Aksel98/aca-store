@@ -9,6 +9,8 @@ import {LOGIN_URL} from "../../services/api/Navigations";
 import {useTranslation} from "react-i18next";
 import Filters from "./Filters";
 import Loader from "../../main/Loader";
+import {MyButton} from "../../main/constants/Constants";
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -21,13 +23,22 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center'
     },
     products: {
-        height: props => props.mediaTablet ? (props.mediaMobile ? 414 : 454) : 665,
+        height: props => props.mediaTablet ? (props.mediaMobile ? 336 : 375) : 625,
+        margin: props => props.mediaTablet ? 0 : '25px 0 0 10px',
         overflow: 'auto',
         justifyContent: 'center',
         display: 'flex',
         flexDirection: 'row',
         flexFlow: 'wrap',
-        margin: props => props.mediaTablet ? 0 : '60px 0 0 10px',
+    },
+    btnParent: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    pagination: {
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 5
     }
 }))
 
@@ -38,6 +49,9 @@ export default function ProductList() {
     const [orderBy, setOrderBy] = useState('asc');
     const [loader, setLoader] = useState(true);
     const [modal, setModal] = useState({open: false, title: '', text: ''});
+    const [page, setPage] = useState(1);
+    const [paginationSize, setPaginationSize] = useState(0)
+    const [limit] = useState(4)
     const history = useHistory();
     let {category} = useParams()
     const {t} = useTranslation()
@@ -47,28 +61,37 @@ export default function ProductList() {
 
     useEffect(() => {
         getAllProductInfo();
-    }, [priceFilter, nameFilter, orderBy]);
+    }, [priceFilter, nameFilter, orderBy, page]);
 
     function getAllProductInfo() {
         try {
-            db.collection('product')
-                .where('device', '==', category)
-                .where('price', '>', priceFilter[0])
-                .where('price', '<', priceFilter[1])
-                .orderBy('price', orderBy)
-                .get().then(snapshot => {
-                const tempArr = [];
-                snapshot.docs.forEach(doc => {
-                    let temp = doc.data();
-                    tempArr.push({...temp, id: doc.id})
+            db.collection('product').where('device', '==', category).get().then(snap => {
+                const startAt = snap.docs[page === 1 ? 0 : (page - 1) * limit];
+                setPaginationSize(Math.ceil(snap.docs.length / limit))
+
+                db.collection('product')
+                    .where('device', '==', category)
+                    .limit(limit)
+                    .startAt(startAt)
+                    .get().then(snapshot => {
+                    const tempArr = [];
+                    snapshot.docs.forEach(doc => {
+                        let temp = doc.data();
+                        tempArr.push({...temp, id: doc.id})
+                    })
+                    nameFilter ? setProducts(products.filter(product => product.model.includes(nameFilter))) : setProducts(tempArr);
+                    setLoader(false)
                 })
-                nameFilter ? setProducts(products.filter(product => product.model.includes(nameFilter))) : setProducts(tempArr);
-                setLoader(false)
             }).catch(err => console.log(err));
         } catch (e) {
             console.log("can not  get the docs:", e);
         }
     }
+
+    const changePagination = (event, value) => {
+        console.log(value)
+        setPage(value);
+    };
 
     function openModal(title, text) {
         setModal({open: true, title, text})
@@ -95,18 +118,31 @@ export default function ProductList() {
                      onOrder={orderHandler}
                      onPrice={priceHandler}/>
             <div className={classes.productsParent}>
-                <div className={classes.products}>
-                    {loader ? <Loader/> : products.map((item) => (
-                        <Product openModal={openModal}
-                                 device={item.device}
-                                 image={item.image}
-                                 name={item.model}
-                                 id={item.id}
-                                 price={item.price}
-                                 key={uniqId()}/>
-                    ))}
-
+                {loader ? <Loader/> : <div>
+                    <div className={classes.btnParent}>
+                        <MyButton color="primary"
+                                  maxwidth="55%"
+                                  variant="contained">Add Device</MyButton>
+                    </div>
+                    <div className={classes.products}>
+                        {products.map((item) => (
+                            <Product openModal={openModal}
+                                     device={item.device}
+                                     image={item.image}
+                                     name={item.model}
+                                     id={item.id}
+                                     price={item.price}
+                                     key={uniqId()}/>
+                        ))}
+                    </div>
+                    <div className={classes.pagination}>
+                        <Pagination count={paginationSize}
+                                    page={page}
+                                    onChange={changePagination}
+                                    color="primary"/>
+                    </div>
                 </div>
+                }
             </div>
             <ModalDialog open={modal.open}
                          title={modal.title}
