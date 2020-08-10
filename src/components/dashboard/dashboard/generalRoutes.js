@@ -7,6 +7,7 @@ import CategoryList from "../category/CategoryList";
 import Footer from "../Footer";
 import ProductList from "../products/ProductList";
 import {makeStyles} from "@material-ui/core/styles";
+import Device from "../Device";
 
 const useStyles = makeStyles({
     dashboardParent: {
@@ -30,10 +31,17 @@ export default function GeneralRoutes() {
                 </div>
                 <Footer/>
             </Route>
-            <Route path='/categories'>
+            <Route exact path='/categories/:category'>
                 <div className={classes.mainContent}>
                     <Header/>
                     <ProductList/>
+                </div>
+                <Footer/>
+            </Route>
+            <Route exact path='/categories/:category/:id'>
+                <div className={classes.mainContent}>
+                    <Header/>
+                    <Device/>
                 </div>
                 <Footer/>
             </Route>

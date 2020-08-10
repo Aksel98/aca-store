@@ -5,7 +5,7 @@ import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import {useMediaQuery} from "@material-ui/core";
 import {UserContext} from "../../main/context/UserContext";
 import {useTranslation} from "react-i18next";
-import {db} from "../../services/firebase/Firebase";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -48,6 +48,7 @@ const useStyles = makeStyles(() => ({
     },
     infoWithImage: {
         textAlign: 'center',
+        textDecoration: 'none',
         padding: 10
     },
     btnWrapper: {
@@ -78,32 +79,25 @@ const useStyles = makeStyles(() => ({
 
 export default function Product(props) {
     const [hover, setHover] = useState(false);
+    const {device, image, name, id, price, openModal} = props
     const currentUser = useContext(UserContext)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:460px)');
     const classes = useStyles({mediaTablet, mediaMobile});
     const {t} = useTranslation()
 
-    function clickHandler(id) {
-        db.collection('product').doc(id).get().then(doc => {
-            console.log(doc.data())
-        })
-    }
-
     return (
-        <div>
-            <div onClick={() => clickHandler(props.id)} className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                <div className={classes.infoWithImage}>
-                    <img className={classes.productImage} src={props.image} alt="got nothing yet :)"/>
+            <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
+                    <img className={classes.productImage} src={image} alt="got nothing yet :)"/>
                     <div className={classes.modelInfo}>
-                        <div className={classes.productName}>{props.name}</div>
-                        <div>{props.info}</div>
-                        <div className={classes.price}>{props.price}$</div>
+                        <div className={classes.productName}>{name}</div>
+                        <div className={classes.price}>{price}$</div>
                     </div>
-                </div>
+                </Link>
                 {hover && (<div className={classes.btnWrapper}>
                         <div style={{display: 'flex'}}>
-                            <MyButton newcolor={ORANGE} onClick={() => !currentUser && props.openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
+                            <MyButton newcolor={ORANGE} onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
                         </div>
                         <div className={classes.btnParent}>
                             <MyButton newcolor={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
@@ -111,6 +105,5 @@ export default function Product(props) {
                     </div>
                 )}
             </div>
-        </div>
     )
 }

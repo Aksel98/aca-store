@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
-import './components/services/i18next'
+import './components/services/translations/i18next'
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk"
 import logger from "redux-logger"

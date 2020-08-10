@@ -111,7 +111,6 @@ export default function Login() {
     function signInPageHandler() {
         setRightPanel(false)
         changePage()
-
     }
 
     function changePage() {
