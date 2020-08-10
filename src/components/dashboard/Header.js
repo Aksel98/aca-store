@@ -168,7 +168,15 @@ export default function Header() {
                         </div>
                     </>} />
                     </div>
-                    <ShoppingCartIcon className={classes.menuItem} />
+                    {/* <ShoppingCartIcon className={classes.menuItem} /> */}
+                    <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none', position: 'relative' }} to='/checkout'>
+                        <ShoppingCartIcon className={classes.menuItem} />
+                        <div className={classes.cardItems}
+                        >{JSON.parse(localStorage.getItem('addToCardItems')) ? JSON.parse(localStorage.getItem('addToCardItems')).length : null}</div>
+
+
+
+                    </Link>
                     {currentUser && <div className={classes.userLogo}><span>{userLogo(currentUser.displayName)}</span></div>}
                     {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
