@@ -46,6 +46,17 @@ const useStyles = makeStyles({
         marginLeft: '15px'
 
     },
+    userLogo: {
+        width: '2rem',
+        height: '2rem',
+        lineHeight: '2rem',
+        color: ORANGE,
+        backgroundColor: WHITE,
+        borderRadius: '50%',
+        textDecoration: 'none',
+        textAlign: 'center',
+        cursor: 'pointer',
+    },
     display: {
         display: "flex",
         alignItems: "center",
