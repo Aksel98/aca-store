@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
 import { BLACK, ORANGE, WHITE, RED, GREY } from "../main/constants/Constants"
@@ -11,6 +11,9 @@ import { auth } from "../services/firebase/Firebase";
 import { LOGO } from "../main/constants/Constants";
 import { useMediaQuery } from "@material-ui/core";
 import { HOME_URL, LOGIN_URL } from "../services/api/Navigations";
+
+import { useEffect } from 'react';
+import { BasketContext } from '../main/context/BasketContext';
 
 const useStyles = makeStyles({
     menu: {
@@ -129,9 +132,19 @@ export default function Header() {
     const location = useLocation();
     const classes = useStyles({ media, pathName: location.pathname === HOME_URL });
     const { t, i18n } = useTranslation()
+
     function userLogo(user) {
         if (user) { return user.split(' ').map(namepart => namepart.slice(0, 1).toUpperCase()).join(''); }
     }
+    //number of items
+
+    const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
+    // function numOfItemsInBasket() {
+    //     return localStorage.getItem('ItemsInBasket') ? JSON.parse(localStorage.getItem('ItemsInBasket')).length : 0;
+    // }
+    // useEffect(() => {
+    //     setNumberOfItems(numOfItemsInBasket())
+    // })
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
     }
@@ -172,7 +185,7 @@ export default function Header() {
                     <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none', position: 'relative' }} to='/checkout'>
                         <ShoppingCartIcon className={classes.menuItem} />
                         <div className={classes.cardItems}
-                        >{JSON.parse(localStorage.getItem('addToCardItems')) ? JSON.parse(localStorage.getItem('addToCardItems')).length : null}</div>
+                        >{itemsInBasket ? itemsInBasket.length : null}</div>
 
 
 

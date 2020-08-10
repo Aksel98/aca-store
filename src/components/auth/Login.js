@@ -1,16 +1,16 @@
-import React, {useState} from "react"
+import React, { useState } from "react"
 import SignIn from "./SignIn"
-import {makeStyles} from "@material-ui/core/styles"
-import {BLACK, BLUE_GRADIENT, MyButton, WHITE} from "../main/constants/Constants"
+import { makeStyles } from "@material-ui/core/styles"
+import { BLACK, BLUE_GRADIENT, MyButton, WHITE } from "../main/constants/Constants"
 import SignUp from "./SignUp";
-import {useMediaQuery} from "@material-ui/core";
-import {useTranslation} from "react-i18next";
+import { useMediaQuery } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import {Link} from "react-router-dom";
-import {auth} from "../services/firebase/Firebase";
-import {useHistory} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { auth } from "../services/firebase/Firebase";
+import { useHistory } from "react-router-dom";
 import SnackBar from "../main/SnackBar";
-import {HOME_URL} from "../services/api/Navigations";
+import { HOME_URL } from "../services/api/Navigations";
 
 const useStyles = makeStyles({
     backIcon: {
@@ -99,8 +99,8 @@ export default function Login() {
     const [error, setError] = useState('')
     const [rightPanel, setRightPanel] = useState(false)
     const media = useMediaQuery('(min-width:600px)');
-    const classes = useStyles({rightPanel, media})
-    const {t} = useTranslation()
+    const classes = useStyles({ rightPanel, media })
+    const { t } = useTranslation()
     const history = useHistory();
 
     function signUpPageHandler() {
@@ -109,6 +109,7 @@ export default function Login() {
     }
 
     function signInPageHandler() {
+
         setRightPanel(false)
         changePage()
     }
@@ -153,42 +154,42 @@ export default function Login() {
 
     return (
         <div className={classes.container}>
-            <Link to={HOME_URL} className={classes.backIcon}><ArrowBackIcon/></Link>
+            <Link to={HOME_URL} className={classes.backIcon}><ArrowBackIcon /></Link>
             <SignUp email={email}
-                    password={password}
-                    error={error}
-                    onValueChange={onValueChange}
-                    signUp={signUp}
-                    rightPanel={rightPanel} a
-                    classFormContainer={classes.formContainer}
-                    media={media}/>
+                password={password}
+                error={error}
+                onValueChange={onValueChange}
+                signUp={signUp}
+                rightPanel={rightPanel} a
+                classFormContainer={classes.formContainer}
+                media={media} />
             <SignIn email={email}
-                    password={password}
-                    error={error}
-                    onValueChange={onValueChange}
-                    signIn={signIn}
-                    rightPanel={rightPanel}
-                    classFormContainer={classes.formContainer}
-                    media={media}/>
+                password={password}
+                error={error}
+                onValueChange={onValueChange}
+                signIn={signIn}
+                rightPanel={rightPanel}
+                classFormContainer={classes.formContainer}
+                media={media} />
             <div className={classes.overlayContainer}>
                 <div className={classes.overlay}>
                     <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
                         {media ? <h1>{t('alreadyHaveAccount')}</h1> : <h3>{t('alreadyHaveAccount')}</h3>}
                         <MyButton color="primary"
-                                  maxwidth="90%"
-                                  variant="contained"
-                                  onClick={signInPageHandler}>{t('signIn')}</MyButton>
+                            maxwidth="90%"
+                            variant="contained"
+                            onClick={signInPageHandler}>{t('signIn')}</MyButton>
                     </div>
                     <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
                         {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
                         <MyButton color="primary"
-                                  maxwidth="90%"
-                                  variant="contained"
-                                  onClick={signUpPageHandler}>{t('signUp')}</MyButton>
+                            maxwidth="90%"
+                            variant="contained"
+                            onClick={signUpPageHandler}>{t('signUp')}</MyButton>
                     </div>
                 </div>
             </div>
-            {error && <SnackBar message={error} error/>}
+            {error && <SnackBar message={error} error />}
         </div>
     )
 }

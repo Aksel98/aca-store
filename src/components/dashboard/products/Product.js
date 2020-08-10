@@ -1,11 +1,12 @@
-import React, {useContext, useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/constants/Constants';
+import React, { useContext, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { BLACK, GREY, MyButton, ORANGE, WHITE } from '../../main/constants/Constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
-import {useMediaQuery} from "@material-ui/core";
-import {UserContext} from "../../main/context/UserContext";
-import {useTranslation} from "react-i18next";
-import {Link} from "react-router-dom";
+import { useMediaQuery } from "@material-ui/core";
+import { UserContext } from "../../main/context/UserContext";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { BasketContext } from '../../main/context/BasketContext';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -79,31 +80,46 @@ const useStyles = makeStyles(() => ({
 
 export default function Product(props) {
     const [hover, setHover] = useState(false);
-    const {device, image, name, id, price, openModal} = props
+    const { device, image, name, id, price, openModal } = props
     const currentUser = useContext(UserContext)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:460px)');
-    const classes = useStyles({mediaTablet, mediaMobile});
-    const {t} = useTranslation()
+    const classes = useStyles({ mediaTablet, mediaMobile });
+    const { t } = useTranslation();
+    const [basket, setBasket] = useContext(BasketContext);
+    const addToBasket = () => {
+        let localArr = [];
+        if (localStorage.getItem('ItemsInBasket')) {
+            localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
+            if (!localArr.includes(id)) { localArr.push(id) }
+            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
+        }
+        else {
+            localArr.push(id);
+            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
+        }
+        setBasket(localArr);
+    }
+
 
     return (
-            <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
-                    <img className={classes.productImage} src={image} alt="got nothing yet :)"/>
-                    <div className={classes.modelInfo}>
-                        <div className={classes.productName}>{name}</div>
-                        <div className={classes.price}>{price}$</div>
-                    </div>
-                </Link>
-                {hover && (<div className={classes.btnWrapper}>
-                        <div style={{display: 'flex'}}>
-                            <MyButton newcolor={ORANGE} onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
-                        </div>
-                        <div className={classes.btnParent}>
-                            <MyButton newcolor={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
-                        </div>
-                    </div>
-                )}
+        <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
+                <img className={classes.productImage} src={image} alt="got nothing yet :)" />
+                <div className={classes.modelInfo}>
+                    <div className={classes.productName}>{name}</div>
+                    <div className={classes.price}>{price}$</div>
+                </div>
+            </Link>
+            {hover && (<div className={classes.btnWrapper}>
+                <div style={{ display: 'flex' }}>
+                    <MyButton newcolor={ORANGE} onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon /></MyButton>
+                </div>
+                <div className={classes.btnParent}>
+                    <MyButton newcolor={ORANGE} className={classes.btn} onClick={addToBasket}>{t('addToCart')}</MyButton>
+                </div>
             </div>
+            )}
+        </div>
     )
 }

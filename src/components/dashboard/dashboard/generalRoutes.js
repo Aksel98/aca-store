@@ -8,7 +8,8 @@ import Footer from "../Footer";
 import ProductList from "../products/ProductList";
 import { makeStyles } from "@material-ui/core/styles";
 import Device from "../Device";
-import Product from "../products/Product";
+
+import Checkout from "../checkout/Checkout";
 
 const useStyles = makeStyles({
     dashboardParent: {
@@ -33,7 +34,7 @@ export default function GeneralRoutes() {
                 <Footer />
             </Route>
             <Route exact path='/checkout'>
-                <Product />
+                <Checkout />
             </Route>
             <Route exact path='/categories/:category'>
                 <div className={classes.mainContent}>
