@@ -1,16 +1,16 @@
-import React, {useContext} from 'react';
-import {makeStyles, styled} from '@material-ui/core/styles';
+import React, { useContext } from 'react';
+import { makeStyles, styled } from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK, ORANGE, WHITE} from "../main/constants/Constants"
+import { BLACK, ORANGE, WHITE, RED, GREY } from "../main/constants/Constants"
 import DropDown from "../main/Dropdown";
-import {useTranslation} from "react-i18next";
-import {Link, useLocation} from "react-router-dom";
-import {UserContext} from "../main/context/UserContext";
+import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "react-router-dom";
+import { UserContext } from "../main/context/UserContext";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import {auth} from "../services/firebase/Firebase";
-import {LOGO} from "../main/constants/Constants";
-import {useMediaQuery} from "@material-ui/core";
-import {HOME_URL, LOGIN_URL} from "../services/api/Navigations";
+import { auth } from "../services/firebase/Firebase";
+import { LOGO } from "../main/constants/Constants";
+import { useMediaQuery } from "@material-ui/core";
+import { HOME_URL, LOGIN_URL } from "../services/api/Navigations";
 
 const useStyles = makeStyles({
     menu: {
@@ -28,6 +28,22 @@ const useStyles = makeStyles({
         display: "flex",
         alignItems: "center",
         justifyContent: 'space-between',
+
+    },
+    cardItems: {
+        position: 'absolute',
+        width: '0.8rem',
+        height: '0.8rem',
+        lineHeight: '0.8rem',
+        color: RED,
+        backgroundColor: GREY,
+        fontWeight: 'bolder',
+        fontSize: '0.7rem',
+        borderRadius: '50%',
+        textDecoration: 'none',
+        textAlign: 'center',
+        cursor: 'pointer',
+        marginLeft: '15px'
 
     },
     display: {
@@ -100,8 +116,11 @@ export default function Header() {
     const currentUser = useContext(UserContext)
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
-    const classes = useStyles({media, pathName: location.pathname === HOME_URL});
-    const {t, i18n} = useTranslation()
+    const classes = useStyles({ media, pathName: location.pathname === HOME_URL });
+    const { t, i18n } = useTranslation()
+    function userLogo(user) {
+        if (user) { return user.split(' ').map(namepart => namepart.slice(0, 1).toUpperCase()).join(''); }
+    }
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
     }
@@ -111,44 +130,45 @@ export default function Header() {
     }
 
     return (
-        <MyAppBar style={{position: media && 'unset'}}>
+        <MyAppBar style={{ position: media && 'unset' }}>
             <div className={classes.menu}>
                 <div className={classes.display}>
-                    <img src={LOGO} width={40} height={30} alt=""/>
+                    <img src={LOGO} width={40} height={30} alt="" />
                     {media ?
                         <Link to={HOME_URL} className={classes.title}>Online Shop</Link> :
                         <Link to={HOME_URL} className={classes.title}>Online Shop</Link>}
                     {media && <>
-                        <ShoppingCartIcon className={classes.menuItem}/>
+                        <ShoppingCartIcon className={classes.menuItem} />
                         {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                         {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
                     </>}
                 </div>
                 {!media ? <div className={classes.subMenu}>
                     <div className={classes.menuItem}><DropDown name={t('languages')} dropdownContent={<>
-                        <div className={classes.dropdownItemParent} style={{marginTop: 15}}
-                             onClick={() => handleClick('en')}>
-                            {t('english')}<img className={classes.flagsImg} src="/images/english-flag.png" alt=""/>
+                        <div className={classes.dropdownItemParent} style={{ marginTop: 15 }}
+                            onClick={() => handleClick('en')}>
+                            {t('english')}<img className={classes.flagsImg} src="/images/english-flag.png" alt="" />
                         </div>
                         <div className={classes.dropdownItemParent} onClick={() => handleClick('arm')}>
-                            {t('armenian')}<img className={classes.flagsImg} src="/images/armenian-flag.png" alt=""/>
+                            {t('armenian')}<img className={classes.flagsImg} src="/images/armenian-flag.png" alt="" />
                         </div>
                         <div className={classes.dropdownItemParent} onClick={() => handleClick('rus')}>
-                            {t('russian')}<img className={classes.flagsImg} src="/images/russian-flag.png" alt=""/>
+                            {t('russian')}<img className={classes.flagsImg} src="/images/russian-flag.png" alt="" />
                         </div>
-                    </>}/>
+                    </>} />
                     </div>
-                    <ShoppingCartIcon className={classes.menuItem}/>
+                    <ShoppingCartIcon className={classes.menuItem} />
+                    {currentUser && <div className={classes.userLogo}><span>{userLogo(currentUser.displayName)}</span></div>}
                     {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
-                </div> : <div style={{display: 'flex', padding: '5px 0'}}>
-                    <img onClick={() => handleClick('en')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
-                         src="/images/english-flag.png" alt=""/>
-                    <img onClick={() => handleClick('arm')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
-                         src="/images/armenian-flag.png" alt=""/>
-                    <img onClick={() => handleClick('rus')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
-                         src="/images/russian-flag.png" alt=""/>
-                </div>}
+                </div> : <div style={{ display: 'flex', padding: '5px 0' }}>
+                        <img onClick={() => handleClick('en')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
+                            src="/images/english-flag.png" alt="" />
+                        <img onClick={() => handleClick('arm')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
+                            src="/images/armenian-flag.png" alt="" />
+                        <img onClick={() => handleClick('rus')} className={`${classes.flagsImgMedia} ${classes.menuItem}`}
+                            src="/images/russian-flag.png" alt="" />
+                    </div>}
 
             </div>
         </MyAppBar>
