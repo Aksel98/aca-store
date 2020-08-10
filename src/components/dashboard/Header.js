@@ -185,7 +185,7 @@ export default function Header() {
                     <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none', position: 'relative' }} to='/checkout'>
                         <ShoppingCartIcon className={classes.menuItem} />
                         <div className={classes.cardItems}
-                        >{itemsInBasket ? itemsInBasket.length : null}</div>
+                        >{(itemsInBasket && itemsInBasket.length) ? itemsInBasket.length : null}</div>
 
 
 
