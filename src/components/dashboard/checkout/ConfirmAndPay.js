@@ -1,11 +1,27 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
-const ConfirmAndPay = () => {
+import { Button, makeStyles, TextField } from '@material-ui/core';
+const useStyles = makeStyles({
+    mainWrapper: {
+        width: '30%',
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '20px',
+        justifyContent: 'space-around'
+
+    }
+})
+const ConfirmAndPay = (props) => {
+
+    const classes = useStyles();
     return (
-        <div style={{ width: '30%', display: 'flex', flexDirection: 'column', margin: '20px', justifyContent: 'space-around' }}>
+        <div className={classes.mainWrapper} >
             <div style={{ textAlign: 'center' }}>
-                info about purchase summary
+                Order Summary
+                <div>
+                    {props.summary}
+                </div>
             </div>
+            {/* <TextField value={} /> */}
             <Button > confirm and pay</Button>
         </div>
     )

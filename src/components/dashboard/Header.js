@@ -119,6 +119,12 @@ const useStyles = makeStyles({
         padding: '150px 10px',
         opacity: '0.6',
     },
+    checkoutLink: {
+        display: 'flex',
+        flexDirection: 'row',
+        textDecoration: 'none',
+        position: 'relative'
+    }
 });
 
 const MyAppBar = styled(AppBar)({
@@ -139,12 +145,7 @@ export default function Header() {
     //number of items
 
     const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
-    // function numOfItemsInBasket() {
-    //     return localStorage.getItem('ItemsInBasket') ? JSON.parse(localStorage.getItem('ItemsInBasket')).length : 0;
-    // }
-    // useEffect(() => {
-    //     setNumberOfItems(numOfItemsInBasket())
-    // })
+
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
     }
@@ -159,8 +160,8 @@ export default function Header() {
                 <div className={classes.display}>
                     <img src={LOGO} width={40} height={30} alt="" />
                     {media ?
-                        <Link to={HOME_URL} className={classes.title}>Online Shop</Link> :
-                        <Link to={HOME_URL} className={classes.title}>Online Shop</Link>}
+                        <Link to={HOME_URL} className={classes.title}> sTORe </Link> :
+                        <Link to={HOME_URL} className={classes.title}> sTORe  </Link>}
                     {media && <>
                         <ShoppingCartIcon className={classes.menuItem} />
                         {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
@@ -181,15 +182,14 @@ export default function Header() {
                         </div>
                     </>} />
                     </div>
+
                     {/* <ShoppingCartIcon className={classes.menuItem} /> */}
-                    <Link style={{ display: 'flex', flexDirection: 'row', textDecoration: 'none', position: 'relative' }} to='/checkout'>
+                    <Link className={classes.checkoutLink} to='/checkout'>
                         <ShoppingCartIcon className={classes.menuItem} />
                         <div className={classes.cardItems}
                         >{(itemsInBasket && itemsInBasket.length) ? itemsInBasket.length : null}</div>
-
-
-
                     </Link>
+
                     {currentUser && <div className={classes.userLogo}><span>{userLogo(currentUser.displayName)}</span></div>}
                     {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}

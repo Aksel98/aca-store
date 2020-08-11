@@ -7,8 +7,33 @@ import Header from "../Header";
 import Footer from "../Footer";
 import uniqid from 'uniqid';
 import ConfirmAndPay from "./ConfirmAndPay";
+import { ORANGE, BLUE, GREY } from "../../main/constants/Constants";
+import { makeStyles } from "@material-ui/core";
 
+const useStyles = makeStyles({
+    mainWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: '100px',
+        justifyContent: 'space-between',
+        height: '500px',
+        overflow: 'auto',
+
+    },
+
+    cartIcon: {
+        cursor: 'pointer',
+        color: ORANGE,
+        '&:hover': {
+            color: BLUE,
+        }
+
+
+    }
+
+})
 const Checkout = () => {
+    const classes = useStyles();
     const [basketItems, setBasketItems] = useContext(BasketContext);
     useEffect(() => setBasketItems(JSON.parse(localStorage.getItem('ItemsInBasket'))), []);
     const [choosenItems, setChoosenItems] = useState([]);
@@ -50,13 +75,24 @@ const Checkout = () => {
 
         <div>
             <Header />
-            <div style={{ display: 'flex', flexDirection: 'row', marginTop: '100px', justifyContent: 'space-between' }}>
+            <div className={classes.mainWrapper}  >
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                    <div>
+                        MODEL
+                    </div>
+                    <div>
+                        PRICE
+                    </div>
+                    <div>
+                        SUBTOTAL
+                    </div>
+                </div>
                 <div >
                     {!basketItems ? 'you have 0 items in your cart' : choosenItems.map(item => <CheckoutItems image={item.image} model={item.model} price={item.price} id={item.id} remove={removeItem} key={uniqid()} />)}
                 </div>
-                <ConfirmAndPay />
-            </div>
 
+            </div>
+            <ConfirmAndPay />
             <Footer />
         </div>
 
