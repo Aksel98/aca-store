@@ -25,5 +25,8 @@
   "orderBy": "Դասավորել ըստ",
   "ascending": "Աճման",
   "descending": "Նվազման",
-  "thereIsNoItems": "Ոչինչ չի գտնվել"
+  "thereIsNoItems": "Ոչինչ չի գտնվել",
+  "chooseCategoryName": "Ընտրեք կատեգորիայի անունը",
+  "chooseCategoryImage": "Ընտրեք կատեգորիայի նկարը",
+  "add": "Ավելացնել"
 }

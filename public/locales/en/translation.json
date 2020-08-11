@@ -25,5 +25,8 @@
   "orderBy": "Order By",
   "ascending": "Ascending",
   "descending": "Descending",
-  "nothingIsFound": "Nothing is found"
+  "nothingIsFound": "Nothing is found",
+  "chooseCategoryName": "Choose category name",
+  "chooseCategoryImage": "Ընտրեք կատեգորիայի անունը",
+  "add": "Add"
 }
