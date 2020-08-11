@@ -6,6 +6,7 @@ import CheckoutItems from "./CheckoutItems";
 import Header from "../Header";
 import Footer from "../Footer";
 import uniqid from 'uniqid';
+import ConfirmAndPay from "./ConfirmAndPay";
 
 const Checkout = () => {
     const [basketItems, setBasketItems] = useContext(BasketContext);
@@ -49,8 +50,11 @@ const Checkout = () => {
 
         <div>
             <Header />
-            <div style={{ marginTop: '100px' }}>
-                {!basketItems ? 'you have 0 items in your cart' : choosenItems.map(item => <CheckoutItems image={item.image} model={item.model} price={item.price} id={item.id} remove={removeItem} key={uniqid()} />)}
+            <div style={{ display: 'flex', flexDirection: 'row', marginTop: '100px', justifyContent: 'space-between' }}>
+                <div >
+                    {!basketItems ? 'you have 0 items in your cart' : choosenItems.map(item => <CheckoutItems image={item.image} model={item.model} price={item.price} id={item.id} remove={removeItem} key={uniqid()} />)}
+                </div>
+                <ConfirmAndPay />
             </div>
 
             <Footer />

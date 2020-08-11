@@ -11,6 +11,7 @@ export const GREY = 'rgb(197, 197, 197)';
 export const LIGHTGREY = 'rgba(228, 228, 228, 0.7)';
 export const PURPLE = '#94;2FB8';
 export const RED = '#8B0000'
+export const BLUE = '#416284'
 
 export const MyButton = styled(Button)({
     width: '100%',
