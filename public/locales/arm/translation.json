@@ -24,5 +24,6 @@
   "price": "Գինը",
   "orderBy": "Դասավորել ըստ",
   "ascending": "Աճման",
-  "descending": "Նվազման"
+  "descending": "Նվազման",
+  "thereIsNoItems": "Ոչինչ չի գտնվել"
 }

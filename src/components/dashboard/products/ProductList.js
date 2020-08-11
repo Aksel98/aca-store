@@ -39,6 +39,9 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'center',
         padding: 5
+    },
+    nothingFound: {
+        color: '#3f51b5'
     }
 }))
 
@@ -65,12 +68,17 @@ export default function ProductList() {
 
     function getAllProductInfo() {
         try {
-            db.collection('product').where('device', '==', category).get().then(snap => {
+            db.collection('product')
+                .where('device', '==', category)
+                .orderBy('price', orderBy)
+                .get().then(snap => {
                 const startAt = snap.docs[page === 1 ? 0 : (page - 1) * limit];
                 setPaginationSize(Math.ceil(snap.docs.length / limit))
-
                 db.collection('product')
                     .where('device', '==', category)
+                    .orderBy('price', orderBy)
+                    .where('price', '<', priceFilter[1])
+                    .where('price', '>', priceFilter[0])
                     .limit(limit)
                     .startAt(startAt)
                     .get().then(snapshot => {
@@ -89,7 +97,6 @@ export default function ProductList() {
     }
 
     const changePagination = (event, value) => {
-        console.log(value)
         setPage(value);
     };
 
@@ -125,7 +132,7 @@ export default function ProductList() {
                                   variant="contained">Add Device</MyButton>
                     </div>
                     <div className={classes.products}>
-                        {products.map((item) => (
+                        {products.length ? products.map((item) => (
                             <Product openModal={openModal}
                                      device={item.device}
                                      image={item.image}
@@ -133,7 +140,7 @@ export default function ProductList() {
                                      id={item.id}
                                      price={item.price}
                                      key={uniqId()}/>
-                        ))}
+                        )) : <h1 className={classes.nothingFound}>{t('nothingIsFound')}</h1>}
                     </div>
                     <div className={classes.pagination}>
                         <Pagination count={paginationSize}

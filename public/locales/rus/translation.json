@@ -24,5 +24,6 @@
   "price": "Цена",
   "orderBy": "Сортировать по",
   "ascending": "По возрастанию",
-  "descending": "По убыванию"
+  "descending": "По убыванию",
+  "nothingIsFound": "Ничего не найдено"
 }

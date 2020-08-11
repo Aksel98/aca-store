@@ -24,5 +24,6 @@
   "price": "Price",
   "orderBy": "Order By",
   "ascending": "Ascending",
-  "descending": "Descending"
+  "descending": "Descending",
+  "nothingIsFound": "Nothing is found"
 }
