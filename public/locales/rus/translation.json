@@ -28,5 +28,7 @@
   "nothingIsFound": "Ничего не найдено",
   "chooseCategoryName": "Выберите название категории",
   "chooseCategoryImage": "Выберите изображение категории",
-  "add": "Добавить"
+  "add": "Добавить",
+  "addDevice": "Добавить устройство",
+  "areYouSure": "Ты уверен?"
 }

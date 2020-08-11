@@ -28,5 +28,7 @@
   "thereIsNoItems": "Ոչինչ չի գտնվել",
   "chooseCategoryName": "Ընտրեք կատեգորիայի անունը",
   "chooseCategoryImage": "Ընտրեք կատեգորիայի նկարը",
-  "add": "Ավելացնել"
+  "add": "Ավելացնել",
+  "addDevice": "Ավելացնել սարք",
+  "areYouSure": "Համոզված ե՞ք"
 }

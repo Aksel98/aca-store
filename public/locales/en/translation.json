@@ -27,6 +27,9 @@
   "descending": "Descending",
   "nothingIsFound": "Nothing is found",
   "chooseCategoryName": "Choose category name",
-  "chooseCategoryImage": "Ընտրեք կատեգորիայի անունը",
-  "add": "Add"
+  "chooseCategoryImage": "Choose category image",
+  "add": "Add",
+  "addDevice": "Add device",
+  "areYouSure": "Are you sure?"
+
 }

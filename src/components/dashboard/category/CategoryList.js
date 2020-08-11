@@ -2,17 +2,18 @@ import React, {useEffect, useState} from 'react';
 import Category from './Category';
 import uniqId from 'uniqid';
 import {makeStyles} from '@material-ui/core';
-import {Link} from 'react-router-dom';
 import {MyButton, ORANGE, WHITE} from "../../main/constants/Constants"
 import {db, storage} from "../../services/firebase/Firebase";
 import ModalDialog from "../../main/modal/ModalDialog";
 import {useTranslation} from "react-i18next";
 import TextField from '@material-ui/core/TextField';
-
+import Fab from '@material-ui/core/Fab';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 const useStyles = makeStyles(() => ({
     categoryView: {
         backgroundColor: WHITE,
+        minHeight: 180,
         padding: '80px 40px 0',
         display: 'flex',
         flexDirection: 'row',
@@ -30,9 +31,14 @@ const useStyles = makeStyles(() => ({
 
 export default function CategoryList() {
     const [category, setCategory] = useState([]);
-    const [openNewCategory, setOpenNewCategory] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+    const [deletePopup, setDeletePopup] = useState(false);
     const [categoryName, setCategoryName] = useState('');
     const [image, setImage] = useState(null);
+    const [disabled, setDisabled] = useState(false);
+    const [url, setUrl] = useState(null);
+    const [isDelete, setIsDelete] = useState(false);
+    const [id, setId] = useState('');
     const classes = useStyles();
     const {t} = useTranslation()
 
@@ -40,13 +46,17 @@ export default function CategoryList() {
         getAllCategoryInfo();
     }, []);
 
+    useEffect(() => {
+        getAllCategoryInfo();
+    }, [url, isDelete]);
+
     function getAllCategoryInfo() {
         try {
             const tempArr = [];
             db.collection('categories').get().then(snapshot => {
                 snapshot.docs.forEach((doc) => {
                     let temp = doc.data();
-                    tempArr.push({...temp});
+                    tempArr.push({...temp, id: doc.id});
                 });
                 setCategory(tempArr);
             });
@@ -56,28 +66,37 @@ export default function CategoryList() {
     }
 
     function addCategory() {
-        console.log(image)
-        storage.ref(`images/category-images//${image.name}`).put(image).on(
+        setDisabled(true)
+        storage.ref(`images/category-images/${image.name}`).put(image).on(
             "state_changed",
-            snapshot => {
+            () => {
             },
             error => {
                 console.log(error)
             },
             () => {
-                storage.ref("images")
+                storage.ref("images/category-images")
                     .child(image.name)
                     .getDownloadURL()
                     .then(url => {
-                        console.log(url)
-                    })
-            }
-        )
-        // db.collection('categories').add({
-        //     name: newCategoryName
-        // }).then(doc => {
-        //     console.log(doc.id)
-        // })
+                            setUrl(url)
+                            db.collection('categories').add({
+                                name: categoryName,
+                                image: url
+                            }).then(() => {
+                                setDisabled(false)
+                                setOpenModal(false)
+                            })
+                        }
+                    )
+            })
+    }
+
+    function deleteCategory() {
+        db.collection('categories').doc(id).delete().then(() => {
+            setDeletePopup(false)
+            setIsDelete(true)
+        }).catch(err => console.log(err))
     }
 
     function addFile(e) {
@@ -91,24 +110,28 @@ export default function CategoryList() {
     }
 
     function openAddedCategory() {
-        setOpenNewCategory(true)
+        setOpenModal(true)
+    }
+
+    function openDeletePopup(val, id) {
+        setId(id)
+        setDeletePopup(val)
     }
 
     return (
         <div>
             <div className={classes.categoryView}>{
                 category.map((item) => {
-                        return (<Link to={{pathname: `/categories/${item.name}`}}
-                                      key={uniqId()}
-                                      style={{textDecoration: 'none', margin: '5px', marginTop: '10px'}}>
-                                <Category key={uniqId()} name={item.name} image={item.image}/>
-                            </Link>
+                        return (<div key={item.id}
+                                     style={{textDecoration: 'none', margin: '5px', marginTop: '10px'}}>
+                                <Category id={item.id} name={item.name} image={item.image} onDelete={openDeletePopup}/>
+                            </div>
                         )
                     }
                 )
             }
             </div>
-            <ModalDialog open={openNewCategory}
+            <ModalDialog open={openModal}
                          content={
                              <div>
                                  <div>
@@ -117,13 +140,26 @@ export default function CategoryList() {
                                  </div>
                                  <div>
                                      <h3 className={classes.newCategoryName}>{t('chooseCategoryImage')}</h3>
-                                     <input type="file" onChange={addFile}/>
+                                     <Fab color="primary" component="label">
+                                         <CloudUploadIcon/>
+                                         <input
+                                             type="file"
+                                             onChange={addFile}
+                                             style={{display: "none"}}/>
+                                     </Fab>
                                  </div>
+                                 <h3 className={classes.newCategoryName}>{image?.name}</h3>
                              </div>
                          }
+                         disabled={!categoryName || !image || disabled}
                          doneButton={addCategory}
                          doneButtonName={t('add')}
-                         close={() => setOpenNewCategory(false)}/>
+                         close={() => setOpenModal(false)}/>
+            <ModalDialog open={deletePopup}
+                         title={t('areYouSure')}
+                         doneButton={deleteCategory}
+                         doneButtonName={t('yes')}
+                         close={() => setDeletePopup(false)}/>
             <div onClick={openAddedCategory} className={classes.btnParent}>
                 <MyButton newcolor={ORANGE} variant="contained">Add Category</MyButton>
             </div>

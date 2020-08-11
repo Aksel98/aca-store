@@ -5,12 +5,14 @@ import {db} from '../../services/firebase/Firebase';
 import {useHistory, useParams} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import ModalDialog from "../../main/modal/ModalDialog";
-import {LOGIN_URL} from "../../services/api/Navigations";
+import {HOME_URL, LOGIN_URL} from "../../services/api/Navigations";
 import {useTranslation} from "react-i18next";
 import Filters from "./Filters";
 import Loader from "../../main/Loader";
-import {MyButton} from "../../main/constants/Constants";
+import {BLUE, MyButton} from "../../main/constants/Constants";
 import Pagination from '@material-ui/lab/Pagination';
+import Fab from '@material-ui/core/Fab';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -18,6 +20,7 @@ const useStyles = makeStyles(() => ({
         display: props => !props.mediaTablet && 'flex',
     },
     productsParent: {
+        position: 'relative',
         width: '100%',
         display: 'flex',
         justifyContent: 'center'
@@ -41,7 +44,11 @@ const useStyles = makeStyles(() => ({
         padding: 5
     },
     nothingFound: {
-        color: '#3f51b5'
+        color: BLUE
+    },
+    backIcon: {
+        position: 'absolute',
+        left: 20
     }
 }))
 
@@ -72,24 +79,28 @@ export default function ProductList() {
                 .where('device', '==', category)
                 .orderBy('price', orderBy)
                 .get().then(snap => {
-                const startAt = snap.docs[page === 1 ? 0 : (page - 1) * limit];
-                setPaginationSize(Math.ceil(snap.docs.length / limit))
-                db.collection('product')
-                    .where('device', '==', category)
-                    .orderBy('price', orderBy)
-                    .where('price', '<', priceFilter[1])
-                    .where('price', '>', priceFilter[0])
-                    .limit(limit)
-                    .startAt(startAt)
-                    .get().then(snapshot => {
-                    const tempArr = [];
-                    snapshot.docs.forEach(doc => {
-                        let temp = doc.data();
-                        tempArr.push({...temp, id: doc.id})
+                if (snap.docs.length) {
+                    const startAt = snap.docs[page === 1 ? 0 : (page - 1) * limit];
+                    setPaginationSize(Math.ceil(snap.docs.length / limit))
+                    db.collection('product')
+                        .where('device', '==', category)
+                        .orderBy('price', orderBy)
+                        .where('price', '<', priceFilter[1])
+                        .where('price', '>', priceFilter[0])
+                        .limit(limit)
+                        .startAt(startAt)
+                        .get().then(snapshot => {
+                        const tempArr = [];
+                        snapshot.docs.forEach(doc => {
+                            let temp = doc.data();
+                            tempArr.push({...temp, id: doc.id})
+                        })
+                        nameFilter ? setProducts(products.filter(product => product.model.includes(nameFilter))) : setProducts(tempArr);
+                        setLoader(false)
                     })
-                    nameFilter ? setProducts(products.filter(product => product.model.includes(nameFilter))) : setProducts(tempArr);
+                } else {
                     setLoader(false)
-                })
+                }
             }).catch(err => console.log(err));
         } catch (e) {
             console.log("can not  get the docs:", e);
@@ -125,11 +136,14 @@ export default function ProductList() {
                      onOrder={orderHandler}
                      onPrice={priceHandler}/>
             <div className={classes.productsParent}>
+                <div onClick={() => history.push(HOME_URL)} className={classes.backIcon}>
+                    <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
+                </div>
                 {loader ? <Loader/> : <div>
                     <div className={classes.btnParent}>
                         <MyButton color="primary"
-                                  maxwidth="55%"
-                                  variant="contained">Add Device</MyButton>
+                                  maxwidth="75%"
+                                  variant="contained">{t('addDevice')}</MyButton>
                     </div>
                     <div className={classes.products}>
                         {products.length ? products.map((item) => (
