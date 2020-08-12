@@ -11,7 +11,7 @@ import { auth, db } from "../services/firebase/Firebase";
 import { useHistory } from "react-router-dom";
 import SnackBar from "../main/SnackBar";
 import { HOME_URL } from "../services/api/Navigations";
-import { firebase } from "../services/firebase/Firebase";
+import firebase from "firebase";
 
 const useStyles = makeStyles({
     backIcon: {
@@ -147,6 +147,9 @@ export default function Login() {
             }).then(() => { console.log('user created') })
             setEmail('')
             history.push(HOME_URL)
+            return result.user.updateProfile({
+                displayName: firstname + ' ' + lastname
+            })
         }).catch(err => {
             setError(err.message)
         }).finally(() => {
