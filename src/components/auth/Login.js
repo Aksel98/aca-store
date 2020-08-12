@@ -137,24 +137,34 @@ export default function Login() {
 
     function signUp(e) {
         e.preventDefault()
-        auth.createUserWithEmailAndPassword(email, password).then((result) => {
-            const user = firebase.auth().currentUser
-            console.log(user.uid)
-            db.collection('users').doc(user.uid).set({
-                name: firstname,
-                surname: lastname,
-                email: email
-            }).then(() => { console.log('user created') })
-            setEmail('')
-            history.push(HOME_URL)
-            return result.user.updateProfile({
-                displayName: firstname + ' ' + lastname
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((result) => {
+
+                return result.user.updateProfile({
+                    displayName: firstname + ' ' + lastname
+                })
             })
-        }).catch(err => {
-            setError(err.message)
-        }).finally(() => {
-            setPassword('')
-        })
+
+            .then(() => {
+                const user = firebase.auth().currentUser
+                console.log(user.uid)
+                return db.collection('users').doc(user.uid).set({
+                    name: firstname,
+                    surname: lastname,
+                    email: email
+                })
+
+
+            })
+            .then(() => {
+                setEmail('')
+                history.push(HOME_URL)
+            })
+            .catch(err => {
+                setError(err.message)
+            }).finally(() => {
+                setPassword('')
+            })
     }
     const onFirstChange = (e) => {
         setFirst(e.target.value)
