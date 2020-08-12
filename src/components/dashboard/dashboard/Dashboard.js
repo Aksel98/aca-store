@@ -18,9 +18,6 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         padding: '150px 10px',
         opacity: '0.6',
-    },
-    mainContent: {
-        minHeight: 640
     }
 })
 

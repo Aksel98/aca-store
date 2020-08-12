@@ -14,7 +14,7 @@ const useStyles = makeStyles({
         overflowX: 'hidden'
     },
     mainContent: {
-        minHeight: 640
+        minHeight: 730
     }
 })
 

@@ -1,6 +1,7 @@
 import React from "react";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import PropTypes from 'prop-types';
 
 export default function SnackBar(props) {
     const [open, setOpen] = React.useState(true);
@@ -16,4 +17,10 @@ export default function SnackBar(props) {
             </MuiAlert>
         </Snackbar>
     )
+}
+
+SnackBar.propTypes = {
+    duration: PropTypes.number,
+    error: PropTypes.bool,
+    message: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }

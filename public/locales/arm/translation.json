@@ -24,5 +24,11 @@
   "price": "Գինը",
   "orderBy": "Դասավորել ըստ",
   "ascending": "Աճման",
-  "descending": "Նվազման"
+  "descending": "Նվազման",
+  "thereIsNoItems": "Ոչինչ չի գտնվել",
+  "chooseCategoryName": "Ընտրեք կատեգորիայի անունը",
+  "chooseCategoryImage": "Ընտրեք կատեգորիայի նկարը",
+  "add": "Ավելացնել",
+  "addDevice": "Ավելացնել սարք",
+  "areYouSure": "Համոզված ե՞ք"
 }
