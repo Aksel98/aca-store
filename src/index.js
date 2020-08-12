@@ -4,14 +4,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 import './components/services/translations/i18next'
-import {applyMiddleware, createStore} from "redux";
-import thunk from "redux-thunk"
-import logger from "redux-logger"
-import allReducers from "./components/services/redux/reducer/reducers";
 import {Provider} from "react-redux";
-import {composeWithDevTools} from "redux-devtools-extension/index";
-
-const store = createStore(allReducers, composeWithDevTools(applyMiddleware(logger, thunk)),)
+import store from "./components/services/redux/store";
 
 ReactDOM.render(
     <React.StrictMode>

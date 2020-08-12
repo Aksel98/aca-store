@@ -136,9 +136,6 @@ export default function Login() {
         auth.createUserWithEmailAndPassword(email, password).then((result) => {
             setEmail('')
             history.push(HOME_URL)
-            return result.user.updateProfile({
-                displayName: ''
-            })
         }).catch(err => {
             setError(err.message)
         }).finally(() => {
