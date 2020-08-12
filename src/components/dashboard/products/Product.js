@@ -7,6 +7,7 @@ import {useMediaQuery} from "@material-ui/core";
 import {UserContext} from "../../main/context/UserContext";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
+import { BasketContext } from '../../main/context/BasketContext';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -86,12 +87,27 @@ const useStyles = makeStyles(() => ({
 
 export default function Product(props) {
     const [hover, setHover] = useState(false);
+    const [basket, setBasket] = useContext(BasketContext);
     const {device, image, name, id, price, openModal} = props
     const currentUser = useContext(UserContext)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:475px)');
     const classes = useStyles({mediaTablet, mediaMobile});
     const {t} = useTranslation()
+
+    const addToBasket = () => {
+        let localArr = [];
+        if (localStorage.getItem('ItemsInBasket')) {
+            localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
+            if (!localArr.includes(id)) { localArr.push(id) }
+            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
+        }
+        else {
+            localArr.push(id);
+            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
+        }
+        setBasket(localArr);
+    }
 
     return (
         <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
@@ -111,7 +127,7 @@ export default function Product(props) {
                                   onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
                     </div>
                     <div className={classes.btnParent}>
-                        <MyButton newcolor={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
+                        <MyButton newcolor={ORANGE} className={classes.btn} onClick={addToBasket}>{t('addToCart')}</MyButton>
                     </div>
                 </div>
             )}

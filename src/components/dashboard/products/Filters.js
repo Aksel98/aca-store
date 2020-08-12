@@ -3,8 +3,8 @@ import TextField from "@material-ui/core/TextField";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import Slider from "@material-ui/core/Slider";
-import {makeStyles} from "@material-ui/core/styles";
-import {useTranslation} from "react-i18next";
+import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
     filters: {
@@ -37,9 +37,9 @@ const useStyles = makeStyles({
 })
 
 export default function Filters(props) {
-    const {name, orderBy, price, onSearch, onOrder, onPrice} = props
+    const { name, orderBy, price, onSearch, onOrder, onPrice } = props
     const classes = useStyles();
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.filters}>
@@ -47,19 +47,19 @@ export default function Filters(props) {
                 <div className={classes.filterType}>
                     <div className={classes.filtersTitle}>{t('search')}</div>
                     <TextField value={name}
-                               onChange={onSearch}
-                               autoComplete="on"/>
+                        onChange={onSearch}
+                        autoComplete="on" />
                 </div>
                 <div className={classes.filterType}>
                     <div className={classes.filtersTitle}>{t('orderBy')}</div>
                     <div onClick={() => onOrder('asc')} className={classes.orders}>
-                        {orderBy === 'asc' ? <CheckBoxIcon color="primary" cursor="pointer"/> :
-                            <CheckBoxOutlineBlankIcon color="primary" cursor="pointer"/>}
+                        {orderBy === 'asc' ? <CheckBoxIcon color="primary" cursor="pointer" /> :
+                            <CheckBoxOutlineBlankIcon color="primary" cursor="pointer" />}
                         <div className={classes.filtersSubtitle}>{t('ascending')}</div>
                     </div>
                     <div onClick={() => onOrder('desc')} className={classes.orders}>
-                        {orderBy === 'desc' ? <CheckBoxIcon color="primary" cursor="pointer"/> :
-                            <CheckBoxOutlineBlankIcon color="primary" cursor="pointer"/>}
+                        {orderBy === 'desc' ? <CheckBoxIcon color="primary" cursor="pointer" /> :
+                            <CheckBoxOutlineBlankIcon color="primary" cursor="pointer" />}
                         <div className={classes.filtersSubtitle}>{t('descending')}</div>
                     </div>
                 </div>
@@ -67,7 +67,7 @@ export default function Filters(props) {
                     <div className={classes.filtersTitle}>{t('price')}</div>
                     <Slider
                         min={50}
-                        max={1000}
+                        max={1500}
                         step={50}
                         value={price}
                         onChange={onPrice}

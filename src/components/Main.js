@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Dashboard from "./dashboard/dashboard/Dashboard";
 import {auth} from "./services/firebase/Firebase";
 import {UserContext} from "./main/context/UserContext";
-import Loader from "./main/Loader";
+import { BasketContext } from "./main/context/BasketContext";
 
 export default function Main() {
-    const [currentUser, setCurrentUser] = useState('')
+    const [currentUser, setCurrentUser] = useState(null)
+    const [basket, setBasket] = useState(JSON.parse(localStorage.getItem('ItemsInBasket')) || []);
 
     useEffect(() => {
         auth.onAuthStateChanged(user => {
@@ -13,10 +14,14 @@ export default function Main() {
         })
     }, [])
 
+
     return (
-        currentUser === '' ? <Loader/> :
         <UserContext.Provider value={currentUser}>
-            <Dashboard/>
+            <BasketContext.Provider value={[basket, setBasket]}>
+                <Dashboard />
+            </BasketContext.Provider>
+
+
         </UserContext.Provider>
     )
 }

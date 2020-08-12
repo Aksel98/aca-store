@@ -1,13 +1,15 @@
 import React from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
-import {HOME_URL} from "../../services/api/Navigations";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { HOME_URL } from "../../services/api/Navigations";
 import Header from "../Header";
 import Carousel from "../Carousel";
 import CategoryList from "../category/CategoryList";
 import Footer from "../Footer";
 import ProductList from "../products/ProductList";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Device from "../Device";
+
+import Checkout from "../checkout/Checkout";
 
 const useStyles = makeStyles({
     dashboardParent: {
@@ -25,27 +27,30 @@ export default function GeneralRoutes() {
         <Switch className={classes.dashboardParent}>
             <Route path={HOME_URL}>
                 <div className={classes.mainContent}>
-                    <Header/>
-                    <Carousel/>
-                    <CategoryList/>
+                    <Header />
+                    <Carousel />
+                    <CategoryList />
                 </div>
-                <Footer/>
+                <Footer />
+            </Route>
+            <Route exact path='/checkout'>
+                <Checkout />
             </Route>
             <Route exact path='/categories/:category'>
                 <div className={classes.mainContent}>
-                    <Header/>
-                    <ProductList/>
+                    <Header />
+                    <ProductList />
                 </div>
-                <Footer/>
+                <Footer />
             </Route>
             <Route exact path='/categories/:category/:id'>
                 <div className={classes.mainContent}>
-                    <Header/>
-                    <Device/>
+                    <Header />
+                    <Device />
                 </div>
-                <Footer/>
+                <Footer />
             </Route>
-            <Redirect to={HOME_URL}/>
+            <Redirect to={HOME_URL} />
         </Switch>
     )
 }
