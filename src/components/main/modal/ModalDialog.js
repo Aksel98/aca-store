@@ -17,18 +17,17 @@ export default function ModalDialog(props) {
                 onClose={props.close}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description">
-                <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+                {props.title && <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>}
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">{props.text}</DialogContentText>
+                    <div>{props.content}</div>
                 </DialogContent>
                 <DialogActions>
-                    <MyButton color={BLACK}
-                              variant="contained"
+                    <MyButton variant="contained"
                               autoFocus
                               onClick={props.close}>{t('cancel')}
                     </MyButton>
-                    <MyButton color={ORANGE}
-                              variant="contained"
+                    <MyButton variant="contained"
                               autoFocus
                               onClick={props.doneButton}>{props.doneButtonName || t('yes')}
                     </MyButton>
