@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, makeStyles, TextField } from '@material-ui/core';
 const useStyles = makeStyles({
     mainWrapper: {
-        width: '30%',
-        display: 'flex',
-        flexDirection: 'column',
-        margin: '20px',
-        justifyContent: 'space-around'
 
+        display: 'flex',
+        flexDirection: 'row',
+        margin: '20px',
+        justifyContent: 'space-around',
+        marginRight: '200px'
     }
 })
 const ConfirmAndPay = (props) => {
@@ -15,14 +15,18 @@ const ConfirmAndPay = (props) => {
     const classes = useStyles();
     return (
         <div className={classes.mainWrapper} >
-            <div style={{ textAlign: 'center' }}>
-                Order Summary
+            <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'left' }}>
                 <div>
-                    {props.summary}
+                    Order Summary
                 </div>
+
+                <Button style={{ padding: '0' }} > confirm and pay</Button>
+
             </div>
-            {/* <TextField value={} /> */}
-            <Button > confirm and pay</Button>
+            <div>
+                AMOUNT
+            </div>
+
         </div>
     )
 }

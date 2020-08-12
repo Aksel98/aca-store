@@ -90,9 +90,12 @@ const Checkout = () => {
                 <div >
                     {!basketItems ? 'you have 0 items in your cart' : choosenItems.map(item => <CheckoutItems image={item.image} model={item.model} price={item.price} id={item.id} remove={removeItem} key={uniqid()} />)}
                 </div>
+                <div style={{ alignSelf: 'flex-end' }}>
+                    <ConfirmAndPay />
+                </div>
 
             </div>
-            <ConfirmAndPay />
+
             <Footer />
         </div>
 
