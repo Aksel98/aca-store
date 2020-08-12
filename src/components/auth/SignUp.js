@@ -1,17 +1,17 @@
-import React, {useState} from "react";
-import {makeStyles, styled} from "@material-ui/core/styles";
+import React, { useState } from "react";
+import { makeStyles, styled } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
 import FacebookIcon from "@material-ui/icons/Facebook";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import MailIcon from "@material-ui/icons/Mail";
 import PhoneIcon from '@material-ui/icons/Phone';
-import {BLACK, MyButton} from "../main/constants/Constants"
+import { BLACK, MyButton } from "../main/constants/Constants"
 import EmailIcon from '@material-ui/icons/Email';
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
-import {useTranslation} from "react-i18next";
-import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../services/api/SignInPopups";
-import {useHistory} from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { signInFacebook, signInGithub, signInGoogle, signInPhoneNumber } from "../services/api/SignInPopups";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     signUpContainer: {
@@ -51,49 +51,63 @@ const MyBtn = styled(MyButton)({
 
 export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {email, password, error, onValueChange, signUp, rightPanel, classFormContainer, media} = props
+    const { firstname, lastname, email, password, error, onFirstChange, onLastChange, onValueChange, signUp, rightPanel, classFormContainer, media } = props
     const history = useHistory()
-    const classes = useStyles({rightPanel, media})
-    const {t} = useTranslation()
+    const classes = useStyles({ rightPanel, media })
+    const { t } = useTranslation()
 
     return (
-            <div className={`${classFormContainer} ${classes.signUpContainer}`}>
-                <form>
-                    {media ? <h2>{t('createAccount')}</h2> : <h3>{t('createAccount')}</h3>}
-                    <div className={classes.socialContainer}>
-                        <div onClick={() => signInGoogle(history)} className={classes.social}><MailIcon/></div>
-                        <div onClick={() => signInFacebook(history)} className={classes.social}><FacebookIcon/></div>
-                        <div onClick={() => signInGithub(history)} className={classes.social}><GitHubIcon/></div>
-                        <div onClick={() => signInPhoneNumber(history)} className={classes.social}><PhoneIcon/></div>
-                    </div>
-                    <span>{t('useYourEmailForRegistration')}</span>
-                    <MyTextField label={`${t('email')}...`}
-                                 type="email"
-                                 InputProps={{endAdornment: <EmailIcon position="start"/>}}
-                                 value={email}
-                                 onChange={onValueChange}
-                                 autoComplete="on"
-                                 error={!!error}/>
-                    <MyTextField label={`${t('password')}...`}
-                                 type={showPassword ? 'text' : 'password'}
-                                 InputProps={{
-                                     endAdornment: (
-                                         <div className={classes.cursor}> {showPassword ?
-                                             <VisibilityIcon position="start"
-                                                             onClick={() => setShowPassword(!showPassword)}/> :
-                                             <VisibilityOffIcon position="start"
-                                                                onClick={() => setShowPassword(!showPassword)}/>}
-                                         </div>)
-                                 }}
-                                 value={password}
-                                 onChange={onValueChange}
-                                 autoComplete="off"
-                                 error={!!error}/>
-                    <MyBtn color="primary"
-                           variant="contained"
-                           disabled={!email || !password}
-                           onClick={signUp}>{t('signUp')}</MyBtn>
-                </form>
+        <div className={`${classFormContainer} ${classes.signUpContainer}`}>
+            <form>
+                {media ? <h2>{t('createAccount')}</h2> : <h3>{t('createAccount')}</h3>}
+                <div className={classes.socialContainer}>
+                    <div onClick={() => signInGoogle(history)} className={classes.social}><MailIcon /></div>
+                    <div onClick={() => signInFacebook(history)} className={classes.social}><FacebookIcon /></div>
+                    <div onClick={() => signInGithub(history)} className={classes.social}><GitHubIcon /></div>
+                    <div onClick={() => signInPhoneNumber(history)} className={classes.social}><PhoneIcon /></div>
+                </div>
+                <span>{t('useYourEmailForRegistration')}</span>
+                <MyTextField label={`${t('First Name')}`}
+                    type='firstname'
+                    // InputProps={{ endAdornment: <EmailIcon position="start" /> }}
+                    value={firstname}
+                    onChange={onFirstChange}
+                    // autoComplete="on"
+                    error={!!error} />
+                <MyTextField label={`${t('Last Name')}`}
+                    type="lastname"
+                    // InputProps={{ endAdornment: <EmailIcon position="start" /> }}
+                    value={lastname}
+                    onChange={onLastChange}
+                    // autoComplete="on"
+                    error={!!error} />
+                <MyTextField label={`${t('email')}...`}
+                    type="email"
+                    InputProps={{ endAdornment: <EmailIcon position="start" /> }}
+                    value={email}
+                    onChange={onValueChange}
+                    autoComplete="on"
+                    error={!!error} />
+                <MyTextField label={`${t('password')}...`}
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                        endAdornment: (
+                            <div className={classes.cursor}> {showPassword ?
+                                <VisibilityIcon position="start"
+                                    onClick={() => setShowPassword(!showPassword)} /> :
+                                <VisibilityOffIcon position="start"
+                                    onClick={() => setShowPassword(!showPassword)} />}
+                            </div>)
+                    }}
+                    value={password}
+                    onChange={onValueChange}
+                    autoComplete="off"
+                    error={!!error} />
+                <MyBtn color="primary"
+                    variant="contained"
+                    disabled={!email || !password}
+                    onClick={signUp}>{t('signUp')}</MyBtn>
+            </form>
         </div>
     )
 }
