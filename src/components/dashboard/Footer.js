@@ -1,33 +1,29 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import CallIcon from '@material-ui/icons/Call';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
-import TwitterIcon from '@material-ui/icons/Twitter';
 import {BLACK, WHITE, ORANGE} from "../main/constants/Constants";
 import MailIcon from '@material-ui/icons/Mail';
 import {Link, useLocation} from "react-router-dom";
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import {LOGO, MyButton} from "../main/constants/Constants";
+import {LOGO} from "../main/constants/Constants";
 import {HOME_URL} from "../services/api/Navigations";
 
 const useStyles = makeStyles(() => ({
     container: {
+        backgroundColor: BLACK,
+        opacity: '0.7',
         paddingTop: 10,
+    },
+    main: {
         display: "flex",
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
-        backgroundColor: BLACK,
-        opacity: '0.7',
     },
     itemsParent: {
         display: "flex",
         flexDirection: 'column',
         flexWrap: 'wrap',
-        padding: "0 8px",
+        padding: "0 5px",
         textAlign: "center"
     },
     logo: {
@@ -105,16 +101,10 @@ const useStyles = makeStyles(() => ({
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        border: "1px solid white "
-    },
-    socialIconsParent: {
-        textAlign: "center",
-    },
-    socialIcons: {
-        margin: '10px 0 0 10px',
-        color: ORANGE,
-        fontSize: 30
-    },
+        borderTop: "2px solid white ",
+        padding: 5,
+        marginTop: 10
+    }
 }));
 
 function Footer() {
@@ -122,8 +112,8 @@ function Footer() {
     const classes = useStyles(location.pathname === HOME_URL);
 
     return (
-        <div >
-            <div className={classes.container}>
+        <div className={classes.container}>
+            <div className={classes.main}>
                 <div className={classes.itemsParent}>
                     <div className={classes.logo}>
                         <img src={LOGO} width={40} height={30} alt=""/>
@@ -148,38 +138,8 @@ function Footer() {
                         <Link to="" className={classes.item}>Privacy Policy</Link>
                     </div>
                 </div>
-                <div className={classes.itemsParent}>
-                    <h3 className={classes.subTitle}>Subscribe More info</h3>
-                    <form className={classes.root} noValidate autoComplete="off">
-                        <TextField style={{margin: 10}}
-                                   label="Enter your email"
-                                   type="email"
-                                   autoComplete="off"
-                                   variant="outlined"
-                                   InputProps={{
-                                       startAdornment: (
-                                           <InputAdornment position="start">
-                                               <MailIcon style={{color: ORANGE}}/>
-                                           </InputAdornment>
-                                       ),
-                                   }}/>
-                    </form>
-                    <MyButton className={classes.containerButton} variant="contained" color="primary"
-                            href="#contained-buttons">
-                        Subscribe
-                    </MyButton>
-                </div>
             </div>
-            <div className={classes.container}>
-                <div className={classes.linksPart}/>
-                <div className={classes.socialIconsParent}>
-                    <FacebookIcon className={classes.socialIcons}/>
-                    <TwitterIcon className={classes.socialIcons}/>
-                    <InstagramIcon className={classes.socialIcons}/>
-                    <AlternateEmailIcon className={classes.socialIcons}/>
-                    <p className={classes.contactInfo}>2020 Online Shop LLC ALL right reserved</p>
-                </div>
-            </div>
+            <div className={classes.linksPart}/>
         </div>
     );
 }

@@ -2,16 +2,17 @@ import React, { useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { BLACK, GREY, MyButton, ORANGE, WHITE } from '../../main/constants/Constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
+import { BasketContext } from '../../main/context/BasketContext';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { useMediaQuery } from "@material-ui/core";
 import { UserContext } from "../../main/context/UserContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { BasketContext } from '../../main/context/BasketContext';
 
 const useStyles = makeStyles(() => ({
     root: {
         position: 'relative',
-        width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 210,
+        width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 205,
         height: props => props.mediaTablet ? (props.mediaMobile ? 215 : 255) : 300,
         display: 'flex',
         flexDirection: 'column',
@@ -39,6 +40,7 @@ const useStyles = makeStyles(() => ({
         fontSize: props => props.mediaMobile ? 16 : 20,
         fontWeight: 'bold',
         fontStyle: 'italic',
+        marginBottom: 25,
         paddingBottom: 25
     },
     price: {
@@ -66,6 +68,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     btn: {
+        fontSize: 13,
         '&:hover': {
             fontWeight: 700
         }
@@ -76,6 +79,10 @@ const useStyles = makeStyles(() => ({
             fontWeight: 'bold'
         }
     },
+    deleteBtn: {
+        width: 35,
+        position: 'absolute'
+    }
 }));
 
 export default function Product(props) {
@@ -83,27 +90,15 @@ export default function Product(props) {
     const { device, image, name, id, price, openModal } = props
     const currentUser = useContext(UserContext)
     const mediaTablet = useMediaQuery('(max-width:600px)');
-    const mediaMobile = useMediaQuery('(max-width:460px)');
+    const mediaMobile = useMediaQuery('(max-width:475px)');
     const classes = useStyles({ mediaTablet, mediaMobile });
-    const { t } = useTranslation();
-    const [basket, setBasket] = useContext(BasketContext);
-    const addToBasket = () => {
-        let localArr = [];
-        if (localStorage.getItem('ItemsInBasket')) {
-            localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
-            if (!localArr.includes(id)) { localArr.push(id) }
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        else {
-            localArr.push(id);
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        setBasket(localArr);
-    }
-
+    const { t } = useTranslation()
 
     return (
         <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <div className={classes.deleteBtn}>
+                <MyButton newcolor={ORANGE}><HighlightOffIcon /></MyButton>
+            </div>
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
                 <img className={classes.productImage} src={image} alt="got nothing yet :)" />
                 <div className={classes.modelInfo}>
@@ -113,10 +108,11 @@ export default function Product(props) {
             </Link>
             {hover && (<div className={classes.btnWrapper}>
                 <div style={{ display: 'flex' }}>
-                    <MyButton newcolor={ORANGE} onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon /></MyButton>
+                    <MyButton newcolor={ORANGE}
+                        onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon /></MyButton>
                 </div>
                 <div className={classes.btnParent}>
-                    <MyButton newcolor={ORANGE} className={classes.btn} onClick={addToBasket}>{t('addToCart')}</MyButton>
+                    <MyButton newcolor={ORANGE} className={classes.btn}>{t('addToCart')}</MyButton>
                 </div>
             </div>
             )}

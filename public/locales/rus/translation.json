@@ -24,5 +24,11 @@
   "price": "Цена",
   "orderBy": "Сортировать по",
   "ascending": "По возрастанию",
-  "descending": "По убыванию"
+  "descending": "По убыванию",
+  "nothingIsFound": "Ничего не найдено",
+  "chooseCategoryName": "Выберите название категории",
+  "chooseCategoryImage": "Выберите изображение категории",
+  "add": "Добавить",
+  "addDevice": "Добавить устройство",
+  "areYouSure": "Ты уверен?"
 }
