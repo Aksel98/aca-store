@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import { BLACK, ORANGE, WHITE, RED, GREY } from "../main/constants/Constants"
+import {BLACK, ORANGE, WHITE, GREY, BLUE} from "../main/constants/Constants"
 import DropDown from "../main/Dropdown";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -11,8 +11,6 @@ import { auth } from "../services/firebase/Firebase";
 import { LOGO } from "../main/constants/Constants";
 import { useMediaQuery } from "@material-ui/core";
 import { HOME_URL, LOGIN_URL } from "../services/api/Navigations";
-
-import { useEffect } from 'react';
 import { BasketContext } from '../main/context/BasketContext';
 
 const useStyles = makeStyles({
@@ -38,7 +36,7 @@ const useStyles = makeStyles({
         width: '0.8rem',
         height: '0.8rem',
         lineHeight: '0.8rem',
-        color: RED,
+        color: BLUE,
         backgroundColor: GREY,
         fontWeight: 'bolder',
         fontSize: '0.7rem',

@@ -6,9 +6,8 @@ import { BasketContext } from "./main/context/BasketContext";
 import Loader from "./main/Loader";
 
 export default function Main() {
-
+    const [currentUser, setCurrentUser] = useState('')
     const [basket, setBasket] = useState(JSON.parse(localStorage.getItem('ItemsInBasket')) || []);
-    const [currentUser, setCurrentUser] = useState('');
 
     useEffect(() => {
         auth.onAuthStateChanged(user => {
