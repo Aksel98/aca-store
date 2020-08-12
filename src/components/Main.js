@@ -3,9 +3,10 @@ import Dashboard from "./dashboard/dashboard/Dashboard";
 import {auth} from "./services/firebase/Firebase";
 import {UserContext} from "./main/context/UserContext";
 import { BasketContext } from "./main/context/BasketContext";
+import Loader from "./main/Loader";
 
 export default function Main() {
-    const [currentUser, setCurrentUser] = useState(null)
+    const [currentUser, setCurrentUser] = useState('')
     const [basket, setBasket] = useState(JSON.parse(localStorage.getItem('ItemsInBasket')) || []);
 
     useEffect(() => {
@@ -16,12 +17,11 @@ export default function Main() {
 
 
     return (
+        currentUser === '' ? <Loader/> :
         <UserContext.Provider value={currentUser}>
             <BasketContext.Provider value={[basket, setBasket]}>
                 <Dashboard />
             </BasketContext.Provider>
-
-
         </UserContext.Provider>
     )
 }
