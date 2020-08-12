@@ -197,6 +197,7 @@ export default function Carousel() {
                                          <Fab color="primary" component="label">
                                              <AddIcon/>
                                              <input
+
                                                  type="file"
                                                  onChange={addFile}
                                                  style={{display: "none"}}/>
