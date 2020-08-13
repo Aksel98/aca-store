@@ -66,6 +66,7 @@ export default function Carousel() {
     const [imagesList, setImagesList] = useState([])
     const [modal, setModal] = useState(false)
     const [url, setUrl] = useState('');
+    const [deletedImage, setDeletedImage] = useState(null);
     const classes = useStyles()
 
     useEffect(() => {
@@ -77,7 +78,13 @@ export default function Carousel() {
     }, [url])
 
     useEffect(() => {
-        let timerId = setTimeout(() => forward(), 500000);
+        let images = [...imagesList]
+        images = images.filter(el => el !== deletedImage)
+        setImagesList(images)
+    }, [deletedImage])
+
+    useEffect(() => {
+        let timerId = setTimeout(() => forward(), 5000);
         return () => clearTimeout(timerId)
     })
 
@@ -123,6 +130,7 @@ export default function Carousel() {
                 <CarouselAdmin isOpen={modal}
                                open={openModal}
                                images={imagesList}
+                               setDeletedImage={setDeletedImage}
                                setUrl={setUrl}/>
             </div> : <div className={classes.loaderParent}><Loader/></div>
     )

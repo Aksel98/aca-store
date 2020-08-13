@@ -45,7 +45,7 @@ const useStyles = makeStyles({
 
 export default function CarouselAdmin(props) {
     const [image, setImage] = useState(null);
-    const {isOpen, open, images, setImages, setUrl} = props
+    const {isOpen, open, images, setUrl, setDeletedImage} = props
     const {t} = useTranslation()
     const classes = useStyles()
 
@@ -62,7 +62,8 @@ export default function CarouselAdmin(props) {
                     .child(image.name)
                     .getDownloadURL()
                     .then(url => {
-                        setUrl(url)
+                            console.log(url)
+                            setUrl(url)
                         }
                     )
             }
@@ -75,6 +76,17 @@ export default function CarouselAdmin(props) {
         }
     }
 
+    function deleteImage(url) {
+        const image = storage.refFromURL(url);
+        storage.ref("images/carousel")
+            .child(image.name).delete().then(() => {
+                setDeletedImage(url)
+            }
+        ).catch((err) => {
+            console.log(err)
+        });
+    }
+
     return (
         <ModalDialog open={isOpen}
                      content={
@@ -83,7 +95,7 @@ export default function CarouselAdmin(props) {
                                  return <div key={uniqId} className={classes.adminImagesParent}>
                                      <img src={img}
                                           className={classes.adminCarouselImg} alt=''/>
-                                     <div className={classes.deleteBtn}>
+                                     <div onClick={() => deleteImage(img)} className={classes.deleteBtn}>
                                          <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
                                      </div>
                                      <div>{img.name}</div>
