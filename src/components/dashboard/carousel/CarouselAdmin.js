@@ -62,7 +62,6 @@ export default function CarouselAdmin(props) {
                     .child(image.name)
                     .getDownloadURL()
                     .then(url => {
-                            console.log(url)
                             setUrl(url)
                         }
                     )
