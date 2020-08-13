@@ -25,7 +25,7 @@ export default function ModalDialog(props) {
                 <DialogActions>
                     <MyButton variant="contained"
                               autoFocus
-                              onClick={props.close}>{t('cancel')}
+                              onClick={props.close}>{t('close')}
                     </MyButton>
                     <MyButton variant="contained"
                               disabled={props.disabled}

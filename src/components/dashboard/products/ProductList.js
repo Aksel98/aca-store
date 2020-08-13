@@ -36,7 +36,9 @@ const useStyles = makeStyles(() => ({
     },
     btnParent: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginLeft: 50,
+        marginBottom: props => props.mediaTablet && 20,
     },
     pagination: {
         display: 'flex',
@@ -61,7 +63,7 @@ export default function ProductList() {
     const [modal, setModal] = useState({open: false, title: '', text: ''});
     const [page, setPage] = useState(1);
     const [paginationSize, setPaginationSize] = useState(0)
-    const [limit] = useState(4)
+    const [limit] = useState(3)
     const history = useHistory();
     let {category} = useParams()
     const {t} = useTranslation()
@@ -108,6 +110,7 @@ export default function ProductList() {
     }
 
     const changePagination = (event, value) => {
+        setLoader(true)
         setPage(value);
     };
 
