@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
 import { BLACK, ORANGE, WHITE, GREY, BLUE } from "../main/constants/Constants"
@@ -133,7 +133,7 @@ const MyAppBar = styled(AppBar)({
 
 export default function Header() {
     const currentUser = useContext(UserContext)
-    const [userInitials, setInitials] = useState(currentUser ? firstLetters(currentUser.displayName) : null)
+    const [userInitials, setInitials] = useState(currentUser ? userLogo(currentUser.displayName) : null)
     const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
@@ -143,14 +143,10 @@ export default function Header() {
     useEffect(() => {
         let temp = '';
         if (currentUser) {
-            temp = firstLetters(currentUser.displayName)
+            temp = userLogo(currentUser.displayName)
         }
         setInitials(temp);
     }, [currentUser, currentUser?.displayName])
-
-    function firstLetters(user) {
-        if (user) { return user.split(' ').map(namepart => namepart.slice(0, 1).toUpperCase()).join(''); }
-    }
 
     function userLogo(user) {
         if (user) {
@@ -176,7 +172,17 @@ export default function Header() {
                     {media && <>
                         <ShoppingCartIcon className={classes.menuItem}/>
                         {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
-                        {currentUser && <div onClick={logOut} className={classes.menuItem}>{t('logout')}</div>}
+                        {currentUser &&
+                        <div className={classes.menuItem}>
+                            <DropDown name={<div className={classes.userLogo}>{userLogo(currentUser.displayName)}</div>} dropdownContent={
+                                <React.Fragment>
+                                    <div onClick={logOut} className={classes.dropdownItemParent}  style={{marginTop: 15}}>
+                                        {t('logout')}
+                                    </div>
+                                </React.Fragment>}
+                            />
+                        </div>
+                        }
                     </>}
                 </div>
                 {!media ? <div className={classes.subMenu}>
@@ -194,14 +200,11 @@ export default function Header() {
                     </>}/>
                     </div>
 
-                    {/* <ShoppingCartIcon className={classes.menuItem} /> */}
                     <Link className={classes.checkoutLink} to='/checkout'>
                         <ShoppingCartIcon className={classes.menuItem}/>
                         <div className={classes.cardItems}
                         >{(itemsInBasket && itemsInBasket.length) ? itemsInBasket.length : null}</div>
                     </Link>
-
-                    {currentUser && <div className={classes.userLogo}><span>{userInitials}</span></div>}
                     {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser &&
                     <div className={classes.menuItem}>
