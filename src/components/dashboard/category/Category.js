@@ -2,7 +2,6 @@ import React from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import {MyButton, ORANGE} from "../../main/constants/Constants";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
-import uniqId from "uniqid";
 import {Link} from "react-router-dom";
 
 const useStyles = makeStyles({
