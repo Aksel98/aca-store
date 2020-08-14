@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK, ORANGE, WHITE, GREY, BLUE} from "../main/constants/Constants"
+import { BLACK, ORANGE, WHITE, GREY, BLUE } from "../main/constants/Constants"
 import DropDown from "../main/Dropdown";
 import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
@@ -133,20 +133,30 @@ const MyAppBar = styled(AppBar)({
 
 export default function Header() {
     const currentUser = useContext(UserContext)
+    const [userInitials, setInitials] = useState(currentUser ? firstLetters(currentUser.displayName) : null)
+    const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
-    const classes = useStyles({media, pathName: location.pathname === HOME_URL});
-    const {t, i18n} = useTranslation()
+    const classes = useStyles({ media, pathName: location.pathname === HOME_URL });
+    const { t, i18n } = useTranslation()
+
+    useEffect(() => {
+        let temp = '';
+        if (currentUser) {
+            temp = firstLetters(currentUser.displayName)
+        }
+        setInitials(temp);
+    }, [currentUser, currentUser?.displayName])
+
+    function firstLetters(user) {
+        if (user) { return user.split(' ').map(namepart => namepart.slice(0, 1).toUpperCase()).join(''); }
+    }
 
     function userLogo(user) {
         if (user) {
             return user.split(' ').map(namepart => namepart.slice(0, 1).toUpperCase()).join('');
         }
     }
-
-    //number of items
-
-    const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
 
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
@@ -190,8 +200,8 @@ export default function Header() {
                         <div className={classes.cardItems}
                         >{(itemsInBasket && itemsInBasket.length) ? itemsInBasket.length : null}</div>
                     </Link>
-                    {/*{currentUser &&*/}
-                    {/*<div className={classes.userLogo}><span>{userLogo(currentUser.displayName)}</span></div>}*/}
+
+                    {currentUser && <div className={classes.userLogo}><span>{userInitials}</span></div>}
                     {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser &&
                     <div className={classes.menuItem}>
