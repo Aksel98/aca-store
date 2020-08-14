@@ -7,10 +7,11 @@ import { useMediaQuery } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from "react-router-dom";
-import { auth } from "../services/firebase/Firebase";
+import { auth, db } from "../services/firebase/Firebase";
 import { useHistory } from "react-router-dom";
 import SnackBar from "../main/SnackBar";
 import { HOME_URL } from "../services/api/Navigations";
+import firebase from "firebase";
 
 const useStyles = makeStyles({
     backIcon: {
@@ -94,6 +95,8 @@ const useStyles = makeStyles({
 })
 
 export default function Login() {
+    const [firstname, setFirst] = useState('')
+    const [lastname, setLast] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -134,16 +137,41 @@ export default function Login() {
 
     function signUp(e) {
         e.preventDefault()
-        auth.createUserWithEmailAndPassword(email, password).then((result) => {
-            setEmail('')
-            history.push(HOME_URL)
-        }).catch(err => {
-            setError(err.message)
-        }).finally(() => {
-            setPassword('')
-        })
-    }
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((result) => {
 
+                return result.user.updateProfile({
+                    displayName: firstname + ' ' + lastname
+                })
+            })
+
+            .then(() => {
+                const user = firebase.auth().currentUser
+                console.log(user.uid)
+                return db.collection('users').doc(user.uid).set({
+                    name: firstname,
+                    surname: lastname,
+                    email: email
+                })
+
+
+            })
+            .then(() => {
+                setEmail('')
+                history.push(HOME_URL)
+            })
+            .catch(err => {
+                setError(err.message)
+            }).finally(() => {
+                setPassword('')
+            })
+    }
+    const onFirstChange = (e) => {
+        setFirst(e.target.value)
+    }
+    const onLastChange = (e) => {
+        setLast(e.target.value)
+    }
     function onValueChange(e) {
         e.target.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)
         setError('')
@@ -152,9 +180,14 @@ export default function Login() {
     return (
         <div className={classes.container}>
             <Link to={HOME_URL} className={classes.backIcon}><ArrowBackIcon /></Link>
-            <SignUp email={email}
+            <SignUp
+                firstname={firstname}
+                lastname={lastname}
+                email={email}
                 password={password}
                 error={error}
+                onFirstChange={onFirstChange}
+                onLastChange={onLastChange}
                 onValueChange={onValueChange}
                 signUp={signUp}
                 rightPanel={rightPanel} a

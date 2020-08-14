@@ -24,7 +24,7 @@ const ConfirmAndPay = (props) => {
 
             </div>
             <div>
-                AMOUNT
+                156564646464
             </div>
 
         </div>
