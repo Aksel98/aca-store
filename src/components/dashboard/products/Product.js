@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { BLACK, GREY, MyButton, ORANGE, WHITE } from '../../main/constants/Constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
@@ -84,7 +84,13 @@ const useStyles = makeStyles(() => ({
         position: 'absolute'
     }
 }));
-
+function* counter() {
+    let count = 1;
+    while (true) {
+        yield count++
+    }
+}
+const count = counter();
 export default function Product(props) {
     const [hover, setHover] = useState(false);
     const [basket, setBasket] = useContext(BasketContext);
@@ -94,6 +100,11 @@ export default function Product(props) {
     const mediaMobile = useMediaQuery('(max-width:475px)');
     const classes = useStyles({ mediaTablet, mediaMobile });
     const { t } = useTranslation()
+    const [btnText, setText] = useState('')
+    useEffect(() => {
+        basket.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
+    }, [])
+
 
     const addToBasket = () => {
         let localArr = [];
@@ -106,6 +117,13 @@ export default function Product(props) {
             localArr.push(id);
             localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
         }
+        setBasket(localArr);
+    }
+    const removeFromBasket = () => {
+        let localArr = [];
+        localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
+        localArr.splice(localArr.indexOf(id), 1)
+        localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
         setBasket(localArr);
     }
 
@@ -127,7 +145,7 @@ export default function Product(props) {
                         onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon /></MyButton>
                 </div>
                 <div className={classes.btnParent}>
-                    <MyButton newcolor={ORANGE} className={classes.btn} onClick={addToBasket}>{t('addToCart')}</MyButton>
+                    <MyButton newcolor={ORANGE} className={classes.btn} onClick={() => { btnText === 'ADD TO CART' ? addToBasket() : removeFromBasket() }}>{t(btnText)}</MyButton>
                 </div>
             </div>
             )}

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useReducer } from "react";
 import { Button, makeStyles } from "@material-ui/core";
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { TextField } from '@material-ui/core';
 import { GREY, ORANGE, PURPLE, RED, BLUE } from "../../main/constants/Constants";
+import { SummaryContext } from "../../main/context/SummaryContext";
+import { useEffect } from "react";
 
 const useStyles = makeStyles({
     mainWrapper: {
@@ -61,16 +63,30 @@ const useStyles = makeStyles({
     }
 
 })
+
+
 export default function CheckoutItems(props) {
+    const [summary, setSummary] = useContext(SummaryContext);
     const classes = useStyles();
     const { image, model, price, id, parameters: info, remove } = props;
-    const [count, setCount] = useState(1);
-    const decreaseCount = () => {
-        count > 1 ? setCount(count - 1) : setCount(1)
+
+    const initialState = { count: 1, subTotal: price, id: id }
+
+    console.log(summary);
+    const [state, dispatch] = useReducer(reducer, initialState);
+    function reducer(state, action) {
+        switch (action.type) {
+            case 'increase':
+                return {
+                    count: state.count + 1, subTotal: (state.count + 1) * price
+                }
+            case 'decrease':
+                if (state.count > 1) {
+                    return { count: state.count - 1, subTotal: (state.count - 1) * price }
+                } else return { count: 1, subTotal: price };
+        }
     }
-    const increaseCount = () => {
-        setCount(count + 1)
-    }
+
     return (
         <div>
             <div className={classes.mainWrapper}>
@@ -86,19 +102,20 @@ export default function CheckoutItems(props) {
                     <div className={classes.itemCount} >
                         <RemoveIcon
                             cursor='pointer'
-                            onClick={decreaseCount}
+                            onClick={() => dispatch({ type: 'decrease' })}
                         />
                         <div className={classes.countText}>
-                            {count}
+                            {state.count}
                         </div>
 
                         <AddIcon
                             cursor='pointer'
-                            onClick={increaseCount}
+                            onClick={() => dispatch({ type: 'increase' })
+                            }
                         />
                     </div>
                     <div className={classes.textField}>
-                        {price * count + ' $'}
+                        {state.subTotal + ' $'}
                     </div>
 
 

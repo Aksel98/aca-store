@@ -134,24 +134,16 @@ export default function Header() {
 
     const currentUser = useContext(UserContext)
     const [userInitials, setInitials] = useState(currentUser ? firstLetters(currentUser.displayName) : null)
-    console.log(userInitials);
+    const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
     const classes = useStyles({ media, pathName: location.pathname === HOME_URL });
     const { t, i18n } = useTranslation()
-    useEffect(() => {
-        let temp = '';
-        if (currentUser) {
-            temp = firstLetters(currentUser.displayName)
-        }
-        setInitials(temp);
-    }, [currentUser, currentUser?.displayName])
+
+
     function firstLetters(user) {
         if (user) { return user.split(' ').map(namepart => namepart.slice(0, 1).toUpperCase()).join(''); }
     }
-    //number of items
-
-    const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
 
     function handleClick(lang) {
         return i18n.changeLanguage(lang)
@@ -160,6 +152,13 @@ export default function Header() {
     function logOut() {
         auth.signOut().then()
     }
+    useEffect(() => {
+        let temp = '';
+        if (currentUser) {
+            temp = firstLetters(currentUser.displayName)
+        }
+        setInitials(temp);
+    }, [currentUser, currentUser?.displayName])
 
     return (
         <MyAppBar style={{ position: media && 'unset' }}>

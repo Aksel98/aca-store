@@ -9,6 +9,7 @@ import uniqid from 'uniqid';
 import ConfirmAndPay from "./ConfirmAndPay";
 import { ORANGE, BLUE, GREY } from "../../main/constants/Constants";
 import { makeStyles } from "@material-ui/core";
+import { SummaryContext } from "../../main/context/SummaryContext";
 
 const useStyles = makeStyles({
     mainWrapper: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles({
 const Checkout = () => {
     const classes = useStyles();
     const [basketItems, setBasketItems] = useContext(BasketContext);
+    const [summary, setSummary] = useState(basketItems ? basketItems.map(item => { return { 'id': item, 'quantity': 1, 'price': 0 } }) : []);
     useEffect(() => setBasketItems(JSON.parse(localStorage.getItem('ItemsInBasket'))), []);
     const [choosenItems, setChoosenItems] = useState([]);
     const getCartItems = () => {
@@ -58,7 +60,9 @@ const Checkout = () => {
     }
     useEffect(() => {
         getCartItems();
+        // console.log(choosenItems);
     }, []);
+
     const removeItem = (itemID) => {
         let tempArr = [...choosenItems];
         tempArr = tempArr.filter(objItem => (objItem.id !== itemID))
@@ -67,36 +71,36 @@ const Checkout = () => {
         let localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
         localArr.splice(localArr.indexOf(itemID), 1);
         localStorage.setItem('ItemsInBasket', JSON.stringify(localArr));
-
-
     }
 
     return (
 
         <div>
-            <Header />
-            <div className={classes.mainWrapper}  >
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                    <div>
-                        MODEL
+            <SummaryContext.Provider value={[summary, setSummary]}>
+                <Header />
+                <div className={classes.mainWrapper}  >
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                        <div>
+                            MODEL
                     </div>
-                    <div>
-                        PRICE
+                        <div>
+                            PRICE
                     </div>
-                    <div>
-                        SUBTOTAL
+                        <div>
+                            SUBTOTAL
                     </div>
-                </div>
-                <div >
-                    {!basketItems ? 'you have 0 items in your cart' : choosenItems.map(item => <CheckoutItems image={item.image} model={item.model} price={item.price} id={item.id} remove={removeItem} key={uniqid()} />)}
-                </div>
-                <div style={{ alignSelf: 'flex-end' }}>
-                    <ConfirmAndPay />
+                    </div>
+                    <div >
+                        {!basketItems ? 'you have 0 items in your cart' : choosenItems.map(item => <CheckoutItems image={item.image} model={item.model} price={item.price} id={item.id} remove={removeItem} key={uniqid()} />)}
+                    </div>
+                    <div style={{ alignSelf: 'flex-end' }}>
+                        <ConfirmAndPay />
+                    </div>
+
                 </div>
 
-            </div>
-
-            <Footer />
+                <Footer />
+            </SummaryContext.Provider>
         </div>
 
 

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, makeStyles, TextField } from '@material-ui/core';
+import { SummaryContext } from '../../main/context/SummaryContext';
 const useStyles = makeStyles({
     mainWrapper: {
 
@@ -10,9 +11,11 @@ const useStyles = makeStyles({
         marginRight: '200px'
     }
 })
+// const reducer = (sum, item) => { sum + item.price * item.quantity };
 const ConfirmAndPay = (props) => {
-
+    const [summary, setSummary] = useContext(SummaryContext);
     const classes = useStyles();
+    // console.log(summary);
     return (
         <div className={classes.mainWrapper} >
             <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'left' }}>
@@ -24,7 +27,7 @@ const ConfirmAndPay = (props) => {
 
             </div>
             <div>
-                156564646464
+                15424545
             </div>
 
         </div>
