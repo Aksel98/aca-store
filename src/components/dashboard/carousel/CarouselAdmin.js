@@ -91,7 +91,7 @@ export default function CarouselAdmin(props) {
                      content={
                          <div className={classes.adminImages}>{
                              images.map(img => {
-                                 return <div key={uniqId} className={classes.adminImagesParent}>
+                                 return <div key={uniqId()} className={classes.adminImagesParent}>
                                      <img src={img}
                                           className={classes.adminCarouselImg} alt=''/>
                                      <div onClick={() => deleteImage(img)} className={classes.deleteBtn}>

@@ -8,6 +8,7 @@ import { UserContext } from "../../main/context/UserContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BasketContext } from '../../main/context/BasketContext';
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -88,7 +89,7 @@ const useStyles = makeStyles(() => ({
 export default function Product(props) {
     const [hover, setHover] = useState(false);
     const [basket, setBasket] = useContext(BasketContext);
-    const { device, image, name, id, price, openModal } = props
+    const { device, images, name, id, price, openModal } = props
     const currentUser = useContext(UserContext)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:475px)');
@@ -115,10 +116,10 @@ export default function Product(props) {
                 <MyButton newcolor={ORANGE}><HighlightOffIcon /></MyButton>
             </div>
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
-                <img className={classes.productImage} src={image} alt="got nothing yet :)" />
+                {images?.length && <img className={classes.productImage} src={images[0]} alt="got nothing yet :)" />}
                 <div className={classes.modelInfo}>
                     <div className={classes.productName}>{name}</div>
-                    <div className={classes.price}>{price}$</div>
+                    <div className={classes.price}>{numberFormat(price, '֏')}</div>
                 </div>
             </Link>
             {hover && (<div className={classes.btnWrapper}>

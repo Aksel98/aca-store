@@ -31,6 +31,12 @@
   "chooseCategoryImage": "Choose category image",
   "add": "Add",
   "addDevice": "Add device",
-  "areYouSure": "Are you sure?"
-
+  "areYouSure": "Are you sure?",
+  "creditFor": "Credit for",
+  "month": "months",
+  "ram": "RAM",
+  "memory": "Memory",
+  "year": "Announcement Year",
+  "color": "Color",
+  "buy": "Buy"
 }

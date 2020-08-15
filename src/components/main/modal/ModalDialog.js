@@ -4,7 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {BLACK, MyButton, ORANGE} from "../constants/Constants"
+import {MyButton} from "../constants/Constants"
 import {useTranslation} from "react-i18next";
 
 export default function ModalDialog(props) {
