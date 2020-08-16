@@ -73,7 +73,7 @@ export default function Filters(props) {
                 <div className={classes.filterType}>
                     <div className={classes.filtersTitle}>{t('price')}</div>
                     <Slider
-                        min={50000}
+                        min={0}
                         max={1000000}
                         step={50000}
                         value={price}

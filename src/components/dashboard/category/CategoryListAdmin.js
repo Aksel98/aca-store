@@ -89,7 +89,7 @@ export default function CategoryListAdmin(props) {
                                  <h3 className={classes.newCategoryName}>{image?.name}</h3>
                              </div>
                          }
-                         disabled={!categoryName || !image || disabled}
+                         disabled={!categoryName.trim() || !image || disabled}
                          doneButton={addCategory}
                          doneButtonName={t('add')}
                          close={() => open(false)}/>

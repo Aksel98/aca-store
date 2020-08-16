@@ -75,10 +75,9 @@ export default function Device() {
     useEffect(() => {
         db.collection('product').doc(id).get().then(doc => {
             setDevice(doc.data())
-            setMainImage(doc.data().images[0])
-            setImages(doc.data().images)
+            setMainImage(doc.data()?.images && doc.data()?.images[0])
+            setImages(doc.data()?.images)
             setLoader(false)
-            console.log(doc.data())
         })
     }, [])
 
@@ -99,7 +98,7 @@ export default function Device() {
             <div className={classes.main}>
                 <div className={classes.images}>
                     <div className={classes.relative}>
-                        <img className={classes.mainImage} src={mainImage}/>
+                        <img className={classes.mainImage} src={mainImage} alt=""/>
                     </div>
                     <div className={`${classes.displayFlex} ${classes.flexWrap}`}>
                         <DeviceImages images={images} setImages={setImages} changeImage={changeImage} openDeletePopup={openDeletePopup}/>

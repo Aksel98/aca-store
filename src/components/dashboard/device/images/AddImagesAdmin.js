@@ -30,7 +30,8 @@ const useStyles = makeStyles({
     imageName: {
         fontWeight: 'bold',
         color: ORANGE,
-        lineHeight: '30px'
+        lineHeight: '18px',
+        fontSize: 9
     },
     addBtn: {
         maxWidth: '90%',

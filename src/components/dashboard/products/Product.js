@@ -54,6 +54,7 @@ const useStyles = makeStyles(() => ({
     infoWithImage: {
         textAlign: 'center',
         textDecoration: 'none',
+        height: '100%',
         padding: 10
     },
     btnWrapper: {
@@ -117,7 +118,7 @@ export default function Product(props) {
                 <MyButton newcolor={ORANGE}><HighlightOffIcon /></MyButton>
             </div>
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
-                {images?.length && <img className={classes.productImage} src={images[0]} alt="got nothing yet :)" />}
+                {images?.length && <img className={classes.productImage} src={images[0]} alt="" />}
                 <div className={classes.modelInfo}>
                     <div className={classes.productName}>{name}</div>
                     <div className={classes.price}>{numberFormat(price, '֏')}</div>

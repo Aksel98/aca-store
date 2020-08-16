@@ -28,6 +28,7 @@ export default function ModalDialog(props) {
                               onClick={props.close}>{t('close')}
                     </MyButton>
                     <MyButton variant="contained"
+                              color="primary"
                               disabled={props.disabled}
                               autoFocus
                               onClick={props.doneButton}>{props.doneButtonName || t('yes')}

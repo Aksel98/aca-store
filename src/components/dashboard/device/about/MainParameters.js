@@ -55,6 +55,7 @@ export default function MainParameters(props) {
                    className={classes.input}
                    ref={refs}
                    defaultValue={parameter}
+                   placeholder="..."
                    onBlur={(e) => onBlur(name, e)}/>
             {isAdmin && <EditIcon onClick={() => refs.current.focus()} className={classes.editIcon}/>}
         </div>

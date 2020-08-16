@@ -65,14 +65,14 @@ export default function DeviceImages(props) {
 
     return (
         <React.Fragment>
-            {images.map(image => {
+            {images?.map(image => {
                 return (
                     <div key={uniqId()} className={classes.additionalImagesParent}>
                         <div onClick={() => openDeletePopup(true, image)} className={classes.deleteBtn}>
                             <MyButton className={classes.padding} newcolor={ORANGE}><HighlightOffIcon/></MyButton>
                         </div>
                         <div onClick={() => changeImage(image)}>
-                            <img src={image} className={classes.additionalImage}/>
+                            <img src={image} className={classes.additionalImage} alt=""/>
                         </div>
                         {<MyButton className={classes.btn}
                                    variant="contained"

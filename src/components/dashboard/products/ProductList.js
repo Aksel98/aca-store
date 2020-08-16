@@ -13,6 +13,7 @@ import {BLUE, MyButton} from "../../main/constants/Constants";
 import Pagination from '@material-ui/lab/Pagination';
 import Fab from '@material-ui/core/Fab';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import ProductsListAdmin from "./ProductsListAdmin";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles(() => ({
     btnParent: {
         display: 'flex',
         justifyContent: 'center',
-        marginLeft: 50,
+        marginLeft: 5,
         marginBottom: props => props.mediaTablet && 20,
     },
     pagination: {
@@ -56,11 +57,13 @@ const useStyles = makeStyles(() => ({
 
 export default function ProductList() {
     const [products, setProducts] = useState([]);
-    const [priceFilter, setPriceFilter] = useState([50000, 1000000]);
+    const [priceFilter, setPriceFilter] = useState([0, 1000000]);
     const [nameFilter, setNameFilter] = useState('');
     const [orderBy, setOrderBy] = useState(localStorage.getItem('orderBy') || 'asc');
     const [loader, setLoader] = useState(true);
     const [modal, setModal] = useState({open: false, title: '', text: ''});
+    const [addDeviceModal, setAddDeviceModal] = useState(false);
+    const [newDevice, setNewDevice] = useState(false);
     const [page, setPage] = useState(1);
     const [paginationSize, setPaginationSize] = useState(0)
     const [limit] = useState(3)
@@ -73,7 +76,7 @@ export default function ProductList() {
 
     useEffect(() => {
         getAllProductInfo();
-    }, [priceFilter, nameFilter, orderBy, page]);
+    }, [priceFilter, nameFilter, orderBy, page, newDevice]);
 
     function getAllProductInfo() {
         try {
@@ -107,6 +110,7 @@ export default function ProductList() {
         } catch (e) {
             console.log("can not  get the docs:", e);
         }
+        setNewDevice(false)
     }
 
     const changePagination = (event, value) => {
@@ -131,6 +135,10 @@ export default function ProductList() {
         setPriceFilter(val)
     }
 
+    function openPopup() {
+        setAddDeviceModal(true)
+    }
+
     return (
         <div className={classes.container}>
             <Filters name={nameFilter}
@@ -144,10 +152,8 @@ export default function ProductList() {
                     <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
                 </div>
                 {loader ? <Loader/> : <div>
-                    <div className={classes.btnParent}>
-                        <MyButton color="primary"
-                                  maxwidth="75%"
-                                  variant="contained">{t('addDevice')}</MyButton>
+                    <div onClick={openPopup} className={classes.btnParent}>
+                        <MyButton color="primary" variant="contained">{t('addDevice')}</MyButton>
                     </div>
                     <div className={classes.products}>
                         {products.length ? products.map((item) => (
@@ -161,10 +167,7 @@ export default function ProductList() {
                         )) : <h1 className={classes.nothingFound}>{t('nothingIsFound')}</h1>}
                     </div>
                     <div className={classes.pagination}>
-                        <Pagination count={paginationSize}
-                                    page={page}
-                                    onChange={changePagination}
-                                    color="primary"/>
+                        <Pagination count={paginationSize} page={page} onChange={changePagination} color="primary"/>
                     </div>
                 </div>
                 }
@@ -175,6 +178,7 @@ export default function ProductList() {
                          doneButton={() => history.push(LOGIN_URL)}
                          doneButtonName={t('login')}
                          close={() => setModal({...modal, open: false})}/>
+            <ProductsListAdmin open={addDeviceModal} isOpen={setAddDeviceModal} setNewDevice={setNewDevice}/>
         </div>
     )
 }
