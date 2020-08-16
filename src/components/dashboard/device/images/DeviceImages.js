@@ -74,7 +74,7 @@ export default function DeviceImages(props) {
                         <div onClick={() => changeImage(image)}>
                             <img src={image} className={classes.additionalImage} alt=""/>
                         </div>
-                        {<MyButton className={classes.btn}
+                        {image !== images[0] && <MyButton className={classes.btn}
                                    variant="contained"
                                    color="primary"
                                    onClick={() => changeMainImage(image)}>{t('makeMain')}</MyButton>}
