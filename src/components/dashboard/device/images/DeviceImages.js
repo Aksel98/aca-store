@@ -39,6 +39,9 @@ const useStyles = makeStyles({
     },
     relative: {
         position: 'relative'
+    },
+    padding: {
+        padding: 0
     }
 })
 
@@ -66,7 +69,7 @@ export default function DeviceImages(props) {
                 return (
                     <div key={uniqId()} className={classes.additionalImagesParent}>
                         <div onClick={() => openDeletePopup(true, image)} className={classes.deleteBtn}>
-                            <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
+                            <MyButton className={classes.padding} newcolor={ORANGE}><HighlightOffIcon/></MyButton>
                         </div>
                         <div onClick={() => changeImage(image)}>
                             <img src={image} className={classes.additionalImage}/>
