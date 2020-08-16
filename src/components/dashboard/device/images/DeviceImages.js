@@ -1,12 +1,11 @@
-import React, {useState} from "react";
+import React from "react";
 import uniqId from "uniqid";
 import {makeStyles} from "@material-ui/core/styles";
 import {BLUE, MyButton, ORANGE} from "../../../main/constants/Constants";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
-import AddImagesAdmin from "./AddImagesAdmin";
-import {array} from "prop-types";
 import {db} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     additionalImagesParent: {
@@ -48,6 +47,7 @@ const useStyles = makeStyles({
 export default function DeviceImages(props) {
     const {changeImage, images, setImages, openDeletePopup} = props
     const {id} = useParams()
+    const {t} = useTranslation()
     const classes = useStyles()
 
     function changeMainImage(img) {
@@ -77,7 +77,7 @@ export default function DeviceImages(props) {
                         {<MyButton className={classes.btn}
                                    variant="contained"
                                    color="primary"
-                                   onClick={() => changeMainImage(image)}>Make main</MyButton>}
+                                   onClick={() => changeMainImage(image)}>{t('makeMain')}</MyButton>}
                     </div>
                 )
             })}

@@ -39,5 +39,6 @@
   "memory": "Memory",
   "year": "Announcement Year",
   "color": "Color",
-  "buy": "Buy"
+  "buy": "Buy",
+  "makeMain": "Make main"
 }

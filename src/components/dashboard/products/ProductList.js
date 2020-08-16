@@ -27,8 +27,8 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center'
     },
     products: {
-        height: props => props.mediaTablet ? (props.mediaMobile ? 336 : 375) : 625,
-        margin: props => props.mediaTablet ? 0 : '25px 0 0 10px',
+        height: props => props.mediaTablet ? (props.mediaMobile ? 336 : 375) : 640,
+        margin: props => props.mediaTablet ? 0 : '10px 0 0 10px',
         overflow: 'auto',
         justifyContent: 'center',
         display: 'flex',
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
     btnParent: {
         display: 'flex',
         justifyContent: 'center',
-        marginLeft: 5,
+        marginLeft: 50,
         marginBottom: props => props.mediaTablet && 20,
     },
     pagination: {
@@ -66,7 +66,7 @@ export default function ProductList() {
     const [newDevice, setNewDevice] = useState(false);
     const [page, setPage] = useState(1);
     const [paginationSize, setPaginationSize] = useState(0)
-    const [limit] = useState(3)
+    const [limit] = useState(6)
     const history = useHistory();
     let {category} = useParams()
     const {t} = useTranslation()
@@ -153,7 +153,7 @@ export default function ProductList() {
                 </div>
                 {loader ? <Loader/> : <div>
                     <div onClick={openPopup} className={classes.btnParent}>
-                        <MyButton color="primary" variant="contained">{t('addDevice')}</MyButton>
+                        <MyButton color="primary" maxwidth="75%" variant="contained">{t('addDevice')}</MyButton>
                     </div>
                     <div className={classes.products}>
                         {products.length ? products.map((item) => (
