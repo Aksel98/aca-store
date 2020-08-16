@@ -4,11 +4,11 @@ import uniqId from 'uniqid';
 import {db} from '../../services/firebase/Firebase';
 import {useHistory, useParams} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from "@material-ui/core";
-import ModalDialog from "../../main/modal/ModalDialog";
+import ModalDialog from "../../main/popups/ModalDialog";
 import {LOGIN_URL} from "../../services/api/Navigations";
 import {useTranslation} from "react-i18next";
 import Filters from "./Filters";
-import Loader from "../../main/Loader";
+import Loader from "../../main/loader/Loader";
 import {BLUE, MyButton} from "../../main/constants/Constants";
 import Pagination from '@material-ui/lab/Pagination';
 import Fab from '@material-ui/core/Fab';
@@ -58,7 +58,7 @@ export default function ProductList() {
     const [products, setProducts] = useState([]);
     const [priceFilter, setPriceFilter] = useState([50000, 1000000]);
     const [nameFilter, setNameFilter] = useState('');
-    const [orderBy, setOrderBy] = useState('asc');
+    const [orderBy, setOrderBy] = useState(localStorage.getItem('orderBy') || 'asc');
     const [loader, setLoader] = useState(true);
     const [modal, setModal] = useState({open: false, title: '', text: ''});
     const [page, setPage] = useState(1);
@@ -120,6 +120,7 @@ export default function ProductList() {
 
     function orderHandler(val) {
         setOrderBy(val)
+        localStorage.setItem('orderBy', val)
     }
 
     function searchHandler(e) {

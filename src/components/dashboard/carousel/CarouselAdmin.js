@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import ModalDialog from "../../main/modal/ModalDialog";
+import ModalDialog from "../../main/popups/ModalDialog";
 import uniqId from "uniqid";
 import {BLUE, MyButton, ORANGE} from "../../main/constants/Constants";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";

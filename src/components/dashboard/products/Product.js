@@ -28,7 +28,8 @@ const useStyles = makeStyles(() => ({
         }
     },
     productImage: {
-        width: props => props.mediaTablet ? '60%' : '75%'
+        width: props => props.mediaTablet ? '60%' : 140,
+        height: props => props.mediaTablet ? 115 : 185
     },
     modelInfo: {
         display: 'flex',

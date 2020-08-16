@@ -3,7 +3,7 @@ import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
 import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
 import {makeStyles} from "@material-ui/core/styles";
 import {storageRef} from "../../services/firebase/Firebase";
-import Loader from "../../main/Loader";
+import Loader from "../../main/loader/Loader";
 import {WHITE} from "../../main/constants/Constants"
 import Fab from '@material-ui/core/Fab';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';

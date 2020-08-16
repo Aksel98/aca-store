@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import ModalDialog from "../../main/modal/ModalDialog";
+import ModalDialog from "../../main/popups/ModalDialog";
 import TextField from "@material-ui/core/TextField";
 import Fab from "@material-ui/core/Fab";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
