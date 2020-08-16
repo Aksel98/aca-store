@@ -41,6 +41,12 @@ const useStyles = makeStyles({
     info: {
         borderBottom: `2px solid ${GREY}`
     },
+    model: {
+        fontSize: 35,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        padding: '0 0 15px',
+    },
     btnParent: {
         margin: 20
     },
@@ -108,7 +114,7 @@ export default function Device() {
                                    type={device.device}/>
                 <div className={classes.deviceInfoPart}>
                     <div className={classes.info}>
-                        <h1>{device.model}</h1>
+                        <div className={classes.model}>{device.model}</div>
                     </div>
                     <div className={classes.info}>
                         <Price price={price || device.price} setPrice={setPrice} count={deviceCount}/>
