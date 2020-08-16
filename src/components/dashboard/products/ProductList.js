@@ -29,6 +29,7 @@ const useStyles = makeStyles(() => ({
     products: {
         height: props => props.mediaTablet ? (props.mediaMobile ? 336 : 375) : 640,
         margin: props => props.mediaTablet ? 0 : '10px 0 0 10px',
+        maxWidth: 1000,
         overflow: 'auto',
         justifyContent: 'center',
         display: 'flex',
