@@ -93,7 +93,7 @@ export default function CheckoutItems(props) {
                             onClick={() => dispatch(decrement(id))}
                         />
                         <div className={classes.countText}>
-                            {itemData.quantity}
+                            {!!itemData && itemData.quantity}
                         </div>
 
                         <AddIcon
@@ -103,7 +103,7 @@ export default function CheckoutItems(props) {
                         />
                     </div>
                     <div className={classes.textField}>
-                        {itemData.subtotal ? itemData.subtotal : itemData.price}
+                        {!!itemData && itemData.quantity * itemData.price}
                     </div>
 
 
