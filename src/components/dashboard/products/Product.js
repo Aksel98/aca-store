@@ -8,6 +8,8 @@ import { UserContext } from "../../main/context/UserContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BasketContext } from '../../main/context/BasketContext';
+import { removeItem, addItem } from '../../services/redux/actions/action';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -104,7 +106,7 @@ export default function Product(props) {
     useEffect(() => {
         basket.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [])
-
+    const dispatch = useDispatch();
 
     const addToBasket = () => {
         let localArr = [];
@@ -118,6 +120,7 @@ export default function Product(props) {
             localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
         }
         setBasket(localArr);
+        dispatch(addItem(id, price))
     }
     const removeFromBasket = () => {
         let localArr = [];
@@ -125,6 +128,7 @@ export default function Product(props) {
         localArr.splice(localArr.indexOf(id), 1)
         localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
         setBasket(localArr);
+        dispatch(removeItem(id))
     }
 
     return (

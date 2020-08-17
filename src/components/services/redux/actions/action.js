@@ -4,6 +4,7 @@ export const LOGGED_IN = 'LOGGED_IN'
 export const INCREMENT = 'INCREMENT'
 export const DECREMENT = 'DECREMENT'
 export const REMOVE_ITEM = 'REMOVE_ITEM'
+export const ADD_ITEM = 'ADD_ITEM'
 export function authChanged() {
     return function (dispatch) {
         auth.onAuthStateChanged(user => {
@@ -30,5 +31,13 @@ export const removeItem = (id) => {
     return {
         type: REMOVE_ITEM,
         id
+    }
+}
+export const addItem = (id, price, quantity = 1) => {
+    return {
+        type: ADD_ITEM,
+        id,
+        price,
+        quantity
     }
 }

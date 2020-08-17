@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, REMOVE_ITEM } from "../actions/action";
+import { INCREMENT, DECREMENT, REMOVE_ITEM, ADD_ITEM } from "../actions/action";
 
 const initialState = JSON.parse(localStorage.getItem('itemDetails'))
 
@@ -30,6 +30,14 @@ const counterReducer = (state = initialState, action) => {
             {
                 let newState = [...state];
                 newState = newState.filter(item => item.id !== action.id)
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
+                return newState
+            }
+        case ADD_ITEM:
+            {
+                let newState = [...state];
+                newState.push({ id: action.id, price: action.price, quantity: action.quantity });
+
                 localStorage.setItem('itemDetails', JSON.stringify(newState))
                 return newState
             }
