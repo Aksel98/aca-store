@@ -1,7 +1,7 @@
 import React from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {makeStyles, styled} from "@material-ui/core/styles";
-import {BLACK} from "./constants/Constants";
+import {BLACK} from "../constants/Constants";
 
 const useStyles = makeStyles(() => ({
     position: {

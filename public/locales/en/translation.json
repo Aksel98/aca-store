@@ -28,9 +28,17 @@
   "descending": "Descending",
   "nothingIsFound": "Nothing is found",
   "chooseCategoryName": "Choose category name",
+  "chooseModelName": "Choose model name",
   "chooseCategoryImage": "Choose category image",
   "add": "Add",
   "addDevice": "Add device",
-  "areYouSure": "Are you sure?"
-
+  "areYouSure": "Are you sure?",
+  "creditFor": "Credit for",
+  "month": "months",
+  "ram": "RAM",
+  "memory": "Memory",
+  "year": "Announcement Year",
+  "color": "Color",
+  "buy": "Buy",
+  "makeMain": "Make main"
 }
