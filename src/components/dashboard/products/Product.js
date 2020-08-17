@@ -104,7 +104,7 @@ export default function Product(props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        basket.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
+        basket?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [])
 
     const addToBasket = () => {

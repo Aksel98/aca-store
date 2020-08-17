@@ -175,7 +175,7 @@ export default function Header() {
                         {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                         {currentUser &&
                         <div className={classes.menuItem}>
-                            <DropDown name={<div className={classes.userLogo}>{userLogo(currentUser.displayName)}</div>} dropdownContent={
+                            <DropDown name={<div className={classes.userLogo}>{firstLetters(currentUser.displayName)}</div>} dropdownContent={
                                 <React.Fragment>
                                     <div onClick={logOut} className={classes.dropdownItemParent}  style={{marginTop: 15}}>
                                         {t('logout')}
@@ -209,7 +209,7 @@ export default function Header() {
                     {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser &&
                     <div className={classes.menuItem}>
-                        <DropDown name={<div className={classes.userLogo}>{userLogo(currentUser.displayName)}</div>} dropdownContent={
+                        <DropDown name={<div className={classes.userLogo}>{firstLetters(currentUser.displayName)}</div>} dropdownContent={
                             <React.Fragment>
                                 <div onClick={logOut} className={classes.dropdownItemParent}  style={{marginTop: 15}}>
                                     {t('logout')}

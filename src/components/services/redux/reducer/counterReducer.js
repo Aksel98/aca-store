@@ -12,7 +12,7 @@ const counterReducer = (state = initialState, action) => {
                         item.quantity += 1; item.subtotal = item.quantity * item.price
                     }
                 })
-                // localStorage.setItem('itemDetails', JSON.stringify(newState))
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
                 return newState
             }
         case DECREMENT:
@@ -23,22 +23,21 @@ const counterReducer = (state = initialState, action) => {
                         if (item.quantity > 1) { item.quantity -= 1; item.subtotal = item.quantity * item.price }
                     }
                 })
-                // localStorage.setItem('itemDetails', JSON.stringify(newState))
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
                 return newState
             }
         case REMOVE_ITEM:
             {
                 let newState = [...state];
                 newState = newState.filter(item => item.id !== action.id)
-                // localStorage.setItem('itemDetails', JSON.stringify(newState))
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
                 return newState
             }
         case ADD_ITEM:
             {
                 let newState = [...state];
                 newState.push({ id: action.id, price: action.price, quantity: action.quantity });
-
-                // localStorage.setItem('itemDetails', JSON.stringify(newState))
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
                 return newState
             }
         default:
