@@ -8,7 +8,7 @@ import { UserContext } from "../../main/context/UserContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BasketContext } from '../../main/context/BasketContext';
-import { removeItem, addItem } from '../../services/redux/actions/action';
+import { removeItem, addItem } from '../../services/redux/actions/actionsForCounterRed';
 import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(() => ({

@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, REMOVE_ITEM, ADD_ITEM } from "../actions/action";
+import { INCREMENT, DECREMENT, REMOVE_ITEM, ADD_ITEM } from "../constantsredux";
 
 const initialState = JSON.parse(localStorage.getItem('itemDetails')) || []
 
