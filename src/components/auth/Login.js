@@ -1,17 +1,17 @@
-import React, { useState } from "react"
+import React, {useEffect, useReducer, useRef, useState} from "react"
 import SignIn from "./SignIn"
-import { makeStyles } from "@material-ui/core/styles"
-import { BLACK, BLUE_GRADIENT, MyButton, WHITE } from "../main/constants/Constants"
+import {makeStyles} from "@material-ui/core/styles"
+import {BLACK, BLUE_GRADIENT, MyButton, WHITE} from "../main/constants/Constants"
 import SignUp from "./SignUp";
-import { useMediaQuery } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
+import {useMediaQuery} from "@material-ui/core";
+import {useTranslation} from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { Link } from "react-router-dom";
-import { auth, db } from "../services/firebase/Firebase";
-import { useHistory } from "react-router-dom";
+import {Link} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import SnackBar from "../main/popups/SnackBar";
-import { HOME_URL } from "../services/api/Navigations";
-import firebase from "firebase";
+import {HOME_URL} from "../services/api/Navigations";
+import {connect} from "react-redux"
+import {signInUser, signUpUser} from "../services/redux/actions/userAction";
 
 const useStyles = makeStyles({
     backIcon: {
@@ -94,7 +94,7 @@ const useStyles = makeStyles({
     },
 })
 
-export default function Login() {
+function Login(props) {
     const [firstname, setFirst] = useState('')
     const [lastname, setLast] = useState('')
     const [email, setEmail] = useState('')
@@ -102,8 +102,8 @@ export default function Login() {
     const [error, setError] = useState('')
     const [rightPanel, setRightPanel] = useState(false)
     const media = useMediaQuery('(min-width:600px)');
-    const classes = useStyles({ rightPanel, media })
-    const { t } = useTranslation()
+    const classes = useStyles({rightPanel, media})
+    const {t} = useTranslation()
     const history = useHistory();
 
     function signUpPageHandler() {
@@ -112,7 +112,6 @@ export default function Login() {
     }
 
     function signInPageHandler() {
-
         setRightPanel(false)
         changePage()
     }
@@ -123,55 +122,51 @@ export default function Login() {
         setPassword('')
     }
 
-    function signIn(e) {
-        e.preventDefault()
-        auth.signInWithEmailAndPassword(email, password).then(() => {
-            setEmail('')
-            history.push(HOME_URL)
-        }).catch(err => {
-            setError(err.message)
-        }).finally(() => {
-            setPassword('')
-        })
+    function signIn() {
+        props.signInUser(email, password, history, setPassword)
+        // auth.signInWithEmailAndPassword(email, password).then(() => {
+        //     setEmail('')
+        //     history.push(HOME_URL)
+        // }).catch(err => {
+        //     setError(err.message)
+        // }).finally(() => {
+        //     setPassword('')
+        // })
     }
 
-    function signUp(e) {
-        e.preventDefault()
-        auth.createUserWithEmailAndPassword(email, password)
-            .then((result) => {
-
-                return result.user.updateProfile({
-                    displayName: firstname + ' ' + lastname
-                })
-            })
-
-            .then(() => {
-                const user = firebase.auth().currentUser
-                console.log(user.uid)
-                return db.collection('users').doc(user.uid).set({
-                    name: firstname,
-                    surname: lastname,
-                    email: email
-                })
-
-
-            })
-            .then(() => {
-                setEmail('')
-                history.push(HOME_URL)
-            })
-            .catch(err => {
-                setError(err.message)
-            }).finally(() => {
-                setPassword('')
-            })
+    function signUp() {
+        props.signUpUser(email, password, firstname, lastname, history, setPassword)
+        // auth.createUserWithEmailAndPassword(email, password)
+        //     .then((result) => {
+        //         return result.user.updateProfile({
+        //             displayName: firstname + ' ' + lastname
+        //         })
+        //     })
+        //     .then(() => {
+        //         const user = firebase.auth().currentUser
+        //         return db.collection('users').doc(user.uid).set({
+        //             name: firstname,
+        //             surname: lastname,
+        //             email: email
+        //         })
+        //     })
+        //     .then(() => {
+        //         history.push(HOME_URL)
+        //     })
+        //     .catch(err => {
+        //         setError(err.message)
+        //     }).finally(() => {
+        //         setPassword('')
+        //     })
     }
+
     const onFirstChange = (e) => {
         setFirst(e.target.value)
     }
     const onLastChange = (e) => {
         setLast(e.target.value)
     }
+
     function onValueChange(e) {
         e.target.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)
         setError('')
@@ -179,7 +174,7 @@ export default function Login() {
 
     return (
         <div className={classes.container}>
-            <Link to={HOME_URL} className={classes.backIcon}><ArrowBackIcon /></Link>
+            <Link to={HOME_URL} className={classes.backIcon}><ArrowBackIcon/></Link>
             <SignUp
                 firstname={firstname}
                 lastname={lastname}
@@ -190,36 +185,47 @@ export default function Login() {
                 onLastChange={onLastChange}
                 onValueChange={onValueChange}
                 signUp={signUp}
-                rightPanel={rightPanel} a
-                classFormContainer={classes.formContainer}
-                media={media} />
-            <SignIn email={email}
-                password={password}
-                error={error}
-                onValueChange={onValueChange}
-                signIn={signIn}
                 rightPanel={rightPanel}
                 classFormContainer={classes.formContainer}
-                media={media} />
+                media={media}/>
+            <SignIn email={email}
+                    password={password}
+                    error={error}
+                    onValueChange={onValueChange}
+                    signIn={signIn}
+                    rightPanel={rightPanel}
+                    classFormContainer={classes.formContainer}
+                    media={media}/>
             <div className={classes.overlayContainer}>
                 <div className={classes.overlay}>
                     <div className={`${classes.overlayPanel} ${classes.overlayLeft}`}>
                         {media ? <h1>{t('alreadyHaveAccount')}</h1> : <h3>{t('alreadyHaveAccount')}</h3>}
                         <MyButton color="primary"
-                            maxwidth="90%"
-                            variant="contained"
-                            onClick={signInPageHandler}>{t('signIn')}</MyButton>
+                                  maxwidth="90%"
+                                  variant="contained"
+                                  onClick={signInPageHandler}>{t('signIn')}</MyButton>
                     </div>
                     <div className={`${classes.overlayPanel} ${classes.overlayRight}`}>
                         {media ? <h1>{t('createAccount')}</h1> : <h3>{t('createAccount')}</h3>}
                         <MyButton color="primary"
-                            maxwidth="90%"
-                            variant="contained"
-                            onClick={signUpPageHandler}>{t('signUp')}</MyButton>
+                                  maxwidth="90%"
+                                  variant="contained"
+                                  onClick={signUpPageHandler}>{t('signUp')}</MyButton>
                     </div>
                 </div>
             </div>
-            {error && <SnackBar message={error} error />}
+            {error && <SnackBar message={error} error/>}
         </div>
     )
 }
+
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+const mapActionsToProps = {
+    signInUser,
+    signUpUser
+}
+
+export default connect(mapStateToProps, mapActionsToProps)(Login)

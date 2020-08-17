@@ -69,17 +69,13 @@ export default function SignUp(props) {
                 <span>{t('useYourEmailForRegistration')}</span>
                 <MyTextField label={`${t('First Name')}`}
                     type='firstname'
-                    // InputProps={{ endAdornment: <EmailIcon position="start" /> }}
                     value={firstname}
                     onChange={onFirstChange}
-                    // autoComplete="on"
                     error={!!error} />
                 <MyTextField label={`${t('Last Name')}`}
                     type="lastname"
-                    // InputProps={{ endAdornment: <EmailIcon position="start" /> }}
                     value={lastname}
                     onChange={onLastChange}
-                    // autoComplete="on"
                     error={!!error} />
                 <MyTextField label={`${t('email')}...`}
                     type="email"

@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from "react";
 import Dashboard from "./dashboard/dashboard/Dashboard";
-import { auth } from "./services/firebase/Firebase";
 import { UserContext } from "./main/context/UserContext";
 import { BasketContext } from "./main/context/BasketContext";
 import Loader from "./main/loader/Loader";
+import {connect} from "react-redux";
+import {getUserData} from "./services/redux/actions/userAction";
 
-export default function Main() {
-    const [currentUser, setCurrentUser] = useState('')
+function Main(props) {
+    // const [currentUser, setCurrentUser] = useState('')
+    // const currentUser = props.user
     const [basket, setBasket] = useState(JSON.parse(localStorage.getItem('ItemsInBasket')) || []);
 
     useEffect(() => {
-        auth.onAuthStateChanged(user => {
-            user ? setCurrentUser(user) : setCurrentUser(null)
-        })
+        props.getUserData()
+        // auth.onAuthStateChanged(user => {
+        //     user ? setCurrentUser(user) : setCurrentUser(null)
+        // })
     }, [])
 
-
     return (
-        currentUser === '' ? <Loader /> :
-            <UserContext.Provider value={currentUser}>
+        props.user === false ? <Loader /> :
+            <UserContext.Provider value={props.user}>
                 <BasketContext.Provider value={[basket, setBasket]}>
                     <Dashboard />
                 </BasketContext.Provider>
             </UserContext.Provider>
     )
 }
+const mapStateToProps = state => ({
+    user: state.user
+})
+
+const mapActionsToProps = {
+    getUserData
+}
+
+export default connect(mapStateToProps, mapActionsToProps)(Main)
