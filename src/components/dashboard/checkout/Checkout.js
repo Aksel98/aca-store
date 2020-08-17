@@ -18,7 +18,7 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         marginTop: '100px',
         justifyContent: 'space-between',
-        height: '695px',
+        height: 690,
         overflow: 'auto',
 
     },

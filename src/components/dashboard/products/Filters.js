@@ -5,6 +5,8 @@ import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import Slider from "@material-ui/core/Slider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {BLUE} from "../../main/constants/Constants";
 
 const useStyles = makeStyles({
     filters: {
@@ -34,6 +36,11 @@ const useStyles = makeStyles({
         alignItems: 'center',
         padding: '5px 0 0',
     },
+    formatNums: {
+        fontSize: 15,
+        fontWeight: 700,
+        color: BLUE
+    }
 })
 
 export default function Filters(props) {
@@ -66,14 +73,14 @@ export default function Filters(props) {
                 <div className={classes.filterType}>
                     <div className={classes.filtersTitle}>{t('price')}</div>
                     <Slider
-                        min={50}
-                        max={1500}
-                        step={50}
+                        min={0}
+                        max={1000000}
+                        step={50000}
                         value={price}
                         onChange={onPrice}
-                        valueLabelDisplay="auto"
                         aria-labelledby="range-slider"
                     />
+                    <div className={classes.formatNums}>{numberFormat(price[0], '֏')} - {numberFormat(price[1], '֏')}</div>
                 </div>
             </div>
         </div>

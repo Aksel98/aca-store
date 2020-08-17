@@ -5,7 +5,7 @@ import Login from "../../auth/Login";
 import {UserContext} from "../../main/context/UserContext";
 import {BLACK} from "../../main/constants/Constants"
 import {LOGIN_URL} from "../../services/api/Navigations";
-import GeneralRoutes from "./generalRoutes";
+import GeneralRoutes from "./GeneralRoutes";
 
 const useStyles = makeStyles({
     loginBg: {
