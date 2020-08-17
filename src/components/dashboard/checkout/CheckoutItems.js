@@ -7,7 +7,7 @@ import { TextField } from '@material-ui/core';
 import { GREY, ORANGE, PURPLE, RED, BLUE } from "../../main/constants/Constants";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, removeItem } from '../../services/redux/actions/actionsForCounterRed'
+import { increment, decrement, removeItem } from '../../services/redux/actions/counterActions'
 import { useTranslation } from "react-i18next";
 const useStyles = makeStyles({
     mainWrapper: {

@@ -8,8 +8,9 @@ import { UserContext } from "../../main/context/UserContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BasketContext } from '../../main/context/BasketContext';
-import { removeItem, addItem } from '../../services/redux/actions/actionsForCounterRed';
+import { removeItem, addItem } from '../../services/redux/actions/counterActions';
 import { useDispatch } from 'react-redux';
+import { addToFav } from '../../services/redux/actions/favouriteActions';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -103,10 +104,11 @@ export default function Product(props) {
     const classes = useStyles({ mediaTablet, mediaMobile });
     const { t } = useTranslation()
     const [btnText, setText] = useState('')
+    const dispatch = useDispatch();
     useEffect(() => {
         basket.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [])
-    const dispatch = useDispatch();
+
 
     const addToBasket = () => {
         let localArr = [];
@@ -146,7 +148,7 @@ export default function Product(props) {
             {hover && (<div className={classes.btnWrapper}>
                 <div style={{ display: 'flex' }}>
                     <MyButton newcolor={ORANGE}
-                        onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon /></MyButton>
+                        onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon onClick={dispatch(addToFav(id))} /></MyButton>
                 </div>
                 <div className={classes.btnParent}>
                     <MyButton newcolor={ORANGE} className={classes.btn} onClick={() => { btnText === 'ADD TO CART' ? addToBasket() : removeFromBasket() }}>{t(btnText)}</MyButton>
