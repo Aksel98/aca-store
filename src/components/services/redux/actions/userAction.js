@@ -1,14 +1,10 @@
-import {CLEAR_ERRORS, LOGOUT, SET_EMAIL, SET_ERRORS, SET_PASSWORD, SET_UNAUTHENTICATED, SET_USER} from "../types"
+import {CLEAR_ERRORS, SET_ERRORS, SET_USER} from "../types"
 import {auth, db} from "../../firebase/Firebase";
 import {HOME_URL} from "../../api/Navigations";
 import firebase from "firebase";
 
 export const signInUser = (email, password, history, setPassword) => (dispatch) => {
     auth.signInWithEmailAndPassword(email, password).then(() => {
-        // dispatch({
-        //     type: SET_EMAIL,
-        //     payload: ''
-        // })
         dispatch(getUserData())
         dispatch({type: CLEAR_ERRORS})
         history.push(HOME_URL)
@@ -52,20 +48,20 @@ export const signUpUser = (email, password, name, surname, history, setPassword)
     })
 }
 
-export const logoutUser = () => (dispatch) => {
-    auth.signOut().then(() => {
-        dispatch({
-            type: LOGOUT,
-            payload: null
-        })
-    })
-}
-
 export const getUserData = () => (dispatch) => {
     auth.onAuthStateChanged(user => {
         dispatch({
             type: SET_USER,
             payload: user
+        })
+    })
+}
+
+export const logoutUser = () => (dispatch) => {
+    auth.signOut().then(() => {
+        dispatch({
+            type: SET_USER,
+            payload: null
         })
     })
 }

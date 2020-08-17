@@ -4,13 +4,13 @@ import { BLACK, GREY, MyButton, ORANGE, WHITE } from '../../main/constants/Const
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { useMediaQuery } from "@material-ui/core";
-import { UserContext } from "../../main/context/UserContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BasketContext } from '../../main/context/BasketContext';
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {useSelector} from "react-redux";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
     root: {
         position: 'relative',
         width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 205,
@@ -86,13 +86,13 @@ const useStyles = makeStyles(() => ({
         width: 35,
         position: 'absolute'
     }
-}));
+});
 
 export default function Product(props) {
     const { device, images, name, id, price, openModal, openDeleteModal} = props
     const [hover, setHover] = useState(false);
     const [basket, setBasket] = useContext(BasketContext);
-    const currentUser = useContext(UserContext)
+    const currentUser = useSelector(state => state.user)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:475px)');
     const classes = useStyles({ mediaTablet, mediaMobile });

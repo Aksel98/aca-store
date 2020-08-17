@@ -5,13 +5,12 @@ import { BLACK, ORANGE, WHITE, GREY, BLUE } from "../main/constants/Constants"
 import DropDown from "../main/dropdown/Dropdown";
 import {useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router-dom";
-import {UserContext} from "../main/context/UserContext";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {LOGO} from "../main/constants/Constants";
 import {useMediaQuery} from "@material-ui/core";
 import {HOME_URL, LOGIN_URL} from "../services/api/Navigations";
 import {BasketContext} from '../main/context/BasketContext';
-import {connect} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import {logoutUser} from "../services/redux/actions/userAction";
 
 const useStyles = makeStyles({
@@ -132,8 +131,9 @@ const MyAppBar = styled(AppBar)({
     boxShadow: "none",
 });
 
-function Header(props) {
-    const currentUser = useContext(UserContext)
+export default function Header() {
+    const currentUser = useSelector(state => state.user)
+    const dispatch = useDispatch()
     const [userInitials, setInitials] = useState(currentUser ? userLogo(currentUser.displayName) : null)
     const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
     const media = useMediaQuery('(max-width:600px)');
@@ -160,7 +160,7 @@ function Header(props) {
     }
 
     function logOut() {
-        props.logoutUser()
+        dispatch(logoutUser())
     }
 
     return (
@@ -231,13 +231,3 @@ function Header(props) {
         </MyAppBar>
     )
 }
-
-const mapStateToProps = state => ({
-    user: state.user
-})
-
-const mapActionsToProps = {
-    logoutUser
-}
-
-export default connect(mapStateToProps, mapActionsToProps)(Header)

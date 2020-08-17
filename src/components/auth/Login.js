@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useRef, useState} from "react"
+import React, {useState} from "react"
 import SignIn from "./SignIn"
 import {makeStyles} from "@material-ui/core/styles"
 import {BLACK, BLUE_GRADIENT, MyButton, WHITE} from "../main/constants/Constants"
@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
 import SnackBar from "../main/popups/SnackBar";
 import {HOME_URL} from "../services/api/Navigations";
-import {connect} from "react-redux"
+import {useDispatch} from "react-redux"
 import {signInUser, signUpUser} from "../services/redux/actions/userAction";
 
 const useStyles = makeStyles({
@@ -94,13 +94,14 @@ const useStyles = makeStyles({
     },
 })
 
-function Login(props) {
+export default function Login() {
     const [firstname, setFirst] = useState('')
     const [lastname, setLast] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [rightPanel, setRightPanel] = useState(false)
+    const dispatch = useDispatch()
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles({rightPanel, media})
     const {t} = useTranslation()
@@ -123,41 +124,11 @@ function Login(props) {
     }
 
     function signIn() {
-        props.signInUser(email, password, history, setPassword)
-        // auth.signInWithEmailAndPassword(email, password).then(() => {
-        //     setEmail('')
-        //     history.push(HOME_URL)
-        // }).catch(err => {
-        //     setError(err.message)
-        // }).finally(() => {
-        //     setPassword('')
-        // })
+        dispatch(signInUser(email, password, history, setPassword))
     }
 
     function signUp() {
-        props.signUpUser(email, password, firstname, lastname, history, setPassword)
-        // auth.createUserWithEmailAndPassword(email, password)
-        //     .then((result) => {
-        //         return result.user.updateProfile({
-        //             displayName: firstname + ' ' + lastname
-        //         })
-        //     })
-        //     .then(() => {
-        //         const user = firebase.auth().currentUser
-        //         return db.collection('users').doc(user.uid).set({
-        //             name: firstname,
-        //             surname: lastname,
-        //             email: email
-        //         })
-        //     })
-        //     .then(() => {
-        //         history.push(HOME_URL)
-        //     })
-        //     .catch(err => {
-        //         setError(err.message)
-        //     }).finally(() => {
-        //         setPassword('')
-        //     })
+        dispatch(signUpUser(email, password, firstname, lastname, history, setPassword))
     }
 
     const onFirstChange = (e) => {
@@ -218,14 +189,3 @@ function Login(props) {
         </div>
     )
 }
-
-const mapStateToProps = state => ({
-    user: state.user
-})
-
-const mapActionsToProps = {
-    signInUser,
-    signUpUser
-}
-
-export default connect(mapStateToProps, mapActionsToProps)(Login)
