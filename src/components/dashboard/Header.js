@@ -158,7 +158,7 @@ export default function Header() {
             temp = firstLetters(currentUser.displayName)
         }
         setInitials(temp);
-    }, [currentUser, currentUser?.displayName])
+    }, [currentUser?.displayName])
 
     return (
         <MyAppBar style={{ position: media && 'unset' }}>

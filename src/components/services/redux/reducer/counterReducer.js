@@ -1,0 +1,41 @@
+import { INCREMENT, DECREMENT, REMOVE_ITEM } from "../actions/action";
+
+const initialState = JSON.parse(localStorage.getItem('itemDetails'))
+
+const counterReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case INCREMENT:
+            {
+                let newState = [...state];
+                newState.forEach(item => {
+                    if (item.id === action.id) {
+                        item.quantity += 1; item.subtotal = item.quantity * item.price
+                    }
+                })
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
+                return newState
+            }
+        case DECREMENT:
+            {
+                let newState = [...state];
+                newState.forEach(item => {
+                    if (item.id === action.id) {
+                        if (item.quantity > 1) { item.quantity -= 1; item.subtotal = item.quantity * item.price }
+                    }
+                })
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
+                return newState
+            }
+        case REMOVE_ITEM:
+            {
+                let newState = [...state];
+                newState = newState.filter(item => item.id !== action.id)
+                localStorage.setItem('itemDetails', JSON.stringify(newState))
+                return newState
+            }
+        default:
+            return state
+    }
+}
+
+export default counterReducer;

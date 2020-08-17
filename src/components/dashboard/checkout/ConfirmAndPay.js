@@ -1,6 +1,9 @@
-import React, { useContext } from 'react';
-import { Button, makeStyles, TextField } from '@material-ui/core';
-import { SummaryContext } from '../../main/context/SummaryContext';
+import React, { useEffect, useState } from 'react';
+import { Button, makeStyles } from '@material-ui/core';
+
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+
 const useStyles = makeStyles({
     mainWrapper: {
 
@@ -11,23 +14,30 @@ const useStyles = makeStyles({
         marginRight: '200px'
     }
 })
-// const reducer = (sum, item) => { sum + item.price * item.quantity };
-const ConfirmAndPay = (props) => {
-    const [summary, setSummary] = useContext(SummaryContext);
+
+const ConfirmAndPay = () => {
+
+    const count = useSelector(state => state.counter)
+    const [amount, setAmount] = useState(0)
+    const { t } = useTranslation()
+    useEffect(() => {
+        setAmount(count.reduce(function (acc, item) { return acc + item['price'] * item['quantity'] }, 0))
+    }, [count])
     const classes = useStyles();
-    // console.log(summary);
+
+
     return (
         <div className={classes.mainWrapper} >
             <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'left' }}>
                 <div>
-                    Order Summary
+                    {t('Order Summary')}
                 </div>
 
-                <Button style={{ padding: '0' }} > confirm and pay</Button>
+                <Button style={{ padding: '0' }} >{t('confirm and pay')} </Button>
 
             </div>
             <div>
-                15424545
+                {amount}
             </div>
 
         </div>
