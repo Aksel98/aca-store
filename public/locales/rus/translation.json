@@ -28,8 +28,17 @@
   "descending": "По убыванию",
   "nothingIsFound": "Ничего не найдено",
   "chooseCategoryName": "Выберите название категории",
+  "chooseModelName": "Выберите название модели",
   "chooseCategoryImage": "Выберите изображение категории",
   "add": "Добавить",
   "addDevice": "Добавить устройство",
-  "areYouSure": "Ты уверен?"
+  "areYouSure": "Ты уверен?",
+  "creditFor": "Кредит на",
+  "month": "месяцев",
+  "ram": "Оперативная память",
+  "memory": "Память",
+  "year": "Год анонсирования",
+  "color": "Цвет",
+  "buy": "Купить",
+  "makeMain": "Сделать основной"
 }

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import ModalDialog from "../../main/modal/ModalDialog";
+import ModalDialog from "../../main/popups/ModalDialog";
 import uniqId from "uniqid";
 import {BLUE, MyButton, ORANGE} from "../../main/constants/Constants";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
@@ -91,7 +91,7 @@ export default function CarouselAdmin(props) {
                      content={
                          <div className={classes.adminImages}>{
                              images.map(img => {
-                                 return <div key={uniqId} className={classes.adminImagesParent}>
+                                 return <div key={uniqId()} className={classes.adminImagesParent}>
                                      <img src={img}
                                           className={classes.adminCarouselImg} alt=''/>
                                      <div onClick={() => deleteImage(img)} className={classes.deleteBtn}>

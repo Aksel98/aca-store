@@ -9,7 +9,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from "react-router-dom";
 import { auth, db } from "../services/firebase/Firebase";
 import { useHistory } from "react-router-dom";
-import SnackBar from "../main/SnackBar";
+import SnackBar from "../main/popups/SnackBar";
 import { HOME_URL } from "../services/api/Navigations";
 import firebase from "firebase";
 

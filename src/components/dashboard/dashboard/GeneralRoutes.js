@@ -7,7 +7,7 @@ import CategoryList from "../category/CategoryList";
 import Footer from "../Footer";
 import ProductList from "../products/ProductList";
 import { makeStyles } from "@material-ui/core/styles";
-import Device from "../Device";
+import Device from "../device/Device";
 
 import Checkout from "../checkout/Checkout";
 

@@ -3,7 +3,7 @@ import Dashboard from "./dashboard/dashboard/Dashboard";
 import { auth } from "./services/firebase/Firebase";
 import { UserContext } from "./main/context/UserContext";
 import { BasketContext } from "./main/context/BasketContext";
-import Loader from "./main/Loader";
+import Loader from "./main/loader/Loader";
 
 export default function Main() {
     const [currentUser, setCurrentUser] = useState('')

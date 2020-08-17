@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import ModalDialog from "../../main/modal/ModalDialog";
+import ModalDialog from "../../main/popups/ModalDialog";
 import TextField from "@material-ui/core/TextField";
 import Fab from "@material-ui/core/Fab";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
@@ -89,7 +89,7 @@ export default function CategoryListAdmin(props) {
                                  <h3 className={classes.newCategoryName}>{image?.name}</h3>
                              </div>
                          }
-                         disabled={!categoryName || !image || disabled}
+                         disabled={!categoryName.trim() || !image || disabled}
                          doneButton={addCategory}
                          doneButtonName={t('add')}
                          close={() => open(false)}/>
