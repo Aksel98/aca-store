@@ -1,4 +1,4 @@
-import {LOGGED_IN} from "../actions/action";
+import { LOGGED_IN } from "../constantsredux";
 
 const currentUserReducer = (state = null, action) => {
     switch (action.type) {

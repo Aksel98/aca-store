@@ -132,8 +132,9 @@ const MyAppBar = styled(AppBar)({
 });
 
 export default function Header() {
+
     const currentUser = useContext(UserContext)
-    const [userInitials, setInitials] = useState(currentUser ? userLogo(currentUser.displayName) : null)
+    const [userInitials, setInitials] = useState(currentUser ? firstLetters(currentUser.displayName) : null)
     const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
@@ -143,12 +144,12 @@ export default function Header() {
     useEffect(() => {
         let temp = '';
         if (currentUser) {
-            temp = userLogo(currentUser.displayName)
+            temp = firstLetters(currentUser.displayName)
         }
         setInitials(temp);
     }, [currentUser, currentUser?.displayName])
 
-    function userLogo(user) {
+    function firstLetters(user) {
         if (user) {
             return user.split(' ').map(namepart => namepart.slice(0, 1).toUpperCase()).join('');
         }

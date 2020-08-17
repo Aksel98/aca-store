@@ -10,6 +10,8 @@ import ConfirmAndPay from "./ConfirmAndPay";
 import { ORANGE, BLUE, GREY } from "../../main/constants/Constants";
 import { makeStyles } from "@material-ui/core";
 
+
+
 const useStyles = makeStyles({
     mainWrapper: {
         display: 'flex',
@@ -35,8 +37,10 @@ const useStyles = makeStyles({
 const Checkout = () => {
     const classes = useStyles();
     const [basketItems, setBasketItems] = useContext(BasketContext);
-    useEffect(() => setBasketItems(JSON.parse(localStorage.getItem('ItemsInBasket'))), []);
     const [choosenItems, setChoosenItems] = useState([]);
+
+    useEffect(() => setBasketItems(JSON.parse(localStorage.getItem('ItemsInBasket'))), []);
+
     const getCartItems = () => {
         if (!!basketItems) {
             try {
@@ -48,7 +52,13 @@ const Checkout = () => {
                             tempArr.push({ ...tempObj });
                         })
                         setChoosenItems(tempArr);
+                        return tempArr
                     })
+                    .then((data) => {
+                        localStorage.setItem('itemDetails', JSON.stringify(data.map(function (item) { return { 'id': item.id, 'quantity': 1, 'price': item.price } })))
+                    }
+
+                    )
                     .catch(err => console.log('error making basket info query', err));
             }
             catch (e) {
@@ -59,6 +69,8 @@ const Checkout = () => {
     useEffect(() => {
         getCartItems();
     }, []);
+
+
     const removeItem = (itemID) => {
         let tempArr = [...choosenItems];
         tempArr = tempArr.filter(objItem => (objItem.id !== itemID))
@@ -67,13 +79,12 @@ const Checkout = () => {
         let localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
         localArr.splice(localArr.indexOf(itemID), 1);
         localStorage.setItem('ItemsInBasket', JSON.stringify(localArr));
-
-
     }
 
     return (
 
         <div>
+
             <Header />
             <div className={classes.mainWrapper}  >
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
@@ -96,7 +107,10 @@ const Checkout = () => {
 
             </div>
 
+
+
             <Footer />
+
         </div>
 
 

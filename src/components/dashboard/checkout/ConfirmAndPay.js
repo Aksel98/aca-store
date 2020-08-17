@@ -1,5 +1,9 @@
-import React from 'react';
-import { Button, makeStyles, TextField } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Button, makeStyles } from '@material-ui/core';
+
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+
 const useStyles = makeStyles({
     mainWrapper: {
 
@@ -10,21 +14,30 @@ const useStyles = makeStyles({
         marginRight: '200px'
     }
 })
-const ConfirmAndPay = (props) => {
 
+const ConfirmAndPay = () => {
+
+    const count = useSelector(state => state.counter)
+    const [amount, setAmount] = useState(0)
+    const { t } = useTranslation()
+    useEffect(() => {
+        setAmount(count.reduce(function (acc, item) { return acc + item['price'] * item['quantity'] }, 0))
+    }, [count])
     const classes = useStyles();
+
+
     return (
         <div className={classes.mainWrapper} >
             <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'left' }}>
                 <div>
-                    Order Summary
+                    {t('Order Summary')}
                 </div>
 
-                <Button style={{ padding: '0' }} > confirm and pay</Button>
+                <Button style={{ padding: '0' }} >{t('confirm and pay')} </Button>
 
             </div>
             <div>
-                156564646464
+                {amount}
             </div>
 
         </div>

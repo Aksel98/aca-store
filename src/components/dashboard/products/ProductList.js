@@ -79,18 +79,18 @@ export default function ProductList() {
         try {
             db.collection('product')
                 .where('device', '==', category)
-                .orderBy('price', orderBy)
+                // .orderBy('price', orderBy)
                 .get().then(snap => {
                     if (snap.docs.length) {
                         const startAt = snap.docs[page === 1 ? 0 : (page - 1) * limit];
                         setPaginationSize(Math.ceil(snap.docs.length / limit))
                         db.collection('product')
                             .where('device', '==', category)
-                            .orderBy('price', orderBy)
-                            .where('price', '<', priceFilter[1])
-                            .where('price', '>', priceFilter[0])
-                            .limit(limit)
-                            .startAt(startAt)
+                            // .orderBy('price', orderBy)
+                            // .where('price', '<', priceFilter[1])
+                            // .where('price', '>', priceFilter[0])
+                            // .limit(limit)
+                            // .startAt(startAt)
                             .get().then(snapshot => {
                                 const tempArr = [];
                                 snapshot.docs.forEach(doc => {
