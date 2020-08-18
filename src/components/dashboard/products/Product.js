@@ -7,10 +7,11 @@ import { useMediaQuery } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BasketContext } from '../../main/context/BasketContext';
-import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {useSelector} from "react-redux";
+import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { useSelector } from "react-redux";
 import { removeItem, addItem } from '../../services/redux/actions/counterActions';
 import { useDispatch } from 'react-redux';
+import { addToFav, removeFromFav } from '../../services/redux/actions/favouriteActions';
 
 const useStyles = makeStyles({
     root: {
@@ -91,7 +92,7 @@ const useStyles = makeStyles({
 });
 
 export default function Product(props) {
-    const { device, images, name, id, price, openModal, openDeleteModal} = props
+    const { device, images, name, id, price, openModal, openDeleteModal } = props
     const [hover, setHover] = useState(false);
     const [basket, setBasket] = useContext(BasketContext);
     const currentUser = useSelector(state => state.user)
@@ -101,7 +102,9 @@ export default function Product(props) {
     const { t } = useTranslation()
     const [btnText, setText] = useState('')
     const dispatch = useDispatch();
-
+    const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
+    const [favColor, setFavColor] = useState(currentUser && favFromLocal?.includes(id) ? ORANGE : GREY)
+    const liked = false;
     useEffect(() => {
         basket?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [])
@@ -129,6 +132,17 @@ export default function Product(props) {
         setBasket(localArr);
         dispatch(removeItem(id))
     }
+    const favItemHandler = () => {
+        if (!currentUser) {
+            openModal(t('modalTitleForAddFavoriteItems'));
+            setFavColor(GREY)
+        }
+        if (currentUser && favColor === GREY) { dispatch(addToFav(id)); setFavColor(ORANGE) }
+        else if (currentUser && favColor === ORANGE) {
+            dispatch(removeFromFav(id)); setFavColor(GREY)
+        };
+
+    }
 
     return (
         <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
@@ -144,8 +158,10 @@ export default function Product(props) {
             </Link>
             {hover && (<div className={classes.btnWrapper}>
                 <div style={{ display: 'flex' }}>
-                    <MyButton newcolor={ORANGE}
-                        onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
+                    <MyButton newcolor={favColor}
+                        onClick={() => favItemHandler()}
+                    // !currentUser ? openModal(t('modalTitleForAddFavoriteItems')) : dispatch(addToFav(id))}
+                    ><FavoriteTwoToneIcon /></MyButton>
                 </div>
                 <div className={classes.btnParent}>
                     <MyButton newcolor={ORANGE} className={classes.btn} onClick={() => { btnText === 'ADD TO CART' ? addToBasket() : removeFromBasket() }}>{t(btnText)}</MyButton>
