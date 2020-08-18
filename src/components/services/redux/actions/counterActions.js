@@ -18,11 +18,12 @@ export const removeItem = (id) => {
         id
     }
 }
-export const addItem = (id, price, quantity = 1) => {
+export const addItem = (id, price, device, quantity = 1) => {
     return {
         type: ADD_ITEM,
         id,
         price,
-        quantity
+        quantity,
+        device
     }
 }

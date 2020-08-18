@@ -16,7 +16,7 @@
   "forgotPassword": "Մոռացել եք գաղտնաբառը?",
   "useYourAccount": "կամ օգտագործեք ձեր հաշիվը",
   "useYourEmailForRegistration": "կամ օգտագործեք ձեր Էլ․փոստը գրանցման համար",
-  "modalTitleForAddFavoriteItems": "Եթե ցանկանում եք ունենալ սիրված իրեր, խնդրում ենք մուտք գործել",
+  "modalTitleForAddFavoriteItems": "Եթե ցանկանում եք ունենալ նախընտրած ապրանքներ, խնդրում ենք մուտք գործել",
   "addToCart": "Ավելացնել քարտին",
   "yes": "Այո",
   "cancel": "Չեղարկել",
@@ -31,6 +31,7 @@
   "chooseModelName": "Ընտրեք մոդելի անունը",
   "chooseCategoryImage": "Ընտրեք կատեգորիայի նկարը",
   "add": "Ավելացնել",
+  "view": "Դիտել",
   "addDevice": "Ավելացնել սարք",
   "areYouSure": "Համոզված ե՞ք",
   "creditFor": "Ապառիկ",
@@ -40,5 +41,7 @@
   "year": "Հայտարարության տարին",
   "color": "Գույնը",
   "buy": "Գնել",
-  "makeMain": "Դարձնել հիմնական"
+  "makeMain": "Դարձնել հիմնական",
+  "yourCartIsEmpty": "Ձեր զամբյուղը դատարկ է",
+  "confirmAndPay": "Հաստատեք և վճարեք"
 }

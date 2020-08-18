@@ -135,7 +135,7 @@ const useStyles = makeStyles((t) => ({
     },
 }))
 
-function Payment() {
+export default function Payment() {
     const media = useMediaQuery('(max-width:1300px)');
     const classes = useStyles(media);
 
@@ -337,5 +337,3 @@ function Payment() {
         </div>
     )
 }
-
-export default Payment;

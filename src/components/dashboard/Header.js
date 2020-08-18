@@ -157,7 +157,7 @@ export default function Header() {
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
     const classes = useStyles({ media, pathName: location.pathname === HOME_URL });
-    const { t, i18n } = useTranslation()
+    const {t, i18n} = useTranslation()
     const favArr = useSelector(state => state.favourites)
 
 

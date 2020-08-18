@@ -1,11 +1,13 @@
 import React from "react";
-import { makeStyles, useMediaQuery } from "@material-ui/core";
+import {makeStyles, useMediaQuery} from "@material-ui/core";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
-import { GREY } from "../../main/constants/Constants";
-import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, removeItem } from '../../services/redux/actions/counterActions'
+import {GREY, MyButton, ORANGE} from "../../main/constants/Constants";
+import {useSelector, useDispatch} from 'react-redux';
+import {increment, decrement, removeItem} from '../../services/redux/actions/counterActions'
 import DeviceCount from "../device/count/DeviceCount";
-import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     container: {
@@ -56,21 +58,30 @@ const useStyles = makeStyles({
         flex: 1,
         marginLeft: 10
     },
+    removeIconParent: {
+        color: ORANGE,
+        width: 'fit-content',
+        cursor: 'pointer'
+    },
     display: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     fullWidth: {
         width: '100%'
+    },
+    link: {
+        textDecoration: 'none'
     }
 })
 
 export default function Checkout(props) {
-    const { image, model, price, id, remove } = props;
+    const {image, model, price, id, remove} = props;
     const count = useSelector(state => state.counter)
     const dispatch = useDispatch()
     const [itemData] = count.filter(item => item.id === id)
-    const media = useMediaQuery('(max-width:600px)');
+    const media = useMediaQuery('(max-width:600px)')
+    const {t} = useTranslation();
     const classes = useStyles(media);
 
     function removeList() {
@@ -88,11 +99,14 @@ export default function Checkout(props) {
 
     return (
         <div className={classes.container}>
-            <img className={classes.image} src={image} alt="" />
+            <div>
+                <img className={classes.image} src={image} alt=""/>
+                <Link className={classes.link} to={`/categories/${itemData.device}/${itemData.id}`}>
+                    <MyButton color="primary" variant="contained">{t('view')}</MyButton>
+                </Link>
+            </div>
             <div className={classes.main}>
-                <div>
-                    <div className={classes.infoName}>{model}</div>
-                </div>
+                <div className={classes.infoName}>{model}</div>
                 <div className={classes.infoParent}>
                     <div className={classes.info}>
                         <div className={classes.display}>
@@ -102,7 +116,9 @@ export default function Checkout(props) {
                     </div>
                     <div className={`${classes.deviceTotalPrice} ${classes.info}`}>
                         <div>{numberFormat(itemData.quantity * itemData.price, '֏')}</div>
-                        <RemoveShoppingCartIcon onClick={removeList} />
+                        <MyButton onClick={removeList} className={classes.removeIconParent}>
+                            <RemoveShoppingCartIcon/>
+                        </MyButton>
                     </div>
                 </div>
             </div>
