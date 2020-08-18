@@ -9,7 +9,6 @@ import ProductList from "../products/ProductList";
 import { makeStyles } from "@material-ui/core/styles";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
-import ConfirmAndPay from "../checkout/ConfirmAndPay";
 import Payment from "../checkout/Payment";
 
 const useStyles = makeStyles({

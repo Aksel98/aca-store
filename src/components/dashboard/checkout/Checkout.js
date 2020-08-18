@@ -1,7 +1,7 @@
 import React from "react";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
-import {GREY} from "../../main/constants/Constants";
+import {GREY, MyButton, ORANGE} from "../../main/constants/Constants";
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement, removeItem} from '../../services/redux/actions/counterActions'
 import DeviceCount from "../device/count/DeviceCount";
@@ -56,9 +56,14 @@ const useStyles = makeStyles({
         flex: 1,
         marginLeft: 10
     },
+    removeIconParent: {
+        color: ORANGE,
+        width: 'fit-content',
+        cursor: 'pointer',
+    },
     display: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     fullWidth: {
         width: '100%'
@@ -102,7 +107,9 @@ export default function Checkout(props) {
                     </div>
                     <div className={`${classes.deviceTotalPrice} ${classes.info}`}>
                         <div>{numberFormat(itemData.quantity * itemData.price, '֏')}</div>
-                        <RemoveShoppingCartIcon onClick={removeList}/>
+                        <MyButton onClick={removeList} className={classes.removeIconParent}>
+                            <RemoveShoppingCartIcon/>
+                        </MyButton>
                     </div>
                 </div>
             </div>

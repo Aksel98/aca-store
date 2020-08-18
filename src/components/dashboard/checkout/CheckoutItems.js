@@ -6,7 +6,7 @@ import Checkout from "./Checkout";
 import Header from "../Header";
 import Footer from "../Footer";
 import uniqId from 'uniqid';
-import ConfirmAndPay from "./ConfirmAndPay";
+import TotalPrice from "./TotalPrice";
 import {ORANGE, BLUE} from "../../main/constants/Constants";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         marginTop: 70,
         justifyContent: 'space-between',
-        height: props => props ?  720 : 678,
+        height: props => props ? 720 : 678,
         overflow: 'auto',
     },
     cartIcon: {
@@ -29,8 +29,17 @@ const useStyles = makeStyles({
             color: BLUE,
         }
     },
+    totalPrice: {
+        position: 'fixed',
+        top: 80,
+        right: 40,
+        zIndex: 1
+    },
     backIcon: {
         marginLeft: 20
+    },
+    fullHeight: {
+        height: '100%'
     }
 })
 
@@ -90,7 +99,10 @@ const CheckoutItems = () => {
                 <div onClick={() => history.goBack()} className={classes.backIcon}>
                     <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
                 </div>
-                <div>
+                <div className={classes.totalPrice}>
+                    <TotalPrice/>
+                </div>
+                <div className={classes.fullHeight}>
                     {basketItems?.length ? choosenItems.map(item => <Checkout
                         image={item.images[0]}
                         price={item.price}
@@ -98,9 +110,6 @@ const CheckoutItems = () => {
                         id={item.id}
                         remove={removeItem}
                         key={uniqId()}/>) : 'you have 0 items in your cart'}
-                </div>
-                <div style={{alignSelf: 'flex-end'}}>
-                    <ConfirmAndPay/>
                 </div>
             </div>
             <Footer/>
