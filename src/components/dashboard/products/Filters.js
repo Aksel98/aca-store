@@ -37,7 +37,7 @@ const useStyles = makeStyles({
         padding: '5px 0 0',
     },
     formatNums: {
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: 700,
         color: BLUE
     }

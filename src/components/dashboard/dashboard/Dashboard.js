@@ -1,11 +1,11 @@
-import React, {useContext} from "react";
+import React from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import Login from "../../auth/Login";
-import {UserContext} from "../../main/context/UserContext";
 import {BLACK} from "../../main/constants/Constants"
 import {LOGIN_URL} from "../../services/api/Navigations";
 import GeneralRoutes from "./GeneralRoutes";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles({
     loginBg: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 })
 
 export default function Dashboard() {
-    const currentUser = useContext(UserContext)
+    const currentUser = useSelector(state => state.user)
     const classes = useStyles()
 
     return (

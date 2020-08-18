@@ -4,16 +4,15 @@ import { BLACK, GREY, MyButton, ORANGE, WHITE } from '../../main/constants/Const
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { useMediaQuery } from "@material-ui/core";
-import { UserContext } from "../../main/context/UserContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BasketContext } from '../../main/context/BasketContext';
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {useSelector} from "react-redux";
 import { removeItem, addItem } from '../../services/redux/actions/counterActions';
 import { useDispatch } from 'react-redux';
-import { addToFav } from '../../services/redux/actions/favouriteActions';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
     root: {
         position: 'relative',
         width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 205,
@@ -32,7 +31,7 @@ const useStyles = makeStyles(() => ({
     },
     productImage: {
         width: props => props.mediaTablet ? '60%' : 140,
-        height: props => props.mediaTablet ? 115 : 185
+        height: props => props.mediaTablet ? 115 : 175
     },
     modelInfo: {
         display: 'flex',
@@ -89,13 +88,13 @@ const useStyles = makeStyles(() => ({
         width: 35,
         position: 'absolute'
     }
-}));
+});
 
 export default function Product(props) {
+    const { device, images, name, id, price, openModal, openDeleteModal} = props
     const [hover, setHover] = useState(false);
     const [basket, setBasket] = useContext(BasketContext);
-    const { device, images, name, id, price, openModal } = props
-    const currentUser = useContext(UserContext)
+    const currentUser = useSelector(state => state.user)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:475px)');
     const classes = useStyles({ mediaTablet, mediaMobile });
@@ -133,7 +132,7 @@ export default function Product(props) {
 
     return (
         <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <div className={classes.deleteBtn}>
+            <div onClick={() => openDeleteModal(true, id)} className={classes.deleteBtn}>
                 <MyButton newcolor={ORANGE}><HighlightOffIcon /></MyButton>
             </div>
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
@@ -146,7 +145,7 @@ export default function Product(props) {
             {hover && (<div className={classes.btnWrapper}>
                 <div style={{ display: 'flex' }}>
                     <MyButton newcolor={ORANGE}
-                        onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon onClick={dispatch(addToFav(id))} /></MyButton>
+                        onClick={() => !currentUser && openModal(t('modalTitleForAddFavoriteItems'))}><FavoriteTwoToneIcon/></MyButton>
                 </div>
                 <div className={classes.btnParent}>
                     <MyButton newcolor={ORANGE} className={classes.btn} onClick={() => { btnText === 'ADD TO CART' ? addToBasket() : removeFromBasket() }}>{t(btnText)}</MyButton>
