@@ -15,12 +15,12 @@ const useStyles = makeStyles({
         }
     },
     bold: {
-      fontWeight: 'bold'
+        fontWeight: 'bold'
     },
     btn: {
-      '&:disabled': {
-          opacity: '0.5'
-      }
+        '&:disabled': {
+            opacity: '0.5'
+        }
     },
     link: {
         color: ORANGE,
@@ -30,6 +30,7 @@ const useStyles = makeStyles({
 })
 
 const TotalPrice = () => {
+    const [quantity, setQuantity] = useState(0)
     const count = useSelector(state => state.counter)
     const [amount, setAmount] = useState(0)
     const classes = useStyles();
@@ -39,6 +40,7 @@ const TotalPrice = () => {
         setAmount(count.reduce(function (acc, item) {
             return acc + item['price'] * item['quantity']
         }, 0))
+        setQuantity(count.map(item => item['quantity']))
     }, [count])
 
     return (
@@ -48,7 +50,12 @@ const TotalPrice = () => {
                 <span className={classes.bold}>{numberFormat(amount, '֏')}</span>
             </div>
             <MyButton className={classes.btn} disabled={!count.length} variant="contained">
-                <Link className={classes.link} to={{pathname: '/payment', state: {summary: amount}}}>{t('confirmAndPay')}</Link>
+                <Link className={classes.link} to={{
+                    pathname: '/payment', state: {
+                        summary: amount,
+                        quantity
+                    }
+                }}>{t('confirmAndPay')}</Link>
             </MyButton>
         </div>
     )

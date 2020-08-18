@@ -9,7 +9,7 @@ import ProductList from "../products/ProductList";
 import { makeStyles } from "@material-ui/core/styles";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
-import Payment from "../checkout/Payment";
+import Payment from "../payment/Payment";
 import FavItem from "../favourites/FavItem";
 import FavItemList from "../favourites/FavItemList";
 
