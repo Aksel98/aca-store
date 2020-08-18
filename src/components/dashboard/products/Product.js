@@ -85,12 +85,15 @@ const useStyles = makeStyles({
             fontWeight: 'bold'
         }
     },
+    favIconColor: {
+        color: props => props.currentUser && props.liked ? ORANGE : GREY
+    },
     deleteBtn: {
         width: 35,
         position: 'absolute'
     }
 });
-let liked = false
+// let liked = false
 export default function Product(props) {
     const { device, images, name, id, price, openModal, openDeleteModal } = props
     const [hover, setHover] = useState(false);
@@ -98,13 +101,17 @@ export default function Product(props) {
     const currentUser = useSelector(state => state.user)
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:475px)');
-    const classes = useStyles({ mediaTablet, mediaMobile });
+    const [liked, setLiked] = useState(false);
+    const classes = useStyles({ mediaTablet, mediaMobile, currentUser, liked });
     const { t } = useTranslation()
     const [btnText, setText] = useState('')
     const dispatch = useDispatch();
     const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
-    const [favColor, setFavColor] = useState(currentUser && favFromLocal?.includes(id) ? ORANGE : GREY)
-    liked = currentUser && favFromLocal?.includes(id) ? true : false;
+
+    // const [favColor, setFavColor] = useState(currentUser && favFromLocal?.includes(id) ? ORANGE : GREY)
+    useEffect(() => {
+        currentUser && favFromLocal?.includes(id) ? setLiked(true) : setLiked(false)
+    })
     useEffect(() => {
         basket?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [])
@@ -135,18 +142,18 @@ export default function Product(props) {
     const favItemHandler = () => {
         if (!currentUser) {
             openModal(t('modalTitleForAddFavoriteItems'));
-            setFavColor(GREY)
+            // setFavColor(GREY)
         }
         if (currentUser && !liked) {
             dispatch(addToFav(id));
-            setFavColor(ORANGE);
-            liked = !liked;
+            // setFavColor(ORANGE);
+            setLiked(!liked)
             console.log(liked)
         }
         else if (currentUser && liked) {
             dispatch(removeFromFav(id));
-            setFavColor(GREY);
-            liked = !liked;
+            // setFavColor(GREY);
+            setLiked(!liked)
             console.log(liked)
         };
 
@@ -166,7 +173,7 @@ export default function Product(props) {
             </Link>
             {hover && (<div className={classes.btnWrapper}>
                 <div style={{ display: 'flex' }}>
-                    <MyButton newcolor={favColor}
+                    <MyButton className={classes.favIconColor}
                         onClick={() => favItemHandler()}
                     // !currentUser ? openModal(t('modalTitleForAddFavoriteItems')) : dispatch(addToFav(id))}
                     ><FavoriteTwoToneIcon /></MyButton>
