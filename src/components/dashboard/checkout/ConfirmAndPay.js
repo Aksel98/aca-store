@@ -21,12 +21,15 @@ const ConfirmAndPay = () => {
     const location = useLocation();
     const count = useSelector(state => state.counter)
     const [amount, setAmount] = useState(0)
+    const [quantity, setQuantity] = useState(0)
     const { t } = useTranslation()
     useEffect(() => {
         setAmount(count.reduce(function (acc, item) { return acc + item['price'] * item['quantity'] }, 0))
+        setQuantity(count.map(item =>item['quantity'] ))
     }, [count])
     const classes = useStyles();
 
+console.log(quantity)
 
     return (
         <div className={classes.mainWrapper} >
@@ -39,7 +42,8 @@ const ConfirmAndPay = () => {
                     <Link to={{
                         pathname: '/payment',
                         state: {
-                            summary: amount
+                            summary: amount,
+                            quantity: quantity
                         }
                     }}>
                         {t('confirm and pay')}
