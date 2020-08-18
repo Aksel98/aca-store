@@ -59,7 +59,8 @@ const FavItemList = () => {
                     key={uniqid()}
                     image={data.images[0]}
                     price={data.price}
-                    model={data.model} />) : 'there are no favourites choosen'
+                    model={data.model}
+                    id={data.id} />) : 'there are no favourites choosen'
             }
 
             </div>

@@ -68,7 +68,7 @@ const useStyles = makeStyles({
     }
 })
 
-export default function Checkout(props) {
+export default function FavItem(props) {
     const { image, model, price, id, remove } = props;
     const count = useSelector(state => state.counter)
     const dispatch = useDispatch()
@@ -76,6 +76,7 @@ export default function Checkout(props) {
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
     const [basket, setBasket] = useContext(BasketContext)
+
     const addToBasket = () => {
         let localArr = [];
         if (localStorage.getItem('ItemsInBasket')) {
@@ -88,6 +89,7 @@ export default function Checkout(props) {
             localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
         }
         setBasket(localArr);
+        console.log(basket);
         dispatch(addItem(id, price))
     }
 
