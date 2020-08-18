@@ -1,4 +1,4 @@
-import { ADD_TO_FAVOURITES, REMOVE_FROM_FAVOURITES } from "../constantsredux"
+import { ADD_TO_FAVOURITES, REMOVE_FROM_FAVOURITES } from "../types"
 
 export const addToFav = (id) => {
     return {
