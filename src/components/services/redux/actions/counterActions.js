@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, REMOVE_ITEM, ADD_ITEM } from "../constantsredux"
+import {ADD_ITEM, DECREMENT, INCREMENT, REMOVE_ITEM} from "../types";
 
 export const increment = (id) => {
     return {

@@ -1,8 +1,7 @@
-import { INCREMENT, DECREMENT, REMOVE_ITEM, ADD_ITEM } from "../constantsredux";
+import {ADD_ITEM, DECREMENT, INCREMENT, REMOVE_ITEM} from "../types";
+import {initialState} from "./reducers";
 
-const initialState = JSON.parse(localStorage.getItem('itemDetails')) || []
-
-const counterReducer = (state = initialState, action) => {
+const counterReducer = (state = initialState.itemDetails, action) => {
     switch (action.type) {
         case INCREMENT:
             {

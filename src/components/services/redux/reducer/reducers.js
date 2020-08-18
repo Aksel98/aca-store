@@ -4,7 +4,8 @@ import userReducer from "./userReducer";
 import uiReducer from "./uiReducer";
 
 export const initialState = {
-    user: false
+    user: false,
+    itemDetails: JSON.parse(localStorage.getItem('itemDetails')) || []
 }
 
 const allReducers = combineReducers({
