@@ -3,7 +3,7 @@ import { Button, makeStyles } from '@material-ui/core';
 
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
     mainWrapper: {
@@ -17,41 +17,29 @@ const useStyles = makeStyles({
     }
 })
 
-const ConfirmAndPay = () => {
+const Payment = () => {
     const location = useLocation();
-    const count = useSelector(state => state.counter)
-    const [amount, setAmount] = useState(0)
+    console.log(location)
+    const [amount, setAmount] = useState(location.state.summary)
     const { t } = useTranslation()
-    useEffect(() => {
-        setAmount(count.reduce(function (acc, item) { return acc + item['price'] * item['quantity'] }, 0))
-    }, [count])
+    const hystory = useHistory()
     const classes = useStyles();
 
 
     return (
         <div className={classes.mainWrapper} >
+            <Button onClick={() => hystory.goBack()}>
+                back to cart
+            </Button>
             <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'left', }}>
                 <div>
                     {t('Order Summary')}
                 </div>
-
-                <Button style={{ padding: '0' }} >
-                    <Link to={{
-                        pathname: '/payment',
-                        state: {
-                            summary: amount
-                        }
-                    }}>
-                        {t('confirm and pay')}
-                    </Link>
-                </Button>
-
             </div>
             <div>
                 {amount}
             </div>
-
         </div>
     )
 }
-export default ConfirmAndPay
+export default Payment

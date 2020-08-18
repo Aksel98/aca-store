@@ -9,6 +9,8 @@ import uniqid from 'uniqid';
 import ConfirmAndPay from "./ConfirmAndPay";
 import { ORANGE, BLUE, GREY } from "../../main/constants/Constants";
 import { makeStyles } from "@material-ui/core";
+import FavItems from "./FavItems";
+import { useSelector } from "react-redux";
 
 
 
@@ -38,7 +40,7 @@ const Checkout = () => {
     const classes = useStyles();
     const [basketItems, setBasketItems] = useContext(BasketContext);
     const [choosenItems, setChoosenItems] = useState([]);
-
+    const user = useSelector(state => state.user)
     useEffect(() => setBasketItems(JSON.parse(localStorage.getItem('ItemsInBasket'))), []);
 
     const getCartItems = () => {
@@ -98,6 +100,7 @@ const Checkout = () => {
                         SUBTOTAL
                     </div>
                 </div>
+                {user && <FavItems />}
                 <div >
                     {!basketItems ? 'you have 0 items in your cart' : choosenItems.map(item => <CheckoutItems image={item.image} model={item.model} price={item.price} id={item.id} remove={removeItem} key={uniqid()} />)}
                 </div>
