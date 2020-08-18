@@ -90,6 +90,16 @@ export default function Device() {
         setOpenDeleteModal(val)
     }
 
+    function addCount() {
+        setDeviceCount(deviceCount + 1)
+    }
+
+    function reduceCount() {
+        if (deviceCount > 1) {
+            setDeviceCount(deviceCount - 1)
+        }
+    }
+
     return (
         <div className={classes.container}>
             <div onClick={() => history.goBack()} className={classes.backIcon}>
@@ -118,7 +128,7 @@ export default function Device() {
                     <div className={classes.info}>
                         <Price price={price || device.price} setPrice={setPrice} count={deviceCount}/>
                         <Credits price={price || device.price} count={deviceCount}/>
-                        <DeviceCount count={deviceCount} setCount={setDeviceCount}/>
+                        <DeviceCount count={deviceCount} add={addCount} reduce={reduceCount} setCount={setDeviceCount}/>
                     </div>
                     <div className={classes.info}>
                         <AboutDevice device={device}/>

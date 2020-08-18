@@ -8,8 +8,7 @@ import Footer from "../Footer";
 import ProductList from "../products/ProductList";
 import { makeStyles } from "@material-ui/core/styles";
 import Device from "../device/Device";
-
-import Checkout from "../checkout/Checkout";
+import CheckoutItems from "../checkout/CheckoutItems";
 import ConfirmAndPay from "../checkout/ConfirmAndPay";
 import Payment from "../checkout/Payment";
 
@@ -36,14 +35,13 @@ export default function GeneralRoutes() {
                 <Footer />
             </Route>
             <Route exact path='/checkout'>
-
-                <Checkout />
+                <CheckoutItems />
             </Route>
             <Route exact path='/payment'>
                 <div>
-                    <Header />
-                    <Payment />
-                    <Footer />
+                    <Header/>
+                    <Payment/>
+                    <Footer/>
                 </div>
             </Route>
             <Route exact path='/categories/:category'>

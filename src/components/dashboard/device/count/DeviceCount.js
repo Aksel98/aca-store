@@ -20,26 +20,16 @@ const useStyles = makeStyles({
     }
 })
 export default function DeviceCount(props) {
-    const {count, setCount} = props
+    const {count, add, reduce} = props
     const classes = useStyles()
-
-    function addCount() {
-        setCount(count + 1)
-    }
-
-    function reduceCount() {
-        if (count > 1) {
-            setCount(count - 1)
-        }
-    }
 
     return (
         <div className={classes.displayFlex}>
-            <MyButton onClick={reduceCount} maxwidth="fit-content">
+            <MyButton onClick={reduce} maxwidth="fit-content">
                 <RemoveRoundedIcon className={classes.rounded}/>
             </MyButton>
             <div className={classes.deviceCount}>{count}</div>
-            <MyButton onClick={addCount} maxwidth="fit-content">
+            <MyButton onClick={add} maxwidth="fit-content">
                 <AddRoundedIcon className={classes.rounded}/>
             </MyButton>
         </div>
