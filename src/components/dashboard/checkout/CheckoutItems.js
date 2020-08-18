@@ -1,119 +1,110 @@
-import React, { useState, useContext, useReducer } from "react";
-import { Button, makeStyles } from "@material-ui/core";
-import RemoveIcon from '@material-ui/icons/Remove';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
-import { TextField } from '@material-ui/core';
-import { GREY, ORANGE, PURPLE, RED, BLUE } from "../../main/constants/Constants";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, removeItem } from '../../services/redux/actions/counterActions'
-import { useTranslation } from "react-i18next";
+import React, {useEffect, useState} from "react"
+import {useContext} from "react";
+import {BasketContext} from "../../main/context/BasketContext";
+import {db} from "../../services/firebase/Firebase";
+import Checkout from "./Checkout";
+import Header from "../Header";
+import Footer from "../Footer";
+import uniqId from 'uniqid';
+import ConfirmAndPay from "./ConfirmAndPay";
+import {ORANGE, BLUE} from "../../main/constants/Constants";
+import {makeStyles, useMediaQuery} from "@material-ui/core";
+import Fab from "@material-ui/core/Fab";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import {useHistory} from "react-router-dom";
+
 const useStyles = makeStyles({
     mainWrapper: {
         display: 'flex',
-        flexDirection: 'row',
-        marginLeft: '10px',
-        marginBottom: "10px",
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        borderBottom: `1px solid ${GREY}`,
-        padding: '5px',
-    },
-    itemInfo: {
-        display: 'flex',
         flexDirection: 'column',
+        marginTop: 70,
         justifyContent: 'space-between',
-        margin: '10px'
-    },
-    iconsWrapper: {
-        height: '2rem',
-        display: 'flex',
-        flexDirection: 'row',
-
-    },
-    itemCount: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginLeft: '20px',
-        marginRight: '20px',
-
-    },
-    textField: {
-        width: '4rem',
-        height: '2rem',
-        textAlign: 'center',
-        border: `1px solid ${ORANGE}`,
-        borderRadius: '3px',
-
-    },
-    countText: {
-        width: '2rem',
-        textAlign: 'center',
-        border: `1px solid ${ORANGE}`,
+        height: props => props ?  720 : 678,
+        overflow: 'auto',
     },
     cartIcon: {
-        marginLeft: '10px',
         cursor: 'pointer',
         color: ORANGE,
         '&:hover': {
             color: BLUE,
         }
-
-
+    },
+    backIcon: {
+        marginLeft: 20
     }
-
 })
 
+const CheckoutItems = () => {
+    const [choosenItems, setChoosenItems] = useState([]);
+    const [basketItems, setBasketItems] = useContext(BasketContext);
+    const media = useMediaQuery('(min-width:600px)');
+    const classes = useStyles(media);
+    const history = useHistory();
 
-export default function CheckoutItems(props) {
+    useEffect(() => {
+        getCartItems();
+    }, []);
 
-    const classes = useStyles();
-    const { image, model, price, id, parameters: info, remove } = props;
-    const count = useSelector(state => state.counter)
-    const dispatch = useDispatch()
-    const [itemData] = count.filter(item => item.id === id)
+    const getCartItems = () => {
+        try {
+            if (basketItems.length) {
+                db.collection('product')
+                    .where('id', 'in', basketItems)
+                    .get()
+                    .then(querySnapshot => {
+                        const tempArr = [];
+                        querySnapshot.docs.forEach(doc => {
+                            let tempObj = doc.data();
+                            tempArr.push({...tempObj});
+                        })
+                        setChoosenItems(tempArr);
+                        return tempArr
+                    })
+                    .then((data) => {
+                            localStorage.setItem('itemDetails', JSON.stringify(data.map(function (item) {
+                                return {'id': item.id, 'quantity': 1, 'price': item.price}
+                            })))
+                        }
+                    )
+                    .catch(err => console.log('error making basket info query', err));
+            }
+        } catch (e) {
+            console.log("can not  get basket items:", e);
+        }
+    }
 
+    const removeItem = (itemID) => {
+        let tempArr = [...choosenItems];
+        tempArr = tempArr.filter(objItem => (objItem.id !== itemID))
+        setChoosenItems(tempArr);
+        setBasketItems(tempArr.map(item => item.id));
+        let localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
+        localArr.splice(localArr.indexOf(itemID), 1);
+        localStorage.setItem('ItemsInBasket', JSON.stringify(localArr));
+    }
 
     return (
-        <div>
+        <React.Fragment>
+            <Header/>
             <div className={classes.mainWrapper}>
-                <img width={'80px'} src={image} alt="" />
-                <div className={classes.itemInfo}>
-                    <div>{model}</div>
-
+                <div onClick={() => history.goBack()} className={classes.backIcon}>
+                    <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
                 </div>
-                <div className={classes.textField}
-                >{price + ' $'}</div>
-
-                <div className={classes.iconsWrapper}>
-                    <div className={classes.itemCount} >
-                        <RemoveIcon
-                            cursor='pointer'
-                            onClick={() => dispatch(decrement(id))}
-                        />
-                        <div className={classes.countText}>
-                            {!!itemData && itemData.quantity}
-                        </div>
-
-                        <AddIcon
-                            cursor='pointer'
-                            onClick={() => dispatch(increment(id))}
-
-                        />
-                    </div>
-                    <div className={classes.textField}>
-                        {!!itemData && itemData.quantity * itemData.price}
-                    </div>
-
-
-                    <RemoveShoppingCartIcon
-                        className={classes.cartIcon}
-                        onClick={() => { remove(id); dispatch(removeItem(id)) }}
-                    />
+                <div>
+                    {basketItems?.length ? choosenItems.map(item => <Checkout
+                        image={item.images[0]}
+                        price={item.price}
+                        model={item.model}
+                        id={item.id}
+                        remove={removeItem}
+                        key={uniqId()}/>) : 'you have 0 items in your cart'}
+                </div>
+                <div style={{alignSelf: 'flex-end'}}>
+                    <ConfirmAndPay/>
                 </div>
             </div>
-        </div>
+            <Footer/>
+        </React.Fragment>
     )
-
 }
+export default CheckoutItems;
