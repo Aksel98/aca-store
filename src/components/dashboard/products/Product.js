@@ -142,19 +142,15 @@ export default function Product(props) {
     const favItemHandler = () => {
         if (!currentUser) {
             openModal(t('modalTitleForAddFavoriteItems'));
-            // setFavColor(GREY)
+
         }
         if (currentUser && !liked) {
             dispatch(addToFav(id));
-            // setFavColor(ORANGE);
             setLiked(!liked)
-            console.log(liked)
         }
         else if (currentUser && liked) {
             dispatch(removeFromFav(id));
-            // setFavColor(GREY);
             setLiked(!liked)
-            console.log(liked)
         };
 
     }
