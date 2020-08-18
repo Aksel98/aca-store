@@ -7,6 +7,7 @@ import {increment, decrement, removeItem} from '../../services/redux/actions/cou
 import DeviceCount from "../device/count/DeviceCount";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     container: {
@@ -79,7 +80,8 @@ export default function Checkout(props) {
     const count = useSelector(state => state.counter)
     const dispatch = useDispatch()
     const [itemData] = count.filter(item => item.id === id)
-    const media = useMediaQuery('(max-width:600px)');
+    const media = useMediaQuery('(max-width:600px)')
+    const {t} = useTranslation();
     const classes = useStyles(media);
 
     function removeList() {
@@ -100,7 +102,7 @@ export default function Checkout(props) {
             <div>
                 <img className={classes.image} src={image} alt=""/>
                     <Link className={classes.link} to={`/categories/${itemData.device}/${itemData.id}`}>
-                    <MyButton color="primary" variant="contained">View</MyButton>
+                    <MyButton color="primary" variant="contained">{t('view')}</MyButton>
                 </Link>
             </div>
             <div className={classes.main}>

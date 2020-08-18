@@ -7,11 +7,12 @@ import Header from "../Header";
 import Footer from "../Footer";
 import uniqId from 'uniqid';
 import TotalPrice from "./TotalPrice";
-import {ORANGE, BLUE} from "../../main/constants/Constants";
+import {ORANGE, BLUE, BLACK} from "../../main/constants/Constants";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import {useHistory} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     mainWrapper: {
@@ -35,6 +36,10 @@ const useStyles = makeStyles({
         right: 40,
         zIndex: 1
     },
+    emptyCart: {
+        textAlign: 'center',
+        color: BLACK
+    },
     backIcon: {
         marginLeft: 20
     },
@@ -44,8 +49,9 @@ const useStyles = makeStyles({
 })
 
 const CheckoutItems = () => {
-    const [choosenItems, setChoosenItems] = useState([]);
+    const [chosenItems, setChosenItems] = useState([]);
     const [basketItems, setBasketItems] = useContext(BasketContext);
+    const {t} = useTranslation()
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles(media);
     const history = useHistory();
@@ -66,7 +72,7 @@ const CheckoutItems = () => {
                             let tempObj = doc.data();
                             tempArr.push({...tempObj});
                         })
-                        setChoosenItems(tempArr);
+                        setChosenItems(tempArr);
                         return tempArr
                     })
                     .then((data) => {
@@ -83,9 +89,9 @@ const CheckoutItems = () => {
     }
 
     const removeItem = (itemID) => {
-        let tempArr = [...choosenItems];
+        let tempArr = [...chosenItems];
         tempArr = tempArr.filter(objItem => (objItem.id !== itemID))
-        setChoosenItems(tempArr);
+        setChosenItems(tempArr);
         setBasketItems(tempArr.map(item => item.id));
         let localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
         localArr.splice(localArr.indexOf(itemID), 1);
@@ -103,13 +109,13 @@ const CheckoutItems = () => {
                     <TotalPrice/>
                 </div>
                 <div className={classes.fullHeight}>
-                    {basketItems?.length ? choosenItems.map(item => <Checkout
+                    {basketItems?.length ? chosenItems.map(item => <Checkout
                         image={item.images[0]}
                         price={item.price}
                         model={item.model}
                         id={item.id}
                         remove={removeItem}
-                        key={uniqId()}/>) : 'you have 0 items in your cart'}
+                        key={uniqId()}/>) : <h1 className={classes.emptyCart}>{t('yourCartIsEmpty')}</h1>}
                 </div>
             </div>
             <Footer/>

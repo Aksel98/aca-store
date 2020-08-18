@@ -54,7 +54,7 @@ export default function SignUp(props) {
     const { firstname, lastname, email, password, error, onFirstChange, onLastChange, onValueChange, signUp, rightPanel, classFormContainer, media } = props
     const history = useHistory()
     const classes = useStyles({ rightPanel, media })
-    const { t } = useTranslation()
+    const {t} = useTranslation()
 
     return (
         <div className={`${classFormContainer} ${classes.signUpContainer}`}>

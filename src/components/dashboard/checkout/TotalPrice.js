@@ -17,6 +17,11 @@ const useStyles = makeStyles({
     bold: {
       fontWeight: 'bold'
     },
+    btn: {
+      '&:disabled': {
+          opacity: '0.5'
+      }
+    },
     link: {
         color: ORANGE,
         fontWeight: 'bold',
@@ -36,15 +41,14 @@ const TotalPrice = () => {
         }, 0))
     }, [count])
 
-
     return (
         <div className={classes.mainWrapper}>
             <div className={classes.price}>
                 <span>Total price`</span>
                 <span className={classes.bold}>{numberFormat(amount, '֏')}</span>
             </div>
-            <MyButton variant="contained">
-                <Link className={classes.link} to={{pathname: '/payment', state: {summary: amount}}}>{t('confirm and pay')}</Link>
+            <MyButton className={classes.btn} disabled={!count.length} variant="contained">
+                <Link className={classes.link} to={{pathname: '/payment', state: {summary: amount}}}>{t('confirmAndPay')}</Link>
             </MyButton>
         </div>
     )
