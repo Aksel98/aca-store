@@ -14,14 +14,14 @@ const useStyles = makeStyles({
         marginTop: '80px',
         justifyContent: 'space-around',
 
-    }
+    },
+
 })
 const FavItemList = () => {
     const classes = useStyles();
     const favIds = useSelector(state => state.favourites);
     const user = useSelector(state => state.user);
     const [favItems, setFavItems] = useState([]);
-    console.log(user.uid)
     const history = useHistory()
     useEffect(() => {
         if (favIds.length) { getFavItems() }
@@ -48,9 +48,12 @@ const FavItemList = () => {
 
     return (
         <div className={classes.main}>
-            <Button onClick={() => history.goBack()}>
-                back to cart
-            </Button>
+            <div >
+                <Button onClick={() => history.goBack()}>
+                    back to cart
+                </Button>
+            </div>
+
             <div>{favItems?.length ? favItems.map(data =>
                 <FavItem
                     key={uniqid()}

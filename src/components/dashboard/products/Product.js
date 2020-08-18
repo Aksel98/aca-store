@@ -93,7 +93,7 @@ const useStyles = makeStyles({
         position: 'absolute'
     }
 });
-// let liked = false
+
 export default function Product(props) {
     const { device, images, name, id, price, openModal, openDeleteModal } = props
     const [hover, setHover] = useState(false);
@@ -108,7 +108,7 @@ export default function Product(props) {
     const dispatch = useDispatch();
     const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
 
-    // const [favColor, setFavColor] = useState(currentUser && favFromLocal?.includes(id) ? ORANGE : GREY)
+
     useEffect(() => {
         currentUser && favFromLocal?.includes(id) ? setLiked(true) : setLiked(false)
     })

@@ -1,11 +1,12 @@
 import React from "react";
-import { makeStyles, useMediaQuery } from "@material-ui/core";
+import { makeStyles, useMediaQuery, Button } from "@material-ui/core";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { GREY } from "../../main/constants/Constants";
 import { useSelector, useDispatch } from 'react-redux';
 import { increment, decrement, removeItem } from '../../services/redux/actions/counterActions'
 import DeviceCount from "../device/count/DeviceCount";
 import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { addToFav, removeFromFav } from "../../services/redux/actions/favouriteActions";
 
 const useStyles = makeStyles({
     container: {
@@ -88,13 +89,19 @@ export default function Checkout(props) {
                     <div className={classes.infoName}>{model}</div>
                 </div>
                 <div className={classes.infoParent}>
-                    <div className={classes.info}>
 
+                    <div className={classes.info}>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>
 
                 </div>
             </div>
+            <div>
+                <Button onClick={() => { }}>add to basket</Button>
+                <Button onClick={() => dispatch(removeFromFav(id))}>remove </Button>
+
+            </div>
+
         </div>
     )
 }
