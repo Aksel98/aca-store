@@ -7,7 +7,6 @@ import { Link, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles({
     mainWrapper: {
-
         display: 'flex',
         flexDirection: 'row',
         margin: '20px',
