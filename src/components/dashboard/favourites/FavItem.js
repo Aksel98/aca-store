@@ -78,13 +78,7 @@ export default function Checkout(props) {
         remove(id)
     }
 
-    function addCount() {
-        dispatch(increment(id))
-    }
 
-    function reduceCount() {
-        dispatch(decrement(id))
-    }
 
     return (
         <div className={classes.container}>
@@ -95,15 +89,10 @@ export default function Checkout(props) {
                 </div>
                 <div className={classes.infoParent}>
                     <div className={classes.info}>
-                        <div className={classes.display}>
-                            <DeviceCount count={itemData.quantity} add={addCount} reduce={reduceCount} />
-                        </div>
+
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>
-                    <div className={`${classes.deviceTotalPrice} ${classes.info}`}>
-                        <div>{numberFormat(itemData.quantity * itemData.price, '֏')}</div>
-                        <RemoveShoppingCartIcon onClick={removeList} />
-                    </div>
+
                 </div>
             </div>
         </div>
