@@ -90,7 +90,7 @@ const useStyles = makeStyles({
         position: 'absolute'
     }
 });
-
+let liked = false
 export default function Product(props) {
     const { device, images, name, id, price, openModal, openDeleteModal } = props
     const [hover, setHover] = useState(false);
@@ -104,7 +104,7 @@ export default function Product(props) {
     const dispatch = useDispatch();
     const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
     const [favColor, setFavColor] = useState(currentUser && favFromLocal?.includes(id) ? ORANGE : GREY)
-    const liked = false;
+    liked = currentUser && favFromLocal?.includes(id) ? true : false;
     useEffect(() => {
         basket?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [])
@@ -137,9 +137,17 @@ export default function Product(props) {
             openModal(t('modalTitleForAddFavoriteItems'));
             setFavColor(GREY)
         }
-        if (currentUser && favColor === GREY) { dispatch(addToFav(id)); setFavColor(ORANGE) }
-        else if (currentUser && favColor === ORANGE) {
-            dispatch(removeFromFav(id)); setFavColor(GREY)
+        if (currentUser && !liked) {
+            dispatch(addToFav(id));
+            setFavColor(ORANGE);
+            liked = !liked;
+            console.log(liked)
+        }
+        else if (currentUser && liked) {
+            dispatch(removeFromFav(id));
+            setFavColor(GREY);
+            liked = !liked;
+            console.log(liked)
         };
 
     }
