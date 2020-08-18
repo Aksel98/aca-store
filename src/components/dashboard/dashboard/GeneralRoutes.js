@@ -10,6 +10,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
 import Payment from "../checkout/Payment";
+import FavItem from "../favourites/FavItem";
+import FavItemList from "../favourites/FavItemList";
 
 const useStyles = makeStyles({
     dashboardParent: {
@@ -38,9 +40,16 @@ export default function GeneralRoutes() {
             </Route>
             <Route exact path='/payment'>
                 <div>
-                    <Header/>
-                    <Payment/>
-                    <Footer/>
+                    <Header />
+                    <Payment />
+                    <Footer />
+                </div>
+            </Route>
+            <Route exact path='/favourites'>
+                <div>
+                    <Header />
+                    <FavItemList />
+                    <Footer />
                 </div>
             </Route>
             <Route exact path='/categories/:category'>

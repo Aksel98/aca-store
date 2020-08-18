@@ -93,7 +93,7 @@ const useStyles = makeStyles({
         position: 'absolute'
     }
 });
-// let liked = false
+
 export default function Product(props) {
     const { device, images, name, id, price, openModal, openDeleteModal } = props
     const [hover, setHover] = useState(false);

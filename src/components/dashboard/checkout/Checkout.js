@@ -101,7 +101,7 @@ export default function Checkout(props) {
         <div className={classes.container}>
             <div>
                 <img className={classes.image} src={image} alt=""/>
-                    <Link className={classes.link} to={`/categories/${itemData.device}/${itemData.id}`}>
+                <Link className={classes.link} to={`/categories/${itemData.device}/${itemData.id}`}>
                     <MyButton color="primary" variant="contained">{t('view')}</MyButton>
                 </Link>
             </div>
@@ -110,7 +110,7 @@ export default function Checkout(props) {
                 <div className={classes.infoParent}>
                     <div className={classes.info}>
                         <div className={classes.display}>
-                            <DeviceCount count={itemData.quantity} add={addCount} reduce={reduceCount}/>
+                            <DeviceCount count={itemData.quantity} add={addCount} reduce={reduceCount} />
                         </div>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>
