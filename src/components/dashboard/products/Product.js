@@ -166,7 +166,7 @@ export default function Product(props) {
                     <div className={classes.price}>{numberFormat(price, '֏')}</div>
                 </div>
             </Link>
-            {(<div className={classes.btnWrapper}>
+            {hover && (<div className={classes.btnWrapper}>
                 <div style={{ display: 'flex' }}>
                     <MyButton className={classes.favIconColor}
                         onClick={() => favItemHandler()}
