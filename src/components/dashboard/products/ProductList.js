@@ -62,6 +62,7 @@ export default function ProductList() {
     const [orderBy, setOrderBy] = useState(localStorage.getItem('orderBy') || 'asc');
     const [loader, setLoader] = useState(true);
     const [modal, setModal] = useState({open: false, title: '', text: ''});
+    const [deleteModal, setDeleteModal] = useState({open: false, id: 'null'});
     const [addDeviceModal, setAddDeviceModal] = useState(false);
     const [newDevice, setNewDevice] = useState(false);
     const [page, setPage] = useState(1);
@@ -122,6 +123,10 @@ export default function ProductList() {
         setModal({open: true, title, text})
     }
 
+    function openDeleteModal(val, id) {
+        setDeleteModal({open: val, id})
+    }
+
     function orderHandler(val) {
         setOrderBy(val)
         localStorage.setItem('orderBy', val)
@@ -158,6 +163,7 @@ export default function ProductList() {
                     <div className={classes.products}>
                         {products.length ? products.map((item) => (
                             <Product openModal={openModal}
+                                     openDeleteModal={openDeleteModal}
                                      device={item.device}
                                      images={item.images}
                                      name={item.model}
@@ -178,7 +184,11 @@ export default function ProductList() {
                          doneButton={() => history.push(LOGIN_URL)}
                          doneButtonName={t('login')}
                          close={() => setModal({...modal, open: false})}/>
-            <ProductsListAdmin open={addDeviceModal} isOpen={setAddDeviceModal} setNewDevice={setNewDevice}/>
+            <ProductsListAdmin open={addDeviceModal}
+                               isOpen={setAddDeviceModal}
+                               setNewDevice={setNewDevice}
+                               deleteModal={deleteModal}
+                               openDeleteModal={openDeleteModal}/>
         </div>
     )
 }

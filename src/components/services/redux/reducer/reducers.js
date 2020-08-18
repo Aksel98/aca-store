@@ -1,10 +1,17 @@
 import { combineReducers } from "redux"
-import currentUserReducer from "./currenUser";
 import counterReducer from './counterReducer';
+import userReducer from "./userReducer";
+import uiReducer from "./uiReducer";
+
+export const initialState = {
+    user: false,
+    itemDetails: JSON.parse(localStorage.getItem('itemDetails')) || []
+}
 
 const allReducers = combineReducers({
-    // currentUser: currentUserReducer,
-    counter: counterReducer
+    user: userReducer,
+    counter: counterReducer,
+    ui: uiReducer
 });
 
 export default allReducers

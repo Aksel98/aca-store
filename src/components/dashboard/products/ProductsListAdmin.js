@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 export default function ProductsListAdmin(props) {
-    const {open, isOpen, setNewDevice} = props
+    const {open, isOpen, setNewDevice, deleteModal, openDeleteModal} = props
     const [newDeviceName, setNewDeviceName] = useState('');
     const location = useLocation();
     const history = useHistory();
@@ -31,10 +31,17 @@ export default function ProductsListAdmin(props) {
             price: 1,
             device: type,
             images: []
-        }).then(res => {
+        }).then(() => {
             isOpen(false)
             setNewDevice(true)
             history.push(`${location}/${id}`)
+        }).catch(err => console.log(err))
+    }
+
+    function deleteDevice() {
+        db.collection("product").doc(deleteModal.id).delete().then(() => {
+            setNewDevice(true)
+            openDeleteModal(false)
         }).catch(err => console.log(err))
     }
 
@@ -43,20 +50,27 @@ export default function ProductsListAdmin(props) {
     }
 
     return (
-        <ModalDialog open={open}
-                     content={
-                         <div>
+        <React.Fragment>
+            <ModalDialog open={open}
+                         content={
                              <div>
-                                 <h3 className={classes.newCategoryName}>{t('chooseModelName')}</h3>
-                                 <TextField label={`${t('name')}...`}
-                                            value={newDeviceName}
-                                            onChange={onChange}/>
+                                 <div>
+                                     <h3 className={classes.newCategoryName}>{t('chooseModelName')}</h3>
+                                     <TextField label={`${t('name')}...`}
+                                                value={newDeviceName}
+                                                onChange={onChange}/>
+                                 </div>
                              </div>
-                         </div>
-                     }
-                     doneButton={addDevice}
-                     doneButtonName={t('add')}
-                     disabled={!newDeviceName.trim()}
-                     close={() => isOpen(false)}/>
+                         }
+                         doneButton={addDevice}
+                         doneButtonName={t('add')}
+                         disabled={!newDeviceName.trim()}
+                         close={() => isOpen(false)}/>
+            <ModalDialog open={deleteModal.open}
+                         title={t('areYouSure')}
+                         doneButtonName={t('yes')}
+                         doneButton={deleteDevice}
+                         close={() => openDeleteModal(false)}/>
+        </React.Fragment>
     )
 }
