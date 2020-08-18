@@ -1,11 +1,14 @@
 import React from "react";
-import { makeStyles, useMediaQuery } from "@material-ui/core";
+import { makeStyles, useMediaQuery, Button } from "@material-ui/core";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { GREY } from "../../main/constants/Constants";
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, removeItem } from '../../services/redux/actions/counterActions'
+import { increment, decrement, removeItem, addItem } from '../../services/redux/actions/counterActions'
 import DeviceCount from "../device/count/DeviceCount";
 import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { addToFav, removeFromFav } from "../../services/redux/actions/favouriteActions";
+import { useContext } from "react";
+import { BasketContext } from "../../main/context/BasketContext";
 
 const useStyles = makeStyles({
     container: {
@@ -65,26 +68,31 @@ const useStyles = makeStyles({
     }
 })
 
-export default function Checkout(props) {
+export default function FavItem(props) {
     const { image, model, price, id, remove } = props;
     const count = useSelector(state => state.counter)
     const dispatch = useDispatch()
     const [itemData] = count.filter(item => item.id === id)
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
+    const [basket, setBasket] = useContext(BasketContext)
 
-    function removeList() {
-        dispatch(removeItem(id))
-        remove(id)
+    const addToBasket = () => {
+        let localArr = [];
+        if (localStorage.getItem('ItemsInBasket')) {
+            localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
+            if (!localArr.includes(id)) { localArr.push(id) }
+            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
+        }
+        else {
+            localArr.push(id);
+            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
+        }
+        setBasket(localArr);
+        console.log(basket);
+        dispatch(addItem(id, price))
     }
 
-    function addCount() {
-        dispatch(increment(id))
-    }
-
-    function reduceCount() {
-        dispatch(decrement(id))
-    }
 
     return (
         <div className={classes.container}>
@@ -94,18 +102,19 @@ export default function Checkout(props) {
                     <div className={classes.infoName}>{model}</div>
                 </div>
                 <div className={classes.infoParent}>
+
                     <div className={classes.info}>
-                        <div className={classes.display}>
-                            <DeviceCount count={itemData.quantity} add={addCount} reduce={reduceCount} />
-                        </div>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>
-                    <div className={`${classes.deviceTotalPrice} ${classes.info}`}>
-                        <div>{numberFormat(itemData.quantity * itemData.price, '֏')}</div>
-                        <RemoveShoppingCartIcon onClick={removeList} />
-                    </div>
+
                 </div>
             </div>
+            <div>
+                <Button onClick={() => addToBasket()}>add to basket</Button>
+                <Button onClick={() => dispatch(removeFromFav(id))}>remove </Button>
+
+            </div>
+
         </div>
     )
 }
