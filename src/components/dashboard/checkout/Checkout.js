@@ -6,6 +6,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement, removeItem} from '../../services/redux/actions/counterActions'
 import DeviceCount from "../device/count/DeviceCount";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles({
     container: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles({
     removeIconParent: {
         color: ORANGE,
         width: 'fit-content',
-        cursor: 'pointer',
+        cursor: 'pointer'
     },
     display: {
         display: 'flex',
@@ -67,6 +68,9 @@ const useStyles = makeStyles({
     },
     fullWidth: {
         width: '100%'
+    },
+    link: {
+        textDecoration: 'none'
     }
 })
 
@@ -93,11 +97,14 @@ export default function Checkout(props) {
 
     return (
         <div className={classes.container}>
-            <img className={classes.image} src={image} alt=""/>
+            <div>
+                <img className={classes.image} src={image} alt=""/>
+                    <Link className={classes.link} to={`/categories/${itemData.device}/${itemData.id}`}>
+                    <MyButton color="primary" variant="contained">View</MyButton>
+                </Link>
+            </div>
             <div className={classes.main}>
-                <div>
-                    <div className={classes.infoName}>{model}</div>
-                </div>
+                <div className={classes.infoName}>{model}</div>
                 <div className={classes.infoParent}>
                     <div className={classes.info}>
                         <div className={classes.display}>

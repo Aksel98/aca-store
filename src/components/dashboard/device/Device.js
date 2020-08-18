@@ -16,6 +16,8 @@ import DeviceCount from "./count/DeviceCount";
 import DeviceImages from "./images/DeviceImages";
 import DeleteImagesAdmin from "./images/DeleteImagesAdmin";
 import AddImagesAdmin from "./images/AddImagesAdmin";
+import ReactImageMagnify from "react-image-magnify";
+import {useMediaQuery} from "@material-ui/core";
 
 const useStyles = makeStyles({
     container: {
@@ -25,18 +27,16 @@ const useStyles = makeStyles({
     main: {
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
     },
     images: {
         width: 302,
-        textAlign: 'center'
-    },
-    mainImage: {
-        width: 160,
-        height: 220,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
     },
     deviceInfoPart: {
-        marginLeft: 30
+        marginLeft: props => props && 101
     },
     info: {
         borderBottom: `2px solid ${GREY}`
@@ -67,8 +67,9 @@ export default function Device() {
     const [deviceCount, setDeviceCount] = useState(1)
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [deletedImage, setDeletedImage] = useState(null)
+    const media = useMediaQuery('(min-width:768px)');
+    const classes = useStyles(media)
     const {id} = useParams()
-    const classes = useStyles()
     const {t} = useTranslation()
     const history = useHistory()
 
@@ -100,6 +101,7 @@ export default function Device() {
         }
     }
 
+    const style = {zIndex: 11110}
     return (
         <div className={classes.container}>
             <div onClick={() => history.goBack()} className={classes.backIcon}>
@@ -107,9 +109,20 @@ export default function Device() {
             </div>
             <div className={classes.main}>
                 <div className={classes.images}>
-                    <div className={classes.relative}>
-                        <img className={classes.mainImage} src={mainImage} alt=""/>
-                    </div>
+                    <ReactImageMagnify  {...{
+                        smallImage: {
+                            isFluidWidth: false,
+                            src: mainImage,
+                            width: 160,
+                            height: 220,
+                        },
+                        largeImage: {
+                            src: mainImage,
+                            width: 500,
+                            height: 600,
+                            style: style
+                        }
+                    }} />
                     <div className={`${classes.displayFlex} ${classes.flexWrap}`}>
                         <DeviceImages images={images} setImages={setImages} changeImage={changeImage} openDeletePopup={openDeletePopup}/>
                         <AddImagesAdmin images={images} setImages={setImages} type={device.device}/>

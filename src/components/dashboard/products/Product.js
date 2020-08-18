@@ -74,13 +74,13 @@ const useStyles = makeStyles({
         }
     },
     btn: {
-        fontSize: 13,
+        fontSize: 12,
+        fontWeight: 700,
         '&:hover': {
-            fontWeight: 700
+            fontWeight: 800
         }
     },
     btnParent: {
-        margin: props => !props.mediaMobile && '0 25px',
         '&hover': {
             fontWeight: 'bold'
         }
@@ -108,10 +108,10 @@ export default function Product(props) {
     const dispatch = useDispatch();
     const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
 
-    // const [favColor, setFavColor] = useState(currentUser && favFromLocal?.includes(id) ? ORANGE : GREY)
     useEffect(() => {
         currentUser && favFromLocal?.includes(id) ? setLiked(true) : setLiked(false)
     })
+
     useEffect(() => {
         basket?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [])
@@ -128,7 +128,7 @@ export default function Product(props) {
             localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
         }
         setBasket(localArr);
-        dispatch(addItem(id, price))
+        dispatch(addItem(id, price, device))
     }
 
     const removeFromBasket = () => {
@@ -151,8 +151,7 @@ export default function Product(props) {
         else if (currentUser && liked) {
             dispatch(removeFromFav(id));
             setLiked(!liked)
-        };
-
+        }
     }
 
     return (
@@ -167,11 +166,10 @@ export default function Product(props) {
                     <div className={classes.price}>{numberFormat(price, '֏')}</div>
                 </div>
             </Link>
-            {hover && (<div className={classes.btnWrapper}>
+            {(<div className={classes.btnWrapper}>
                 <div style={{ display: 'flex' }}>
                     <MyButton className={classes.favIconColor}
                         onClick={() => favItemHandler()}
-                    // !currentUser ? openModal(t('modalTitleForAddFavoriteItems')) : dispatch(addToFav(id))}
                     ><FavoriteTwoToneIcon /></MyButton>
                 </div>
                 <div className={classes.btnParent}>

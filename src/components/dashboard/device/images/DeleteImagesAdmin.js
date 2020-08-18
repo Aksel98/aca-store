@@ -11,7 +11,6 @@ export default function DeleteImagesAdmin(props) {
 
     function deleteImage() {
         const imgs = images.filter(image => image !== deletedImage)
-        console.log(deletedImage)
         db.collection('product').doc(id).update({
             images: imgs
         }).then(() => {

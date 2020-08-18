@@ -35,7 +35,7 @@ const counterReducer = (state = initialState.itemDetails, action) => {
         case ADD_ITEM:
             {
                 let newState = [...state];
-                newState.push({ id: action.id, price: action.price, quantity: action.quantity });
+                newState.push({id: action.id, price: action.price, quantity: action.quantity, device: action.device});
                 localStorage.setItem('itemDetails', JSON.stringify(newState))
                 return newState
             }
