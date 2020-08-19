@@ -1,5 +1,5 @@
 import React, {useEffect, useState,} from 'react';
-import {useLocation} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {makeStyles} from '@material-ui/core/styles';
 import ConfirmationNumberOutlinedIcon from "@material-ui/icons/ConfirmationNumberOutlined";
 import uniqId from 'uniqid';
@@ -19,14 +19,14 @@ import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {useMediaQuery} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {removeFromBasket} from "../../services/redux/actions/basketAction";
+import Fab from "@material-ui/core/Fab";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
 const useStyles = makeStyles({
     container: {
         display: "flex",
         flexDirection: "column",
-        width: "60%",
-        marginTop: "60px",
-        margin: "auto",
+        margin: props => props ? "60px 20px" : "60px 40px",
     },
     confirmIconBlock: {
         display: "flex",
@@ -38,7 +38,7 @@ const useStyles = makeStyles({
         fontSize: "20px"
     },
     tableRow: {
-        display: "flex",
+        display:  props => !props && "flex",
         justifyContent: "space-around",
         borderBottom: `1px solid ${ORANGE}`,
         textAlign: "center",
@@ -78,7 +78,7 @@ const useStyles = makeStyles({
         padding: "10px 5px"
     },
     methods: {
-        display: "flex",
+        display: props => !props && "flex",
         justifyContent: "center",
         padding: "20px"
     },
@@ -110,7 +110,7 @@ const useStyles = makeStyles({
         paddingLeft: "5px"
     },
     transfersInfo: {
-        display: "flex",
+        display: props => !props && "flex",
         margin: "20px 0px"
     },
     infoTitle: {
@@ -121,12 +121,14 @@ const useStyles = makeStyles({
         margin: "0px"
     },
     confirmBtn: {
-        width: "40%"
+        width: "70%"
     },
     transfersInfoblock: {
+        textAlign: props => props && 'center',
         display: "flex",
         flexDirection: "column",
         width: "100%",
+        margin: '0 0 40px'
     },
     transfersInfobtn: {
         display: "flex",
@@ -145,9 +147,10 @@ export default function Payment() {
     const [subTotal, setSubTotal] = useState(0);
     const basket = useSelector(state => state.basket);
     const dispatch = useDispatch()
-    const media = useMediaQuery('(max-width:1300px)');
+    const media = useMediaQuery('(max-width:968px)');
     const classes = useStyles(media);
     const location = useLocation()
+    const history = useHistory();
 
     useEffect(() => {
         getCartItems();
@@ -202,24 +205,32 @@ export default function Payment() {
 
     return (
         <div className={classes.container}>
+            <div onClick={() => history.goBack()} className={classes.backIcon}>
+                <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
+            </div>
             <div className={classes.confirmIconBlock}>
                 <ConfirmationNumberOutlinedIcon/>
                 <h1 className={classes.confirmIconText}>CONFIRM YOUR ORDER</h1>
             </div>
-            <div className={classes.tableRow}>
+            {!media && <div className={classes.tableRow}>
                 <h2 className={classes.tableRowTitle}>Product Name</h2>
                 <h2 className={classes.tableRowTitle}>Model</h2>
                 <h2 className={classes.tableRowTitle}>Quantity</h2>
                 <h2 className={classes.tableRowTitle}>Price</h2>
                 <h2 className={classes.tableRowTitle}>Total</h2>
                 <h2 className={classes.tableRowTitle}>Action</h2>
-            </div>
+            </div>}
             <div>{!basket ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
                 <div key={uniqId} className={classes.tableRow}>
+                    {media && <div className={classes.tableRowTitle}>Product Name</div>}
                     <span className={classes.collParam}> {item.device}</span>
+                    {media && <div className={classes.tableRowTitle}>Model</div>}
                     <span className={classes.collParam}> {item.model}</span>
+                    {media && <div className={classes.tableRowTitle}>Quantity</div>}
                     <span className={classes.collParam}> {location.state.quantity[ind]} </span>
+                    {media && <div className={classes.tableRowTitle}>Price</div>}
                     <span className={classes.collParam}> {numberFormat(Math.ceil(item.price), ' ֏')}</span>
+                    {media && <div className={classes.tableRowTitle}>Total</div>}
                     <span
                         className={classes.collParam}> {numberFormat(Math.ceil(item.price * location.state.quantity[ind]), ' ֏')}</span>
                     <span className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
@@ -289,11 +300,10 @@ export default function Payment() {
                     <p className={classes.infoText}>Addres: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
                     <p className={classes.infoText}>Your Order will not ship until we receive payment.</p>
                 </div>
-                <div className={classes.transfersInfobtn}>
-
+                {!media && <div className={classes.transfersInfobtn}>
                     <MyButton className={classes.confirmBtn} newcolor={ORANGE} variant="contained">Confirm
                         order</MyButton>
-                </div>
+                </div>}
                 <div className={classes.transfersInfoblock}>
                     <h2 className={classes.infoTitle}>SHIPPING ADDRESS</h2>
                     <FormControl required className={classes.formControl}>
@@ -336,6 +346,9 @@ export default function Payment() {
                     />
                 </div>
             </div>
+            {media && <div className={classes.transfersInfobtn}>
+                <MyButton className={classes.confirmBtn} newcolor={ORANGE} variant="contained">Confirm order</MyButton>
+            </div>}
         </div>
     )
 }
