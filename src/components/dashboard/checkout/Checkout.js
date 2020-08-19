@@ -7,7 +7,7 @@ import DeviceCount from "../device/count/DeviceCount";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {removeFromBasket} from "../../services/redux/actions/basketAction";
+import {decrement, increment, removeFromBasket} from "../../services/redux/actions/basketAction";
 
 const useStyles = makeStyles({
     container: {
@@ -78,8 +78,8 @@ const useStyles = makeStyles({
 export default function Checkout(props) {
     const {image, model, price, id, remove} = props;
     const count = useSelector(state => state.basket)
-    const [itemData] = count.filter(item => item.id === id)
     const dispatch = useDispatch()
+    const [itemData] = count.filter(item => item.id === id)
     const media = useMediaQuery('(max-width:600px)')
     const {t} = useTranslation();
     const classes = useStyles(media);
@@ -87,6 +87,14 @@ export default function Checkout(props) {
     function removeList() {
         remove(id)
         dispatch(removeFromBasket(id))
+    }
+
+    function addCount() {
+        dispatch(increment(id))
+    }
+
+    function reduceCount() {
+        dispatch(decrement(id))
     }
 
     return (
@@ -102,7 +110,7 @@ export default function Checkout(props) {
                 <div className={classes.infoParent}>
                     <div className={classes.info}>
                         <div className={classes.display}>
-                            <DeviceCount count={itemData.quantity} id={id}/>
+                            <DeviceCount count={itemData.quantity} add={addCount} reduce={reduceCount} />
                         </div>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>

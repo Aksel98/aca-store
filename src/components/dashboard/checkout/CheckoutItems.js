@@ -74,14 +74,7 @@ const CheckoutItems = () => {
                         })
                         setChosenItems(tempArr);
                         return tempArr
-                    })
-                    .then((data) => {
-                            localStorage.setItem('basketItems', JSON.stringify(data.map(function (item) {
-                                return {'id': item.id, 'quantity': 1, 'price': item.price}
-                            })))
-                        }
-                    )
-                    .catch(err => console.log('error making basket info query', err));
+                    }).catch(err => console.log('error making basket info query', err));
             }
         } catch (e) {
             console.log("can not  get basket items:", e);

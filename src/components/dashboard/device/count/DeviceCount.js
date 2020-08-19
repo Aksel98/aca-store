@@ -22,19 +22,16 @@ const useStyles = makeStyles({
     }
 })
 export default function DeviceCount(props) {
-    const {id} = props
-    const count = useSelector(state => state.basket)
-    const [itemData] = count.filter(item => item.id === id)
-    const dispatch = useDispatch()
+    const {count, add, reduce} = props
     const classes = useStyles()
 
     return (
         <div className={classes.displayFlex}>
-            <MyButton onClick={() => dispatch(decrement(id))} maxwidth="fit-content">
+            <MyButton onClick={reduce} maxwidth="fit-content">
                 <RemoveRoundedIcon className={classes.rounded}/>
             </MyButton>
-            <div className={classes.deviceCount}>{itemData.quantity}</div>
-            <MyButton onClick={() => dispatch(increment(id))} maxwidth="fit-content">
+            <div className={classes.deviceCount}>{count}</div>
+            <MyButton onClick={add} maxwidth="fit-content">
                 <AddRoundedIcon className={classes.rounded}/>
             </MyButton>
         </div>

@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useState, } from 'react';
+import React, {useEffect, useState,} from 'react';
 import {useLocation} from "react-router-dom";
 import {makeStyles} from '@material-ui/core/styles';
 import ConfirmationNumberOutlinedIcon from "@material-ui/icons/ConfirmationNumberOutlined";
-import {BasketContext} from "../../main/context/BasketContext";
+import uniqId from 'uniqid';
 import {db} from "../../services/firebase/Firebase";
 import TextField from '@material-ui/core/TextField';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
@@ -14,11 +14,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import { MyButton, ORANGE, BLUE, GREY } from "../../main/constants/Constants";
+import {MyButton, ORANGE, BLUE} from "../../main/constants/Constants";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {useMediaQuery} from "@material-ui/core";
+import {useDispatch, useSelector} from "react-redux";
+import {removeFromBasket} from "../../services/redux/actions/basketAction";
 
-const useStyles = makeStyles((t) => ({
+const useStyles = makeStyles({
     container: {
         display: "flex",
         flexDirection: "column",
@@ -84,13 +86,13 @@ const useStyles = makeStyles((t) => ({
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        alignItems:"center"
+        alignItems: "center"
     },
     paymentMetods: {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        alignItems:"center"
+        alignItems: "center"
     },
     shippingIcom: {
         display: "flex",
@@ -133,73 +135,73 @@ const useStyles = makeStyles((t) => ({
         justifyContent: "center",
         width: "100%",
     },
-}))
+})
 
 export default function Payment() {
+    const [state, setState] = useState({country: '', name: ' ',});
+    const [value, setValue] = useState("5000");
+    const [valuePayment, setValuePayment] = useState("bank");
+    const [chosenItems, setChosenItems] = useState([]);
+    const [subTotal, setSubTotal] = useState(0);
+    const basket = useSelector(state => state.basket);
+    const dispatch = useDispatch()
     const media = useMediaQuery('(max-width:1300px)');
     const classes = useStyles(media);
-
-    const [state, setState] = useState({
-        country: '',
-        name: ' ',
-    });
-    const handleChange2 = (event) => {
-        const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value,
-        })};
     const location = useLocation()
-    const [value, setValue] = useState("5000");
-    const [valuePayment, setValuePeyment] = useState("bank");
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
-    const handleChange1 = (event) => {
-        setValuePeyment(event.target.value);
-    };
-    const [basketItems, setBasketItems] = useContext(BasketContext);
-    useEffect(() => setBasketItems(JSON.parse(localStorage.getItem('ItemsInBasket'))), []);
-    const [choosenItems, setChoosenItems] = useState([]);
+
+    useEffect(() => {
+        getCartItems();
+    }, []);
+
+    useEffect(() => {
+        setSubTotal(chosenItems.map((item, ind) => {
+            return item.price * location.state.quantity[ind]
+        }).reduce((acc, Value) => (acc + Value), 0))
+    }, [chosenItems])
+
     const getCartItems = () => {
-        if (!!basketItems) {
+        const basketIds = basket.map(item => item.id)
+        if (basketIds.length) {
             try {
-                db.collection('product').where('id', 'in', [...basketItems]).get()
-                    .then(querySnapshot => {
-                        const tempArr = [];
-                        querySnapshot.docs.forEach(doc => {
-                            let tempObj = doc.data();
-                            tempArr.push({...tempObj});
-                        })
-                        setChoosenItems(tempArr);
+                db.collection('product').where('id', 'in', basketIds).get().then(querySnapshot => {
+                    const tempArr = [];
+                    querySnapshot.docs.forEach(doc => {
+                        let tempObj = doc.data();
+                        tempArr.push({...tempObj});
                     })
-                    .catch(err => console.log('error making basket info query', err));
+                    setChosenItems(tempArr);
+                }).catch(err => console.log('error making basket info query', err));
             } catch (e) {
                 console.log("can not  get basket items:", e);
             }
         }
     }
-    useEffect(() => {
-        getCartItems();
-    }, []);
-    const removeItem = (itemID) => {
-        let tempArr = [...choosenItems];
-        tempArr = tempArr.filter(objItem => (objItem.id !== itemID))
-        setChoosenItems(tempArr);
-        setBasketItems(tempArr.map(item => item.id));
-        let localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
-        localArr.splice(localArr.indexOf(itemID), 1);
-        localStorage.setItem('ItemsInBasket', JSON.stringify(localArr));
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
+
+    const handleChange1 = (event) => {
+        setValuePayment(event.target.value);
+    };
+
+    const handleChange2 = (event) => {
+        const name = event.target.name;
+        setState({
+            ...state,
+            [name]: event.target.value,
+        })
+    };
+
+    const removeItem = (id) => {
+        let tempArr = [...chosenItems];
+        tempArr = tempArr.filter(objItem => (objItem.id !== id))
+        setChosenItems(tempArr);
+        dispatch(removeFromBasket(id))
     }
-    const [subTotal, setSubTotal] = useState("");
-    useEffect(() => {
-        setSubTotal(choosenItems.map((item, ind) =>
-            item.price * location.state.quantity[ind]).reduce((acc, Value) => (acc + Value), 0))
-    }, [choosenItems])
-    console.log(location.state.quantity);
-    console.log(subTotal);
+
     return (
-        <div  className={classes.container}>
+        <div className={classes.container}>
             <div className={classes.confirmIconBlock}>
                 <ConfirmationNumberOutlinedIcon/>
                 <h1 className={classes.confirmIconText}>CONFIRM YOUR ORDER</h1>
@@ -212,8 +214,8 @@ export default function Payment() {
                 <h2 className={classes.tableRowTitle}>Total</h2>
                 <h2 className={classes.tableRowTitle}>Action</h2>
             </div>
-            <div>{!basketItems ? 'you have 0 items in your cart' : choosenItems.map((item, ind) =>
-                <div className={classes.tableRow}>
+            <div>{!basket ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
+                <div key={uniqId} className={classes.tableRow}>
                     <span className={classes.collParam}> {item.device}</span>
                     <span className={classes.collParam}> {item.model}</span>
                     <span className={classes.collParam}> {location.state.quantity[ind]} </span>
@@ -267,7 +269,7 @@ export default function Payment() {
                         <AccountBalanceIcon/>
                         <h2 className={classes.methodsTitle}>PAYMENT METHOD</h2>
                     </span>
-                    <FormControl component="fieldset1">
+                    <FormControl>
                         <RadioGroup aria-label="payment" name="payment" value={valuePayment}
                                     onChange={handleChange1}>
                             <FormControlLabel value="bank" control={<Radio color="primary"/>}

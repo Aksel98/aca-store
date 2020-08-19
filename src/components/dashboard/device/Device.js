@@ -18,8 +18,7 @@ import DeleteImagesAdmin from "./images/DeleteImagesAdmin";
 import AddImagesAdmin from "./images/AddImagesAdmin";
 import ReactImageMagnify from "react-image-magnify";
 import {useMediaQuery} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
-import {addToBasket} from "../../services/redux/actions/basketAction";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles({
     container: {
@@ -69,14 +68,13 @@ export default function Device() {
     const [mainImage, setMainImage] = useState({})
     const [loader, setLoader] = useState(true)
     const [price, setPrice] = useState(0)
+    const [deviceCount, setDeviceCount] = useState(1)
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [deletedImage, setDeletedImage] = useState(null)
-    const {id} = useParams()
-    const count = useSelector(state => state.basket)
-    const [itemData] = count.filter(item => item.id === id)
     const dispatch = useDispatch()
     const media = useMediaQuery('(min-width:768px)');
     const classes = useStyles(media)
+    const {id} = useParams()
     const {t} = useTranslation()
     const history = useHistory()
 
@@ -98,8 +96,14 @@ export default function Device() {
         setOpenDeleteModal(val)
     }
 
-    function buy() {
-        dispatch(addToBasket(device.id, device.price, device.device))
+    function addCount() {
+        setDeviceCount(deviceCount + 1)
+    }
+
+    function reduceCount() {
+        if (deviceCount > 1) {
+            setDeviceCount(deviceCount - 1)
+        }
     }
 
     const style = {zIndex: 11110}
@@ -141,16 +145,16 @@ export default function Device() {
                         <div className={classes.model}>{device.model}</div>
                     </div>
                     <div className={classes.info}>
-                        <Price price={price || device.price} setPrice={setPrice} count={itemData.quantity}/>
-                        <Credits price={price || device.price} count={itemData.quantity}/>
-                        <DeviceCount id={id}/>
+                        <Price price={price || device.price} setPrice={setPrice} count={deviceCount}/>
+                        <Credits price={price || device.price} count={deviceCount}/>
+                        <DeviceCount count={deviceCount} add={addCount} reduce={reduceCount} setCount={setDeviceCount}/>
                     </div>
                     <div className={classes.info}>
                         <AboutDevice device={device}/>
                     </div>
-                    <Link to="/checkout" onClick={buy} className={classes.btnParent}>
+                    {/*<Link to="/checkout" className={classes.btnParent}>*/}
                         <MyButton className={classes.btnDistance} variant="contained" color="primary">{t('buy')}</MyButton>
-                    </Link>
+                    {/*</Link>*/}
                 </div>
                 {loader && <Loader/>}
             </div>
