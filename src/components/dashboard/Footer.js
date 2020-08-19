@@ -117,7 +117,7 @@ function Footer() {
                 <div className={classes.itemsParent}>
                     <div className={classes.logo}>
                         <img src={LOGO} width={40} height={30} alt=""/>
-                        <Link to={HOME_URL} className={classes.title}>sTORe</Link>
+                        <Link to={HOME_URL} className={classes.title}>ACA store</Link>
                     </div>
                     <h3 className={classes.subTitle}>Contact Us</h3>
                     <div className={classes.logo}>

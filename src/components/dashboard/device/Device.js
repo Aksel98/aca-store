@@ -18,7 +18,8 @@ import DeleteImagesAdmin from "./images/DeleteImagesAdmin";
 import AddImagesAdmin from "./images/AddImagesAdmin";
 import ReactImageMagnify from "react-image-magnify";
 import {useMediaQuery} from "@material-ui/core";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {addToBasket} from "../../services/redux/actions/basketAction";
 
 const useStyles = makeStyles({
     container: {
@@ -37,7 +38,8 @@ const useStyles = makeStyles({
         alignItems: 'center'
     },
     deviceInfoPart: {
-        marginLeft: props => props && 101
+        marginLeft: props => props && 101,
+        width: props => !props && '100%'
     },
     info: {
         borderBottom: `2px solid ${GREY}`
@@ -68,13 +70,15 @@ export default function Device() {
     const [mainImage, setMainImage] = useState({})
     const [loader, setLoader] = useState(true)
     const [price, setPrice] = useState(0)
-    const [deviceCount, setDeviceCount] = useState(1)
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [deletedImage, setDeletedImage] = useState(null)
-    const dispatch = useDispatch()
-    const media = useMediaQuery('(min-width:768px)');
-    const classes = useStyles(media)
     const {id} = useParams()
+    const basketItems = useSelector(state => state.basket)
+    const [basket] = basketItems.filter(item => item.id === id)
+    const [deviceCount, setDeviceCount] = useState(basket?.quantity || 1)
+    const dispatch = useDispatch()
+    const media = useMediaQuery('(min-width:990px)');
+    const classes = useStyles(media)
     const {t} = useTranslation()
     const history = useHistory()
 
@@ -83,6 +87,7 @@ export default function Device() {
             setDevice(doc.data())
             setMainImage(doc.data()?.images && doc.data()?.images[0])
             setImages(doc.data()?.images)
+            setPrice(doc.data().price)
             setLoader(false)
         })
     }, [])
@@ -106,7 +111,10 @@ export default function Device() {
         }
     }
 
-    const style = {zIndex: 11110}
+    function buy() {
+        dispatch(addToBasket(device.id, price, device.device, deviceCount))
+    }
+
     return (
         <div className={classes.container}>
             <div onClick={() => history.goBack()} className={classes.backIcon}>
@@ -125,9 +133,8 @@ export default function Device() {
                             src: mainImage,
                             width: 500,
                             height: 600,
-                            style: style
                         }
-                    }} />
+                    }}/>
                     <div className={`${classes.displayFlex} ${classes.flexWrap}`}>
                         <DeviceImages images={images} setImages={setImages} changeImage={changeImage}
                                       openDeletePopup={openDeletePopup}/>
@@ -145,16 +152,16 @@ export default function Device() {
                         <div className={classes.model}>{device.model}</div>
                     </div>
                     <div className={classes.info}>
-                        <Price price={price || device.price} setPrice={setPrice} count={deviceCount}/>
-                        <Credits price={price || device.price} count={deviceCount}/>
+                        <Price price={price} setPrice={setPrice} count={deviceCount}/>
+                        <Credits price={price} count={deviceCount}/>
                         <DeviceCount count={deviceCount} add={addCount} reduce={reduceCount} setCount={setDeviceCount}/>
                     </div>
                     <div className={classes.info}>
                         <AboutDevice device={device}/>
                     </div>
-                    {/*<Link to="/checkout" className={classes.btnParent}>*/}
+                    <Link to="/checkout" onClick={buy} className={classes.btnParent}>
                         <MyButton className={classes.btnDistance} variant="contained" color="primary">{t('buy')}</MyButton>
-                    {/*</Link>*/}
+                    </Link>
                 </div>
                 {loader && <Loader/>}
             </div>

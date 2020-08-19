@@ -116,17 +116,9 @@ export default function Product(props) {
         basketIds?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
     }, [basketItems])
 
-    const addBasket = () => {
-        dispatch(addToBasket(id, price, device))
-    }
-
-    const removeBasket = () => {
-        dispatch(removeFromBasket(id))
-    }
     const favItemHandler = () => {
         if (!currentUser) {
             openModal(t('modalTitleForAddFavoriteItems'));
-
         }
         if (currentUser && !liked) {
             dispatch(addToFav(id));
@@ -157,7 +149,7 @@ export default function Product(props) {
                     </div>
                     <div className={classes.btnParent}>
                         <MyButton newcolor={ORANGE} className={classes.btn} onClick={() => {
-                            btnText === 'ADD TO CART' ? addBasket() : removeBasket()
+                            btnText === 'ADD TO CART' ? dispatch(addToBasket(id, price, device)) : dispatch(removeFromBasket(id))
                         }}>{t(btnText)}</MyButton>
                     </div>
                 </div>

@@ -177,8 +177,8 @@ export default function Header() {
             <div className={classes.menu}>
                 <div className={classes.display}>
                     <img src={LOGO} width={40} height={30} alt="" />
-                    {media ? <Link to={HOME_URL} className={classes.title}> sTORe </Link>
-                        : <Link to={HOME_URL} className={classes.title}> sTORe </Link>}
+                    {media ? <Link to={HOME_URL} className={classes.title}>ACA store</Link>
+                        : <Link to={HOME_URL} className={classes.title}>ACA store</Link>}
                     {media && <>
                         <ShoppingCartIcon className={classes.menuItem} />
                         {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}

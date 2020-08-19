@@ -3,8 +3,6 @@ import {BLACK, MyButton} from "../../../main/constants/Constants";
 import RemoveRoundedIcon from "@material-ui/icons/RemoveRounded";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import {makeStyles} from "@material-ui/core/styles";
-import {decrement, increment} from "../../../services/redux/actions/basketAction";
-import {useDispatch, useSelector} from "react-redux";
 
 const useStyles = makeStyles({
     deviceCount: {

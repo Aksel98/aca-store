@@ -17,6 +17,7 @@ const useStyles = makeStyles({
     },
     carouselImg: {
         width: '100%',
+        height: 500,
         zIndex: '0',
         gridColumnStart: '1',
         gridColumnEnd: '21',

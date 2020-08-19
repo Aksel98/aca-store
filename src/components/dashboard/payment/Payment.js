@@ -145,7 +145,7 @@ export default function Payment() {
     const [valuePayment, setValuePayment] = useState("bank");
     const [chosenItems, setChosenItems] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
-    const basket = useSelector(state => state.basket);
+    const basketItems = useSelector(state => state.basket);
     const dispatch = useDispatch()
     const media = useMediaQuery('(max-width:968px)');
     const classes = useStyles(media);
@@ -163,7 +163,7 @@ export default function Payment() {
     }, [chosenItems])
 
     const getCartItems = () => {
-        const basketIds = basket.map(item => item.id)
+        const basketIds = basketItems.map(item => item.id)
         if (basketIds.length) {
             try {
                 db.collection('product').where('id', 'in', basketIds).get().then(querySnapshot => {
@@ -220,7 +220,7 @@ export default function Payment() {
                 <h2 className={classes.tableRowTitle}>Total</h2>
                 <h2 className={classes.tableRowTitle}>Action</h2>
             </div>}
-            <div>{!basket ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
+            <div>{!basketItems ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
                 <div key={uniqId} className={classes.tableRow}>
                     {media && <div className={classes.tableRowTitle}>Product Name</div>}
                     <span className={classes.collParam}> {item.device}</span>

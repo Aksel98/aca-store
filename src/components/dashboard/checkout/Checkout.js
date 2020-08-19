@@ -77,9 +77,8 @@ const useStyles = makeStyles({
 
 export default function Checkout(props) {
     const {image, model, price, id, remove} = props;
-    const count = useSelector(state => state.basket)
+    const [basket] = useSelector(state => state.basket).filter(item => item.id === id)
     const dispatch = useDispatch()
-    const [itemData] = count.filter(item => item.id === id)
     const media = useMediaQuery('(max-width:600px)')
     const {t} = useTranslation();
     const classes = useStyles(media);
@@ -101,7 +100,7 @@ export default function Checkout(props) {
         <div className={classes.container}>
             <div>
                 <img className={classes.image} src={image} alt=""/>
-                <Link className={classes.link} to={`/categories/${itemData.device}/${itemData.id}`}>
+                <Link className={classes.link} to={`/categories/${basket.device}/${basket.id}`}>
                     <MyButton color="primary" variant="contained">{t('view')}</MyButton>
                 </Link>
             </div>
@@ -110,12 +109,12 @@ export default function Checkout(props) {
                 <div className={classes.infoParent}>
                     <div className={classes.info}>
                         <div className={classes.display}>
-                            <DeviceCount count={itemData.quantity} add={addCount} reduce={reduceCount} />
+                            <DeviceCount count={basket.quantity} add={addCount} reduce={reduceCount} />
                         </div>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>
                     <div className={`${classes.deviceTotalPrice} ${classes.info}`}>
-                        <div>{numberFormat(itemData.quantity * itemData.price, '֏')}</div>
+                        <div>{numberFormat(basket.quantity * basket.price, '֏')}</div>
                         <MyButton onClick={removeList} className={classes.removeIconParent}>
                             <RemoveShoppingCartIcon/>
                         </MyButton>
