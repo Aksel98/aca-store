@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 
 const TotalPrice = () => {
     const [quantity, setQuantity] = useState(0)
-    const count = useSelector(state => state.counter)
+    const count = useSelector(state => state.basket)
     const [amount, setAmount] = useState(0)
     const classes = useStyles();
     const {t} = useTranslation()

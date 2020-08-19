@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from "react"
-import {useContext} from "react";
-import {BasketContext} from "../../main/context/BasketContext";
 import {db} from "../../services/firebase/Firebase";
 import Checkout from "./Checkout";
 import Header from "../Header";
@@ -13,6 +11,7 @@ import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles({
     mainWrapper: {
@@ -50,7 +49,7 @@ const useStyles = makeStyles({
 
 const CheckoutItems = () => {
     const [chosenItems, setChosenItems] = useState([]);
-    const [basketItems, setBasketItems] = useContext(BasketContext);
+    const basketItems = useSelector(state => state.basket);
     const {t} = useTranslation()
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles(media);
@@ -61,10 +60,11 @@ const CheckoutItems = () => {
     }, []);
 
     const getCartItems = () => {
+        const basketIds = basketItems.map(item => item.id)
         try {
             if (basketItems.length) {
                 db.collection('product')
-                    .where('id', 'in', basketItems)
+                    .where('id', 'in', basketIds)
                     .get()
                     .then(querySnapshot => {
                         const tempArr = [];
@@ -76,7 +76,7 @@ const CheckoutItems = () => {
                         return tempArr
                     })
                     .then((data) => {
-                            localStorage.setItem('itemDetails', JSON.stringify(data.map(function (item) {
+                            localStorage.setItem('basketItems', JSON.stringify(data.map(function (item) {
                                 return {'id': item.id, 'quantity': 1, 'price': item.price}
                             })))
                         }
@@ -92,10 +92,6 @@ const CheckoutItems = () => {
         let tempArr = [...chosenItems];
         tempArr = tempArr.filter(objItem => (objItem.id !== itemID))
         setChosenItems(tempArr);
-        setBasketItems(tempArr.map(item => item.id));
-        let localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
-        localArr.splice(localArr.indexOf(itemID), 1);
-        localStorage.setItem('ItemsInBasket', JSON.stringify(localArr));
     }
 
     return (

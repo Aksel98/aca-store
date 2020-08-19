@@ -9,8 +9,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { LOGO } from "../main/constants/Constants";
 import { useMediaQuery } from "@material-ui/core";
 import { HOME_URL, LOGIN_URL } from "../services/api/Navigations";
-import { BasketContext } from '../main/context/BasketContext';
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../services/redux/actions/userAction";
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 
@@ -152,22 +151,12 @@ const MyAppBar = styled(AppBar)({
 export default function Header() {
     const currentUser = useSelector(state => state.user)
     const dispatch = useDispatch()
-    const [userInitials, setInitials] = useState(currentUser ? firstLetters(currentUser.displayName) : null)
-    const [itemsInBasket, setItemsInBasket] = useContext(BasketContext);
+    const basketItems = useSelector(state => state.basket);
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
     const classes = useStyles({ media, pathName: location.pathname === HOME_URL });
     const {t, i18n} = useTranslation()
     const favArr = useSelector(state => state.favourites)
-
-
-    useEffect(() => {
-        let temp = '';
-        if (currentUser) {
-            temp = firstLetters(currentUser.displayName)
-        }
-        setInitials(temp);
-    }, [currentUser, currentUser?.displayName])
 
     function firstLetters(user) {
         if (user) {
@@ -234,8 +223,7 @@ export default function Header() {
 
                     <Link className={classes.checkoutLink} to='/checkout'>
                         <ShoppingCartIcon className={classes.menuItem} />
-                        <div className={classes.cardItems}
-                        >{(itemsInBasket && itemsInBasket.length) ? itemsInBasket.length : null}</div>
+                        {basketItems.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
                     </Link>
                     {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser &&

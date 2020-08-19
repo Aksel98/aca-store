@@ -1,0 +1,31 @@
+import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_FROM_BASKET} from "../types";
+
+export const addToBasket = (id, price, device, quantity = 1) => (dispatch) => {
+    dispatch({
+        type: ADD_TO_BASKET,
+        id,
+        price,
+        quantity,
+        device
+    })
+}
+
+export const removeFromBasket = (id) => (dispatch) => {
+    dispatch({
+        type: REMOVE_FROM_BASKET,
+        id
+    })
+}
+
+export const increment = (id) => {
+    return {
+        type: INCREMENT,
+        id
+    }
+}
+export const decrement = (id) => {
+    return {
+        type: DECREMENT,
+        id
+    }
+}

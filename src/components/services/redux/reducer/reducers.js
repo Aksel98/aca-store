@@ -1,18 +1,18 @@
 import { combineReducers } from "redux"
-import counterReducer from './counterReducer';
 import userReducer from "./userReducer";
 import uiReducer from "./uiReducer";
 import favouriteReducer from "./favouriteReducer";
+import basketReducer from "./basketReducer";
 
 export const initialState = {
     user: false,
-    itemDetails: JSON.parse(localStorage.getItem('itemDetails')) || [],
+    basketItems: JSON.parse(localStorage.getItem('basketItems')) || [],
     favourites: JSON.parse(localStorage.getItem('favourites')) || [],
 }
 
 const allReducers = combineReducers({
     user: userReducer,
-    counter: counterReducer,
+    basket: basketReducer,
     ui: uiReducer,
     favourites: favouriteReducer,
 });

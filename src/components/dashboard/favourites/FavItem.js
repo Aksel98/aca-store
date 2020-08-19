@@ -1,14 +1,10 @@
 import React from "react";
-import { makeStyles, useMediaQuery, Button } from "@material-ui/core";
-import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
-import { GREY } from "../../main/constants/Constants";
-import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, removeItem, addItem } from '../../services/redux/actions/counterActions'
-import DeviceCount from "../device/count/DeviceCount";
-import { numberFormat } from "../../main/format-numbers/NumberFormat";
-import { addToFav, removeFromFav } from "../../services/redux/actions/favouriteActions";
-import { useContext } from "react";
-import { BasketContext } from "../../main/context/BasketContext";
+import {makeStyles, useMediaQuery, Button} from "@material-ui/core";
+import {GREY} from "../../main/constants/Constants";
+import {useDispatch} from 'react-redux';
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {removeFromFav} from "../../services/redux/actions/favouriteActions";
+import {addToBasket} from "../../services/redux/actions/basketAction";
 
 const useStyles = makeStyles({
     container: {
@@ -69,52 +65,28 @@ const useStyles = makeStyles({
 })
 
 export default function FavItem(props) {
-    const { image, model, price, id, remove } = props;
-    const count = useSelector(state => state.counter)
+    const {image, model, id, price, device} = props;
     const dispatch = useDispatch()
-    const [itemData] = count.filter(item => item.id === id)
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
-    const [basket, setBasket] = useContext(BasketContext)
-
-    const addToBasket = () => {
-        let localArr = [];
-        if (localStorage.getItem('ItemsInBasket')) {
-            localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
-            if (!localArr.includes(id)) { localArr.push(id) }
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        else {
-            localArr.push(id);
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        setBasket(localArr);
-        console.log(basket);
-        dispatch(addItem(id, price))
-    }
-
 
     return (
         <div className={classes.container}>
-            <img className={classes.image} src={image} alt="" />
+            <img className={classes.image} src={image} alt=""/>
             <div className={classes.main}>
                 <div>
                     <div className={classes.infoName}>{model}</div>
                 </div>
                 <div className={classes.infoParent}>
-
                     <div className={classes.info}>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>
-
                 </div>
             </div>
             <div>
-                <Button onClick={() => addToBasket()}>add to basket</Button>
+                <Button onClick={() => dispatch(addToBasket(id, price, device))}>add to basket</Button>
                 <Button onClick={() => dispatch(removeFromFav(id))}>remove </Button>
-
             </div>
-
         </div>
     )
 }

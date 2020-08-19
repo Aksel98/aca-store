@@ -53,9 +53,10 @@ const FavItemList = () => {
                 <FavItem
                     key={uniqId()}
                     image={data.images[0]}
-                    price={data.price}
                     model={data.model}
-                    id={data.id}/>) : 'there are no favourites chosen'}
+                    id={data.id}
+                    price={data.price}
+                    device={data.device}/>) : 'there are no favourites chosen'}
             </div>
         </div>
     )

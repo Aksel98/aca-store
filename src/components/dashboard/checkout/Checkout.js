@@ -3,11 +3,11 @@ import {makeStyles, useMediaQuery} from "@material-ui/core";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import {GREY, MyButton, ORANGE} from "../../main/constants/Constants";
 import {useSelector, useDispatch} from 'react-redux';
-import {increment, decrement, removeItem} from '../../services/redux/actions/counterActions'
 import DeviceCount from "../device/count/DeviceCount";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {removeFromBasket} from "../../services/redux/actions/basketAction";
 
 const useStyles = makeStyles({
     container: {
@@ -77,24 +77,16 @@ const useStyles = makeStyles({
 
 export default function Checkout(props) {
     const {image, model, price, id, remove} = props;
-    const count = useSelector(state => state.counter)
-    const dispatch = useDispatch()
+    const count = useSelector(state => state.basket)
     const [itemData] = count.filter(item => item.id === id)
+    const dispatch = useDispatch()
     const media = useMediaQuery('(max-width:600px)')
     const {t} = useTranslation();
     const classes = useStyles(media);
 
     function removeList() {
-        dispatch(removeItem(id))
         remove(id)
-    }
-
-    function addCount() {
-        dispatch(increment(id))
-    }
-
-    function reduceCount() {
-        dispatch(decrement(id))
+        dispatch(removeFromBasket(id))
     }
 
     return (
@@ -110,7 +102,7 @@ export default function Checkout(props) {
                 <div className={classes.infoParent}>
                     <div className={classes.info}>
                         <div className={classes.display}>
-                            <DeviceCount count={itemData.quantity} add={addCount} reduce={reduceCount} />
+                            <DeviceCount count={itemData.quantity} id={id}/>
                         </div>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>

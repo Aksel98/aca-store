@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {useParams} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {db} from "../../services/firebase/Firebase";
 import {GREY, MyButton} from "../../main/constants/Constants";
 import Loader from "../../main/loader/Loader";
@@ -18,6 +18,8 @@ import DeleteImagesAdmin from "./images/DeleteImagesAdmin";
 import AddImagesAdmin from "./images/AddImagesAdmin";
 import ReactImageMagnify from "react-image-magnify";
 import {useMediaQuery} from "@material-ui/core";
+import {useDispatch} from "react-redux";
+import {addToBasket} from "../../services/redux/actions/basketAction";
 
 const useStyles = makeStyles({
     container: {
@@ -48,7 +50,10 @@ const useStyles = makeStyles({
         padding: '0 0 15px',
     },
     btnParent: {
-        margin: 20
+        textDecoration: 'none'
+    },
+    btnDistance: {
+        margin: '20px 0',
     },
     displayFlex: {
         display: 'flex'
@@ -67,6 +72,7 @@ export default function Device() {
     const [deviceCount, setDeviceCount] = useState(1)
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [deletedImage, setDeletedImage] = useState(null)
+    const dispatch = useDispatch()
     const media = useMediaQuery('(min-width:768px)');
     const classes = useStyles(media)
     const {id} = useParams()
@@ -91,14 +97,8 @@ export default function Device() {
         setOpenDeleteModal(val)
     }
 
-    function addCount() {
-        setDeviceCount(deviceCount + 1)
-    }
-
-    function reduceCount() {
-        if (deviceCount > 1) {
-            setDeviceCount(deviceCount - 1)
-        }
+    function buy() {
+        dispatch(addToBasket(device.id, device.price, device.device))
     }
 
     const style = {zIndex: 11110}
@@ -124,7 +124,8 @@ export default function Device() {
                         }
                     }} />
                     <div className={`${classes.displayFlex} ${classes.flexWrap}`}>
-                        <DeviceImages images={images} setImages={setImages} changeImage={changeImage} openDeletePopup={openDeletePopup}/>
+                        <DeviceImages images={images} setImages={setImages} changeImage={changeImage}
+                                      openDeletePopup={openDeletePopup}/>
                         <AddImagesAdmin images={images} setImages={setImages} type={device.device}/>
                     </div>
                 </div>
@@ -141,14 +142,14 @@ export default function Device() {
                     <div className={classes.info}>
                         <Price price={price || device.price} setPrice={setPrice} count={deviceCount}/>
                         <Credits price={price || device.price} count={deviceCount}/>
-                        <DeviceCount count={deviceCount} add={addCount} reduce={reduceCount} setCount={setDeviceCount}/>
+                        <DeviceCount count={deviceCount} id={id}/>
                     </div>
                     <div className={classes.info}>
                         <AboutDevice device={device}/>
                     </div>
-                    <div className={classes.btnParent}>
-                        <MyButton variant="contained" color="primary">{t('buy')}</MyButton>
-                    </div>
+                    <Link to="/checkout" onClick={buy} className={classes.btnParent}>
+                        <MyButton className={classes.btnDistance} variant="contained" color="primary">{t('buy')}</MyButton>
+                    </Link>
                 </div>
                 {loader && <Loader/>}
             </div>
