@@ -30,7 +30,7 @@ const MyAppBar = styled(AppBar)({
 export default function Header() {
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
-    const {t, i18n} = useTranslation()
+    const {i18n} = useTranslation()
 
     function getFirstLetters(user) {
         return user?.split(' ').map(namePart => namePart.slice(0, 1).toUpperCase()).join('');

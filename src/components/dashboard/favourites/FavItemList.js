@@ -6,34 +6,46 @@ import {db} from '../../services/firebase/Firebase';
 import FavItem from './FavItem';
 import {useHistory} from 'react-router-dom';
 import {Button, makeStyles} from '@material-ui/core';
+import Fab from "@material-ui/core/Fab";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import {BLACK} from "../../main/constants/Constants";
+import {useTranslation} from "react-i18next";
+import Loader from "../../main/loader/Loader";
 
 const useStyles = makeStyles({
     main: {
-        display: 'flex',
-        flexDirection: 'column',
         marginTop: '80px',
-        justifyContent: 'space-around',
+    },
+    backIcon: {
+        margin: '10px 14px'
+    },
+    favItems: {
+        height: 640,
+        overflow: 'auto'
+    },
+    noFavourites: {
+        textAlign: 'center',
+        color: BLACK
     },
 })
 const FavItemList = () => {
     const classes = useStyles();
     const favIds = useSelector(state => state.favourites);
-    const user = useSelector(state => state.user);
     const [favItems, setFavItems] = useState([]);
+    const {t} = useTranslation()
     const history = useHistory()
+
     useEffect(() => {
-        if (favIds.length) {
-            getFavItems()
-        }
-    }, [favIds.length])
+        getFavItems()
+    }, [])
 
     function getFavItems() {
         try {
             db.collection('product')
                 .where('id', 'in', favIds).get()
-                .then(querySnapchot => {
+                .then(querySnapshot => {
                     const tempArr = [];
-                    querySnapchot.docs.forEach(doc => {
+                    querySnapshot.docs.forEach(doc => {
                         let tempObj = doc.data();
                         tempArr.push(tempObj)
                     })
@@ -46,17 +58,17 @@ const FavItemList = () => {
 
     return (
         <div className={classes.main}>
-            <div>
-                <Button onClick={() => history.goBack()}>back to cart</Button>
+            <div onClick={() => history.goBack()} className={classes.backIcon}>
+                <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
             </div>
-            <div>{favItems?.length ? favItems.map(data =>
-                <FavItem
-                    key={uniqId()}
-                    image={data.images[0]}
-                    model={data.model}
-                    id={data.id}
-                    price={data.price}
-                    device={data.device}/>) : 'there are no favourites chosen'}
+            <div className={classes.favItems}>{favItems.map(data =>
+                <FavItem key={uniqId()}
+                         image={data?.images[0]}
+                         model={data.model}
+                         id={data.id}
+                         price={data.price}
+                         device={data.device}
+                         setFavItems={setFavItems}/>)}
             </div>
         </div>
     )

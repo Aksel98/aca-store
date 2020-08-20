@@ -1,10 +1,11 @@
 import React from "react";
 import {makeStyles, useMediaQuery, Button} from "@material-ui/core";
-import {GREY} from "../../main/constants/Constants";
-import {useDispatch} from 'react-redux';
+import {GREY, MyButton} from "../../main/constants/Constants";
+import {useDispatch, useSelector} from 'react-redux';
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {removeFromFav} from "../../services/redux/actions/favouriteActions";
 import {addToBasket} from "../../services/redux/actions/basketAction";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     container: {
@@ -61,14 +62,24 @@ const useStyles = makeStyles({
     },
     fullWidth: {
         width: '100%'
+    },
+    distance: {
+        marginTop: 10
     }
 })
 
 export default function FavItem(props) {
-    const {image, model, id, price, device} = props;
+    const {image, model, id, price, device, setFavItems} = props;
+    const favourites = useSelector(state => state.favourites)
     const dispatch = useDispatch()
+    const {t} = useTranslation()
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
+
+    function removeFavItem() {
+        dispatch(removeFromFav(id))
+        // setFavItems(favourites)
+    }
 
     return (
         <div className={classes.container}>
@@ -84,8 +95,14 @@ export default function FavItem(props) {
                 </div>
             </div>
             <div>
-                <Button onClick={() => dispatch(addToBasket(id, price, device))}>add to basket</Button>
-                <Button onClick={() => dispatch(removeFromFav(id))}>remove </Button>
+                <MyButton color="primary"
+                          maxwidth="90%"
+                          variant="contained"
+                          onClick={() => dispatch(addToBasket(id, price, device))}>{t('buy')}</MyButton>
+                <MyButton maxwidth="90%"
+                          variant="contained"
+                          className={classes.distance}
+                          onClick={removeFavItem}>{t('remove')}</MyButton>
             </div>
         </div>
     )
