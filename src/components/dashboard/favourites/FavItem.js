@@ -1,14 +1,11 @@
 import React from "react";
-import { makeStyles, useMediaQuery, Button } from "@material-ui/core";
-import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
-import { GREY } from "../../main/constants/Constants";
-import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, removeItem, addItem } from '../../services/redux/actions/counterActions'
-import DeviceCount from "../device/count/DeviceCount";
-import { numberFormat } from "../../main/format-numbers/NumberFormat";
-import { addToFav, removeFromFav } from "../../services/redux/actions/favouriteActions";
-import { useContext } from "react";
-import { BasketContext } from "../../main/context/BasketContext";
+import {makeStyles, useMediaQuery, Button} from "@material-ui/core";
+import {GREY, MyButton} from "../../main/constants/Constants";
+import {useDispatch, useSelector} from 'react-redux';
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {removeFromFav} from "../../services/redux/actions/favouriteActions";
+import {addToBasket} from "../../services/redux/actions/basketAction";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     container: {
@@ -65,56 +62,48 @@ const useStyles = makeStyles({
     },
     fullWidth: {
         width: '100%'
+    },
+    distance: {
+        marginTop: 10
     }
 })
 
 export default function FavItem(props) {
-    const { image, model, price, id, remove } = props;
-    const count = useSelector(state => state.counter)
+    const {image, model, id, price, device, setFavItems} = props;
+    const favourites = useSelector(state => state.favourites)
     const dispatch = useDispatch()
-    const [itemData] = count.filter(item => item.id === id)
+    const {t} = useTranslation()
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
-    const [basket, setBasket] = useContext(BasketContext)
 
-    const addToBasket = () => {
-        let localArr = [];
-        if (localStorage.getItem('ItemsInBasket')) {
-            localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
-            if (!localArr.includes(id)) { localArr.push(id) }
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        else {
-            localArr.push(id);
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        setBasket(localArr);
-        console.log(basket);
-        dispatch(addItem(id, price))
+    function removeFavItem() {
+        dispatch(removeFromFav(id))
+        // setFavItems(favourites)
     }
-
 
     return (
         <div className={classes.container}>
-            <img className={classes.image} src={image} alt="" />
+            <img className={classes.image} src={image} alt=""/>
             <div className={classes.main}>
                 <div>
                     <div className={classes.infoName}>{model}</div>
                 </div>
                 <div className={classes.infoParent}>
-
                     <div className={classes.info}>
                         <div className={classes.price}>{numberFormat(price, '֏')}</div>
                     </div>
-
                 </div>
             </div>
             <div>
-                <Button onClick={() => addToBasket()}>add to basket</Button>
-                <Button onClick={() => dispatch(removeFromFav(id))}>remove </Button>
-
+                <MyButton color="primary"
+                          maxwidth="90%"
+                          variant="contained"
+                          onClick={() => dispatch(addToBasket(id, price, device))}>{t('buy')}</MyButton>
+                <MyButton maxwidth="90%"
+                          variant="contained"
+                          className={classes.distance}
+                          onClick={removeFavItem}>{t('remove')}</MyButton>
             </div>
-
         </div>
     )
 }

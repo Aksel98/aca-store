@@ -31,17 +31,17 @@ const useStyles = makeStyles({
 
 const TotalPrice = () => {
     const [quantity, setQuantity] = useState(0)
-    const count = useSelector(state => state.counter)
+    const basketItems = useSelector(state => state.basket)
     const [amount, setAmount] = useState(0)
     const classes = useStyles();
     const {t} = useTranslation()
 
     useEffect(() => {
-        setAmount(count.reduce(function (acc, item) {
+        setAmount(basketItems.reduce(function (acc, item) {
             return acc + item['price'] * item['quantity']
         }, 0))
-        setQuantity(count.map(item => item['quantity']))
-    }, [count])
+        setQuantity(basketItems.map(item => item['quantity']))
+    }, [basketItems])
 
     return (
         <div className={classes.mainWrapper}>
@@ -49,7 +49,7 @@ const TotalPrice = () => {
                 <span>Total price`</span>
                 <span className={classes.bold}>{numberFormat(amount, '֏')}</span>
             </div>
-            <MyButton className={classes.btn} disabled={!count.length} variant="contained">
+            <MyButton className={classes.btn} disabled={!basketItems.length} variant="contained">
                 <Link className={classes.link} to={{
                     pathname: '/payment', state: {
                         summary: amount,

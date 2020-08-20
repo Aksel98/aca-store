@@ -5,6 +5,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {BLACK} from "../../../main/constants/Constants";
 import {db} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {updatePrice} from "../../../services/redux/actions/basketAction";
 
 const useStyles = makeStyles({
     display: {
@@ -38,8 +40,9 @@ const useStyles = makeStyles({
 
 export default function Price(props) {
     const {price, setPrice, count} = props
-    const classes = useStyles()
     const {id} = useParams()
+    const dispatch = useDispatch()
+    const classes = useStyles()
     const ref = createRef()
 
     function onFocus() {
@@ -48,12 +51,12 @@ export default function Price(props) {
 
     function onBlur(key, e) {
         const devPrice = Number((e.target.value).slice(0, -1).split(',').join(''))
-
         db.collection('product').doc(id).update({
             price: devPrice
-        })
-            .then(() => setPrice(devPrice))
-            .catch(err => console.log(err))
+        }).then(() => {
+            setPrice(devPrice)
+            dispatch(updatePrice(count, id))
+        }).catch(err => console.log(err))
     }
 
     return (

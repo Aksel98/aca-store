@@ -6,6 +6,9 @@ import {BLACK} from "../../main/constants/Constants"
 import {LOGIN_URL} from "../../services/api/Navigations";
 import GeneralRoutes from "./GeneralRoutes";
 import {useSelector} from "react-redux";
+import Header from "../header/Header";
+import FavItemList from "../favourites/FavItemList";
+import Footer from "../footer/Footer";
 
 const useStyles = makeStyles({
     loginBg: {
@@ -18,6 +21,9 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         padding: '150px 10px',
         opacity: '0.6',
+    },
+    favouritesPage: {
+        height: 710
     }
 })
 
@@ -27,8 +33,18 @@ export default function Dashboard() {
 
     return (
         <Router>
-            {currentUser ? <GeneralRoutes/> : (
+            {currentUser ?
                 <Switch>
+                    <Route path='/favourites'>
+                        <Header/>
+                        <div className={classes.favouritesPage}>
+                            <FavItemList/>
+                        </div>
+                        <Footer/>
+                    </Route>
+                    <GeneralRoutes/>
+                </Switch>
+                : <Switch>
                     <Route path={LOGIN_URL}>
                         <div className={classes.loginBg}>
                             <div className={classes.loginContainer}>
@@ -37,8 +53,7 @@ export default function Dashboard() {
                         </div>
                     </Route>
                     <GeneralRoutes/>
-                </Switch>
-            )}
+                </Switch>}
         </Router>
     )
 }

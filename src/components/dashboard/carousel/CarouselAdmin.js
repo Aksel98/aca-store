@@ -36,6 +36,7 @@ const useStyles = makeStyles({
     imageName: {
         fontWeight: 'bold',
         color: ORANGE,
+        wordBreak: 'break-word',
         paddingTop: 5
     },
     center: {
@@ -50,23 +51,26 @@ export default function CarouselAdmin(props) {
     const classes = useStyles()
 
     function addCarouselImg() {
-        storage.ref(`images/carousel/${image?.name}`).put(image).on(
-            "state_changed",
-            () => {
-            },
-            error => {
-                console.log(error)
-            },
-            () => {
-                storage.ref("images/carousel")
-                    .child(image.name)
-                    .getDownloadURL()
-                    .then(url => {
-                            setUrl(url)
-                        }
-                    )
-            }
-        )
+        if (image) {
+            storage.ref(`images/carousel/${image?.name}`).put(image).on(
+                "state_changed",
+                () => {
+                },
+                error => {
+                    console.log(error)
+                },
+                () => {
+                    storage.ref("images/carousel")
+                        .child(image.name)
+                        .getDownloadURL()
+                        .then(url => {
+                                setUrl(url)
+                                setImage(null)
+                            }
+                        )
+                }
+            )
+        }
     }
 
     function addFile(e) {
@@ -84,6 +88,11 @@ export default function CarouselAdmin(props) {
         ).catch((err) => {
             console.log(err)
         });
+    }
+
+    function closeModal() {
+        open(false)
+        setImage(null)
     }
 
     return (
@@ -115,8 +124,9 @@ export default function CarouselAdmin(props) {
                              </div>
                          </div>
                      }
+                     disabled={!image}
                      doneButton={addCarouselImg}
                      doneButtonName={t('add')}
-                     close={() => open(false)}/>
+                     close={closeModal}/>
     )
 }

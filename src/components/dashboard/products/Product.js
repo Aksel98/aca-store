@@ -1,17 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { BLACK, GREY, MyButton, ORANGE, WHITE } from '../../main/constants/Constants';
+import React, {useState, useEffect} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/constants/Constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { useMediaQuery } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { BasketContext } from '../../main/context/BasketContext';
-import { numberFormat } from "../../main/format-numbers/NumberFormat";
-import { useSelector } from "react-redux";
-import { removeItem, addItem } from '../../services/redux/actions/counterActions';
-import { useDispatch } from 'react-redux';
-import { addToFav, removeFromFav } from '../../services/redux/actions/favouriteActions';
+import {useMediaQuery} from "@material-ui/core";
+import {useTranslation} from "react-i18next";
+import {Link} from "react-router-dom";
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {useSelector} from "react-redux";
+import {useDispatch} from 'react-redux';
+import {addToFav, removeFromFav} from '../../services/redux/actions/favouriteActions';
+import {addToBasket, removeFromBasket} from "../../services/redux/actions/basketAction";
 
 const useStyles = makeStyles({
     root: {
@@ -95,17 +94,17 @@ const useStyles = makeStyles({
 });
 
 export default function Product(props) {
-    const { device, images, name, id, price, openModal, openDeleteModal } = props
+    const {device, images, name, id, price, openModal, openDeleteModal} = props
     const [hover, setHover] = useState(false);
-    const [basket, setBasket] = useContext(BasketContext);
+    const basketItems = useSelector(state => state.basket)
     const currentUser = useSelector(state => state.user)
+    const dispatch = useDispatch();
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:475px)');
     const [liked, setLiked] = useState(false);
-    const classes = useStyles({ mediaTablet, mediaMobile, currentUser, liked });
-    const { t } = useTranslation()
+    const classes = useStyles({mediaTablet, mediaMobile, currentUser, liked});
+    const {t} = useTranslation()
     const [btnText, setText] = useState('')
-    const dispatch = useDispatch();
     const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
 
     useEffect(() => {
@@ -113,69 +112,51 @@ export default function Product(props) {
     })
 
     useEffect(() => {
-        basket?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
-    }, [])
+        const basketIds = basketItems.map(item => item.id)
+        basketIds?.includes(id) ? setText(t('removeFromCart')) : setText(t('addToCart'));
+    }, [basketItems])
 
-    const addToBasket = () => {
-        let localArr = [];
-        if (localStorage.getItem('ItemsInBasket')) {
-            localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
-            if (!localArr.includes(id)) { localArr.push(id) }
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        else {
-            localArr.push(id);
-            localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        }
-        setBasket(localArr);
-        dispatch(addItem(id, price, device))
-    }
-
-    const removeFromBasket = () => {
-        let localArr = [];
-        localArr = JSON.parse(localStorage.getItem('ItemsInBasket'));
-        localArr.splice(localArr.indexOf(id), 1)
-        localStorage.setItem('ItemsInBasket', JSON.stringify(localArr))
-        setBasket(localArr);
-        dispatch(removeItem(id))
-    }
     const favItemHandler = () => {
         if (!currentUser) {
             openModal(t('modalTitleForAddFavoriteItems'));
-
         }
         if (currentUser && !liked) {
             dispatch(addToFav(id));
             setLiked(!liked)
-        }
-        else if (currentUser && liked) {
+        } else if (currentUser && liked) {
             dispatch(removeFromFav(id));
             setLiked(!liked)
         }
     }
 
+    function addOrRemove() {
+        btnText === t('addToCart') ? dispatch(addToBasket(id, price, device)) : dispatch(removeFromBasket(id))
+    }
+
     return (
         <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <div onClick={() => openDeleteModal(true, id)} className={classes.deleteBtn}>
-                <MyButton newcolor={ORANGE}><HighlightOffIcon /></MyButton>
+                <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
             </div>
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
-                {images?.length && <img className={classes.productImage} src={images[0]} alt="" />}
+                {images?.length && <img className={classes.productImage} src={images[0]} alt=""/>}
                 <div className={classes.modelInfo}>
                     <div className={classes.productName}>{name}</div>
                     <div className={classes.price}>{numberFormat(price, '֏')}</div>
                 </div>
             </Link>
             {hover && (<div className={classes.btnWrapper}>
-                <div style={{ display: 'flex' }}>
-                    <MyButton className={classes.favIconColor}
-                        onClick={() => favItemHandler()}
-                    ><FavoriteTwoToneIcon /></MyButton>
+                    <div style={{display: 'flex'}}>
+                        <MyButton className={classes.favIconColor}
+                                  onClick={() => favItemHandler()}
+                        ><FavoriteTwoToneIcon/></MyButton>
+                    </div>
+                    <div className={classes.btnParent}>
+                        <MyButton newcolor={ORANGE}
+                                  className={classes.btn}
+                                  onClick={addOrRemove}>{t(btnText)}</MyButton>
+                    </div>
                 </div>
-                <div className={classes.btnParent}>
-                    <MyButton newcolor={ORANGE} className={classes.btn} onClick={() => { btnText === 'ADD TO CART' ? addToBasket() : removeFromBasket() }}>{t(btnText)}</MyButton>
-                </div>
-            </div>
             )}
         </div>
     )
