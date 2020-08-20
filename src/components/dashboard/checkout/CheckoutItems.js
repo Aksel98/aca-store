@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {db} from "../../services/firebase/Firebase";
 import Checkout from "./Checkout";
 import Header from "../header/Header";
-import Footer from "../Footer";
+import Footer from "../footer/Footer";
 import uniqId from 'uniqid';
 import TotalPrice from "./TotalPrice";
 import {ORANGE, BLUE, BLACK} from "../../main/constants/Constants";

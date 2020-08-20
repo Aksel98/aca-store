@@ -116,14 +116,12 @@ export default function WebView(props) {
                 </Link>}
                 <Link className={classes.checkoutLink} to='/checkout'>
                     <ShoppingCartIcon className={classes.menuItem}/>
-                    {basketItems?.length && <div className={classes.cardItems}>{basketItems.length}</div>}
+                    {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
                 </Link>
                 {currentUser ?
                     <DropDown name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
-                              dropdownContent={
-                                  <div onClick={() => dispatch(logoutUser())} className={classes.dropdownItemParent}>
-                                      {t('logout')}
-                                  </div>}/> : <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
+                              dropdownContent={<div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>}/>
+                    : <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
             </div>
         </React.Fragment>
     )

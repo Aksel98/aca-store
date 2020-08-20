@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
     },
     products: {
         height: props => props.mediaTablet ? (props.mediaMobile ? 336 : 375) : 640,
-        margin: props => props.mediaTablet ? 0 : '10px 0 0 10px',
+        margin: props => props.mediaTablet ? 0 : '20px 0 0',
         overflow: 'auto',
         justifyContent: 'center',
         display: 'flex',
@@ -44,7 +44,6 @@ const useStyles = makeStyles(() => ({
     pagination: {
         display: 'flex',
         justifyContent: 'center',
-        padding: 5
     },
     nothingFound: {
         color: BLUE
@@ -146,6 +145,9 @@ export default function ProductList() {
 
     return (
         <div className={classes.container}>
+            {mediaTablet && <div onClick={() => history.goBack()} className={classes.backIcon}>
+                <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
+            </div>}
             <Filters name={nameFilter}
                      orderBy={orderBy}
                      price={priceFilter}
@@ -153,9 +155,9 @@ export default function ProductList() {
                      onOrder={orderHandler}
                      onPrice={priceHandler}/>
             <div className={classes.productsParent}>
-                <div onClick={() => history.goBack()} className={classes.backIcon}>
+                {!mediaTablet && <div onClick={() => history.goBack()} className={classes.backIcon}>
                     <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
-                </div>
+                </div>}
                 {loader ? <Loader/> : <div>
                     <div onClick={openPopup} className={classes.btnParent}>
                         <MyButton color="primary" maxwidth="75%" variant="contained">{t('addDevice')}</MyButton>

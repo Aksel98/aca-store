@@ -1,11 +1,11 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import CallIcon from '@material-ui/icons/Call';
-import {BLACK, WHITE, ORANGE} from "../main/constants/Constants";
+import {BLACK, WHITE, ORANGE} from "../../main/constants/Constants";
 import MailIcon from '@material-ui/icons/Mail';
 import {Link, useLocation} from "react-router-dom";
-import {LOGO} from "../main/constants/Constants";
-import {HOME_URL} from "../services/api/Navigations";
+import {LOGO} from "../../main/constants/Constants";
+import {HOME_URL} from "../../services/api/Navigations";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -32,6 +32,7 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: "center",
+        fontSize: 15
     },
     title: {
         fontSize: 24,

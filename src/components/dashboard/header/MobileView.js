@@ -108,7 +108,7 @@ export default function (props) {
                     </Link>}
                     <Link className={classes.checkoutLink} to='/checkout'>
                         <ShoppingCartIcon className={classes.menuItem}/>
-                        {basketItems?.length && <div className={classes.cardItems}>{basketItems.length}</div>}
+                        {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
                     </Link>
                     {currentUser ? <div className={classes.menuItem}>
                         <DropDown
