@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {db} from "../../services/firebase/Firebase";
 import Checkout from "./Checkout";
-import Header from "../Header";
+import Header from "../header/Header";
 import Footer from "../Footer";
 import uniqId from 'uniqid';
 import TotalPrice from "./TotalPrice";

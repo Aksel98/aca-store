@@ -113,7 +113,7 @@ export default function Product(props) {
 
     useEffect(() => {
         const basketIds = basketItems.map(item => item.id)
-        basketIds?.includes(id) ? setText('remove from cart') : setText('ADD TO CART');
+        basketIds?.includes(id) ? setText(t('removeFromCart')) : setText(t('addToCart'));
     }, [basketItems])
 
     const favItemHandler = () => {
@@ -127,6 +127,10 @@ export default function Product(props) {
             dispatch(removeFromFav(id));
             setLiked(!liked)
         }
+    }
+
+    function addOrRemove() {
+        btnText === t('addToCart') ? dispatch(addToBasket(id, price, device)) : dispatch(removeFromBasket(id))
     }
 
     return (
@@ -148,9 +152,9 @@ export default function Product(props) {
                         ><FavoriteTwoToneIcon/></MyButton>
                     </div>
                     <div className={classes.btnParent}>
-                        <MyButton newcolor={ORANGE} className={classes.btn} onClick={() => {
-                            btnText === 'ADD TO CART' ? dispatch(addToBasket(id, price, device)) : dispatch(removeFromBasket(id))
-                        }}>{t(btnText)}</MyButton>
+                        <MyButton newcolor={ORANGE}
+                                  className={classes.btn}
+                                  onClick={addOrRemove}>{t(btnText)}</MyButton>
                     </div>
                 </div>
             )}

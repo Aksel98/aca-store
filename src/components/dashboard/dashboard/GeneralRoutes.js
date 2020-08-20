@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { HOME_URL } from "../../services/api/Navigations";
-import Header from "../Header";
+import Header from "../header/Header";
 import Carousel from "../carousel/Carousel";
 import CategoryList from "../category/CategoryList";
 import Footer from "../Footer";
@@ -10,7 +10,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
 import Payment from "../payment/Payment";
-import FavItem from "../favourites/FavItem";
 import FavItemList from "../favourites/FavItemList";
 
 const useStyles = makeStyles({
