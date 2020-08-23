@@ -130,7 +130,8 @@ const useStyles = makeStyles({
         width: '0.8rem',
         height: '0.8rem',
         lineHeight: '0.8rem',
-        color: '#FF0000',
+        color: WHITE,
+        // '#FF0000',
         // backgroundColor: WHITE,
         marginLeft: '6px',
         marginTop: '6px',
@@ -157,7 +158,7 @@ export default function Header() {
     const media = useMediaQuery('(max-width:600px)');
     const location = useLocation();
     const classes = useStyles({ media, pathName: location.pathname === HOME_URL });
-    const {t, i18n} = useTranslation()
+    const { t, i18n } = useTranslation()
     const favArr = useSelector(state => state.favourites)
 
 
@@ -220,17 +221,19 @@ export default function Header() {
                         </div>
                     </>} />
                     </div>
-                    {currentUser && <div style={{
+                    {currentUser && <Link to='/favourites' ><div style={{
                         display: 'flex',
                         flexDirection: 'row',
                         textDecoration: 'none',
                         position: 'relative',
 
-                    }}> <Link to='/favourites' ><FavoriteTwoToneIcon style={{ color: WHITE }} /></Link>
+                    }}> <FavoriteTwoToneIcon style={{ color: WHITE }} />
 
                         <div className={classes.favCount}
                         >{(!!favArr && favArr.length) ? favArr.length : null}</div>
-                    </div>}
+                    </div>
+                    </Link>
+                    }
 
                     <Link className={classes.checkoutLink} to='/checkout'>
                         <ShoppingCartIcon className={classes.menuItem} />
@@ -259,6 +262,6 @@ export default function Header() {
                     </div>}
 
             </div>
-        </MyAppBar>
+        </MyAppBar >
     )
 }

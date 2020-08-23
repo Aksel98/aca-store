@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
 import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
-import {makeStyles} from "@material-ui/core/styles";
-import {storageRef} from "../../services/firebase/Firebase";
+import { makeStyles } from "@material-ui/core/styles";
+import { storageRef } from "../../services/firebase/Firebase";
 import Loader from "../../main/loader/Loader";
-import {WHITE} from "../../main/constants/Constants"
+import { WHITE } from "../../main/constants/Constants"
 import Fab from '@material-ui/core/Fab';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CarouselAdmin from "./CarouselAdmin";
+import { useRef } from 'react';
 
 const useStyles = makeStyles({
     display: {
@@ -121,17 +122,17 @@ export default function Carousel() {
             <div className={classes.display}>
                 <div className={classes.upload} onClick={openModal}>
                     <Fab color="primary">
-                        <CloudUploadIcon/>
+                        <CloudUploadIcon />
                     </Fab>
                 </div>
-                <ArrowBackIosSharpIcon className={`${classes.arrowIcon} ${classes.leftIcon}`} onClick={backward}/>
-                <img src={imagesList[index]} className={classes.carouselImg} alt=''/>
-                <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightIcon}`} onClick={forward}/>
+                <ArrowBackIosSharpIcon className={`${classes.arrowIcon} ${classes.leftIcon}`} onClick={backward} />
+                <img src={imagesList[index]} className={classes.carouselImg} alt='' />
+                <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightIcon}`} onClick={forward} />
                 <CarouselAdmin isOpen={modal}
-                               open={openModal}
-                               images={imagesList}
-                               setDeletedImage={setDeletedImage}
-                               setUrl={setUrl}/>
-            </div> : <div className={classes.loaderParent}><Loader/></div>
+                    open={openModal}
+                    images={imagesList}
+                    setDeletedImage={setDeletedImage}
+                    setUrl={setUrl} />
+            </div> : <div className={classes.loaderParent}><Loader /></div>
     )
 }

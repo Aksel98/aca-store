@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Category from './Category';
-import {makeStyles} from '@material-ui/core';
-import {MyButton, ORANGE, WHITE} from "../../main/constants/Constants"
-import {db} from "../../services/firebase/Firebase";
+import { makeStyles } from '@material-ui/core';
+import { MyButton, ORANGE, WHITE } from "../../main/constants/Constants"
+import { db } from "../../services/firebase/Firebase";
 import CategoryListAdmin from "./CategoryListAdmin";
+import { useRef } from 'react';
 
 const useStyles = makeStyles(() => ({
     categoryView: {
@@ -32,13 +33,23 @@ export default function CategoryList() {
     const [isDelete, setIsDelete] = useState(false);
     const [id, setId] = useState('');
     const classes = useStyles();
+    const isMountedRef = useRef(null);
 
     useEffect(() => {
-        getAllCategoryInfo();
+        isMountedRef.current = true;
+        if (isMountedRef.current) {
+            getAllCategoryInfo();
+        }
+        return () => isMountedRef.current = false
+
     }, []);
 
     useEffect(() => {
-        getAllCategoryInfo();
+        isMountedRef.current = true;
+        if (isMountedRef.current) {
+            getAllCategoryInfo();
+        }
+        return () => isMountedRef.current = false
     }, [url, isDelete]);
 
     function getAllCategoryInfo() {
@@ -47,7 +58,7 @@ export default function CategoryList() {
             db.collection('categories').get().then(snapshot => {
                 snapshot.docs.forEach((doc) => {
                     let temp = doc.data();
-                    tempArr.push({...temp, id: doc.id});
+                    tempArr.push({ ...temp, id: doc.id });
                 });
                 setCategory(tempArr);
             });
@@ -70,22 +81,22 @@ export default function CategoryList() {
         <div>
             <div className={classes.categoryView}>{
                 category.map((item) => {
-                        return (<div key={item.id}
-                                     style={{textDecoration: 'none', margin: '5px', marginTop: '10px'}}>
-                                <Category id={item.id} name={item.name} image={item.image} onDelete={openDeletePopup}/>
-                            </div>
-                        )
-                    }
+                    return (<div key={item.id}
+                        style={{ textDecoration: 'none', margin: '5px', marginTop: '10px' }}>
+                        <Category id={item.id} name={item.name} image={item.image} onDelete={openDeletePopup} />
+                    </div>
+                    )
+                }
                 )
             }
             </div>
             <CategoryListAdmin isOpen={modal}
-                               open={openAddedCategory}
-                               setUrl={setUrl}
-                               setDeletePopup={setDeletePopup}
-                               setIsDelete={setIsDelete}
-                               deletePopup={deletePopup}
-                               deletedId={id}/>
+                open={openAddedCategory}
+                setUrl={setUrl}
+                setDeletePopup={setDeletePopup}
+                setIsDelete={setIsDelete}
+                deletePopup={deletePopup}
+                deletedId={id} />
             <div onClick={openAddedCategory} className={classes.btnParent}>
                 <MyButton newcolor={ORANGE} variant="contained">Add Category</MyButton>
             </div>

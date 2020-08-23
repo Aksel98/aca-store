@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState, } from 'react';
-import {useLocation} from "react-router-dom";
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useContext, useEffect, useState, } from 'react';
+import { useLocation } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
 import ConfirmationNumberOutlinedIcon from "@material-ui/icons/ConfirmationNumberOutlined";
-import {BasketContext} from "../../main/context/BasketContext";
-import {db} from "../../services/firebase/Firebase";
+import { BasketContext } from "../../main/context/BasketContext";
+import { db } from "../../services/firebase/Firebase";
 import TextField from '@material-ui/core/TextField';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
@@ -15,9 +15,9 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { MyButton, ORANGE, BLUE, GREY } from "../../main/constants/Constants";
-import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {useMediaQuery} from "@material-ui/core";
-
+import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { useMediaQuery } from "@material-ui/core";
+import uniqId from 'uniqid';
 const useStyles = makeStyles((t) => ({
     container: {
         display: "flex",
@@ -84,13 +84,13 @@ const useStyles = makeStyles((t) => ({
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        alignItems:"center"
+        alignItems: "center"
     },
     paymentMetods: {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        alignItems:"center"
+        alignItems: "center"
     },
     shippingIcom: {
         display: "flex",
@@ -148,7 +148,8 @@ export default function Payment() {
         setState({
             ...state,
             [name]: event.target.value,
-        })};
+        })
+    };
     const location = useLocation()
     const [value, setValue] = useState("5000");
     const [valuePayment, setValuePeyment] = useState("bank");
@@ -169,7 +170,7 @@ export default function Payment() {
                         const tempArr = [];
                         querySnapshot.docs.forEach(doc => {
                             let tempObj = doc.data();
-                            tempArr.push({...tempObj});
+                            tempArr.push({ ...tempObj });
                         })
                         setChoosenItems(tempArr);
                     })
@@ -196,12 +197,12 @@ export default function Payment() {
         setSubTotal(choosenItems.map((item, ind) =>
             item.price * location.state.quantity[ind]).reduce((acc, Value) => (acc + Value), 0))
     }, [choosenItems])
-    console.log(location.state.quantity);
-    console.log(subTotal);
+    // console.log(location.state.quantity);
+    // console.log(subTotal);
     return (
-        <div  className={classes.container}>
+        <div className={classes.container}>
             <div className={classes.confirmIconBlock}>
-                <ConfirmationNumberOutlinedIcon/>
+                <ConfirmationNumberOutlinedIcon />
                 <h1 className={classes.confirmIconText}>CONFIRM YOUR ORDER</h1>
             </div>
             <div className={classes.tableRow}>
@@ -213,7 +214,7 @@ export default function Payment() {
                 <h2 className={classes.tableRowTitle}>Action</h2>
             </div>
             <div>{!basketItems ? 'you have 0 items in your cart' : choosenItems.map((item, ind) =>
-                <div className={classes.tableRow}>
+                <div key={uniqId()} className={classes.tableRow}>
                     <span className={classes.collParam}> {item.device}</span>
                     <span className={classes.collParam}> {item.model}</span>
                     <span className={classes.collParam}> {location.state.quantity[ind]} </span>
@@ -221,8 +222,8 @@ export default function Payment() {
                     <span
                         className={classes.collParam}> {numberFormat(Math.ceil(item.price * location.state.quantity[ind]), ' ֏')}</span>
                     <span className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
-                                                                   newcolor={ORANGE}
-                                                                   variant="contained">Remove</MyButton></span>
+                        newcolor={ORANGE}
+                        variant="contained">Remove</MyButton></span>
                 </div>)}
             </div>
             <div className={classes.tableRow}>
@@ -245,35 +246,35 @@ export default function Payment() {
             <div className={classes.methods}>
                 <div className={classes.shippingMetods}>
                     <span className={classes.shippingIcom}>
-                        <LocalShippingIcon/>
-                        <h2 className={classes.methodsTitle}>SHIPPING METHOD</h2>
+                        <LocalShippingIcon />
+                        <h2 className={classes.methodsTitle}>SHIPPING</h2>
                     </span>
                     <FormControl component="fieldset">
-                        <FormLabel component="legend">Shipping rate</FormLabel>
+                        {/* <FormLabel component="legend">Shipping rate</FormLabel> */}
                         <RadioGroup aria-label="shipping" name="shipping" value={value} onChange={handleChange}>
-                            <FormControlLabel value="5000" control={<Radio color="primary"/>}
-                                              label="Custom shipping metod 5,000 ֏"/>
-                            <FormControlLabel value="10000" control={<Radio color="primary"/>}
-                                              label="FedEx 2 day  10,000 ֏"/>
-                            <FormControlLabel value="12000" control={<Radio color="primary"/>}
-                                              label="UPS 3 day 12,000 ֏"/>
-                            <FormControlLabel value="18000" control={<Radio color="primary"/>}
-                                              label="USPS Media mail 1 day 18,000 ֏"/>
+                            <FormControlLabel value="5000" control={<Radio color="primary" />}
+                                label="Standart 5,000 ֏" />
+                            <FormControlLabel value="10000" control={<Radio color="primary" />}
+                                label="FedEx 2 day  10,000 ֏" />
+                            {/* <FormControlLabel value="12000" control={<Radio color="primary" />}
+                                label="UPS 3 day 12,000 ֏" />
+                            <FormControlLabel value="18000" control={<Radio color="primary" />}
+                                label="USPS Media mail 1 day 18,000 ֏" /> */}
                         </RadioGroup>
                     </FormControl>
                 </div>
                 <div className={classes.paymentMetods}>
                     <span className={classes.paymentIcon}>
-                        <AccountBalanceIcon/>
-                        <h2 className={classes.methodsTitle}>PAYMENT METHOD</h2>
+                        <AccountBalanceIcon />
+                        <h2 className={classes.methodsTitle}>PAYMENT</h2>
                     </span>
-                    <FormControl component="fieldset1">
+                    <FormControl >
                         <RadioGroup aria-label="payment" name="payment" value={valuePayment}
-                                    onChange={handleChange1}>
-                            <FormControlLabel value="bank" control={<Radio color="primary"/>}
-                                              label="Bank Transfer"/>
-                            <FormControlLabel value="cashe" control={<Radio color="primary"/>}
-                                              label="Cashe on delivery"/>
+                            onChange={handleChange1}>
+                            <FormControlLabel value="bank" control={<Radio color="primary" />}
+                                label="Bank Transfer" />
+                            <FormControlLabel value="cashe" control={<Radio color="primary" />}
+                                label="Cashe on delivery" />
                         </RadioGroup>
                     </FormControl>
                 </div>
@@ -305,10 +306,10 @@ export default function Payment() {
                                 id: 'country-native-required',
                             }}
                         >
-                            <option aria-label="None" value=""/>
+                            <option aria-label="None" value="" />
                             <option value={10}>Armenia</option>
                             <option value={20}>Georgia</option>
-                            <option value={30}>iran</option>
+                            <option value={30}>Iran</option>
                             <option value={40}>Russia</option>
                             <option value={50}>United Kingdom</option>
                             <option value={60}>United States</option>

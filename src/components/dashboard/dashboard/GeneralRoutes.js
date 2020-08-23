@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { HOME_URL } from "../../services/api/Navigations";
+import { HOME_URL, LOGIN_URL } from "../../services/api/Navigations";
 import Header from "../Header";
 import Carousel from "../carousel/Carousel";
 import CategoryList from "../category/CategoryList";
@@ -13,6 +13,8 @@ import Payment from "../payment/Payment";
 import FavItem from "../favourites/FavItem";
 import FavItemList from "../favourites/FavItemList";
 
+import { useSelector } from "react-redux";
+
 const useStyles = makeStyles({
     dashboardParent: {
         overflowX: 'hidden'
@@ -24,7 +26,7 @@ const useStyles = makeStyles({
 
 export default function GeneralRoutes() {
     const classes = useStyles();
-
+    const currentUser = useSelector(state => state.user)
     return (
         <Switch className={classes.dashboardParent}>
             <Route path={HOME_URL}>
@@ -46,11 +48,11 @@ export default function GeneralRoutes() {
                 </div>
             </Route>
             <Route exact path='/favourites'>
-                <div>
+                {currentUser ? <div>
                     <Header />
                     <FavItemList />
                     <Footer />
-                </div>
+                </div> : <Redirect to={LOGIN_URL} />}
             </Route>
             <Route exact path='/categories/:category'>
                 <div className={classes.mainContent}>
