@@ -1,5 +1,5 @@
 import React from "react";
-import {BLACK, MyButton} from "../../../main/constants/Constants";
+import {BLACK, MyButton} from "../../../main/constants/constants";
 import RemoveRoundedIcon from "@material-ui/icons/RemoveRounded";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import {makeStyles} from "@material-ui/core/styles";

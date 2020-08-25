@@ -1,13 +1,14 @@
-import React, {createRef} from "react";
+import React, {createRef, useContext} from "react";
 import NumberFormat from "react-number-format";
 import EditIcon from "@material-ui/icons/Edit";
 import {makeStyles} from "@material-ui/core/styles";
-import {BLACK} from "../../../main/constants/Constants";
+import {BLACK} from "../../../main/constants/constants";
 import {db} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {updatePrice} from "../../../services/redux/actions/basketAction";
 import {getError} from "../../../services/redux/actions/uiActions";
+import {TypeContext} from "../../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     display: {
@@ -43,6 +44,7 @@ export default function Price(props) {
     const {price, setPrice, count} = props
     const {id} = useParams()
     const dispatch = useDispatch()
+    const isAdmin = useContext(TypeContext)
     const classes = useStyles()
     const ref = createRef()
 
@@ -59,19 +61,19 @@ export default function Price(props) {
             dispatch(updatePrice(devPrice, id))
         }).catch(err => dispatch(getError(err.message)))
     }
-
+console.log(isAdmin)
     return (
         <div className={classes.display}>
             <h2 className={classes.relative}>
                 <NumberFormat value={price * count}
-                              displayType={'input'}
+                              displayType={!isAdmin && 'text'}
                               thousandSeparator={true}
                               suffix={'֏'}
                               className={classes.input}
                               onBlur={(e) => onBlur('price', e)}/>
                 <input className={classes.hiddenInput} ref={ref}/>
             </h2>
-            <EditIcon onClick={onFocus} className={classes.editIcon}/>
+            {isAdmin && <EditIcon onClick={onFocus} className={classes.editIcon}/>}
         </div>
     )
 }

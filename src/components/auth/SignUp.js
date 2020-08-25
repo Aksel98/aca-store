@@ -5,7 +5,7 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import MailIcon from "@material-ui/icons/Mail";
 import PhoneIcon from '@material-ui/icons/Phone';
-import {BLACK, MyButton} from "../main/constants/Constants"
+import {BLACK, MyButton} from "../main/constants/constants"
 import EmailIcon from '@material-ui/icons/Email';
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";

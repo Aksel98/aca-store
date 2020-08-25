@@ -14,7 +14,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import {MyButton, ORANGE, BLUE} from "../../main/constants/Constants";
+import {MyButton, ORANGE, BLUE} from "../../main/constants/constants";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {useMediaQuery} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";

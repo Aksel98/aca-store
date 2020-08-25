@@ -1,7 +1,7 @@
 import React from "react";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
-import {GREY, MyButton, ORANGE} from "../../main/constants/Constants";
+import {GREY, MyButton, ORANGE} from "../../main/constants/constants";
 import {useSelector, useDispatch} from 'react-redux';
 import DeviceCount from "../device/count/DeviceCount";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";

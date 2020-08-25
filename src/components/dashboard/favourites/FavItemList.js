@@ -8,7 +8,7 @@ import {useHistory} from 'react-router-dom';
 import {Button, makeStyles} from '@material-ui/core';
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import {BLACK} from "../../main/constants/Constants";
+import {BLACK, BLUE} from "../../main/constants/constants";
 import {useTranslation} from "react-i18next";
 import Loader from "../../main/loader/Loader";
 import {getError} from "../../services/redux/actions/uiActions";
@@ -28,8 +28,8 @@ const useStyles = makeStyles({
         textAlign: 'center',
         color: BLACK
     },
-    emptyCart: {
-        color: BLACK,
+    emptyFavourites: {
+        color: BLUE,
         textAlign: 'center'
     },
 })
@@ -83,7 +83,7 @@ const FavItemList = () => {
                          device={data.device}
                          favItems={favItems}
                          setFavItems={setFavItems}/>)}
-            </div> : <h1 className={classes.emptyCart}>{t('youHaveNoFavourites')}</h1>}
+            </div> : <h1 className={classes.emptyFavourites}>{t('youHaveNoFavourites')}</h1>}
         </div>
     )
 }

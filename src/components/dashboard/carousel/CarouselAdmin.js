@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import ModalDialog from "../../main/popups/ModalDialog";
 import uniqId from "uniqid";
-import {BLUE, MyButton, ORANGE} from "../../main/constants/Constants";
+import {BLUE, MyButton, ORANGE} from "../../main/constants/constants";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";

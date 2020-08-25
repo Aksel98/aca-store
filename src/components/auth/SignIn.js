@@ -7,8 +7,8 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import MailIcon from '@material-ui/icons/Mail';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import {BLACK} from "../main/constants/Constants"
-import {MyButton} from "../main/constants/Constants"
+import {BLACK} from "../main/constants/constants"
+import {MyButton} from "../main/constants/constants"
 import {useTranslation} from "react-i18next";
 import PhoneIcon from "@material-ui/icons/Phone";
 import {useHistory} from "react-router-dom";

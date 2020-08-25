@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import SignIn from "./SignIn"
 import {makeStyles} from "@material-ui/core/styles"
-import {BLACK, BLUE_GRADIENT, MyButton, WHITE} from "../main/constants/Constants"
+import {BLACK, BLUE_GRADIENT, MyButton, WHITE} from "../main/constants/constants"
 import SignUp from "./SignUp";
 import {useMediaQuery} from "@material-ui/core";
 import {useTranslation} from "react-i18next";

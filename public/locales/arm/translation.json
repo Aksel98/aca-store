@@ -19,6 +19,7 @@
   "modalTitleForAddFavoriteItems": "Եթե ցանկանում եք ունենալ նախընտրած ապրանքներ, խնդրում ենք մուտք գործել",
   "youHaveNoFavourites": "Դուք չունեք նախընտրած ապրանքներ",
   "addToCart": "Ավելացնել քարտին",
+  "addCategory": "Ավելացնել կատեգորիա",
   "removeFromCart": "Հեռացրել զամբյուղից",
   "yes": "Այո",
   "cancel": "Չեղարկել",
@@ -45,5 +46,7 @@
   "buy": "Գնել",
   "makeMain": "Դարձնել հիմնական",
   "yourCartIsEmpty": "Ձեր զամբյուղը դատարկ է",
-  "confirmAndPay": "Հաստատեք և վճարեք"
+  "confirmAndPay": "Հաստատեք և վճարեք",
+  "loginForPay": "Մուտք գործեք վճարման համար",
+  "totalPrice": "Ընդհանուր գինը"
 }

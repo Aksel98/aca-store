@@ -1,7 +1,7 @@
 import React from "react";
 import {numberFormat} from "../../../main/format-numbers/NumberFormat";
 import {makeStyles} from "@material-ui/core/styles";
-import {BLACK, GREY} from "../../../main/constants/Constants";
+import {BLACK, GREY} from "../../../main/constants/constants";
 import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({

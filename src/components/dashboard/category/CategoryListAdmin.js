@@ -5,7 +5,7 @@ import Fab from "@material-ui/core/Fab";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import {db, storage} from "../../services/firebase/Firebase";
 import {makeStyles} from "@material-ui/core";
-import {ORANGE} from "../../main/constants/Constants";
+import {ORANGE} from "../../main/constants/constants";
 import {useTranslation} from "react-i18next";
 import {getError} from "../../services/redux/actions/uiActions";
 import {useDispatch} from "react-redux";

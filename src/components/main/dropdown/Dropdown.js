@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import ArrowDropDownRoundedIcon from "@material-ui/icons/ArrowDropDownRounded";
-import {BLACK, ORANGE,} from "../constants/Constants"
+import {BLACK, ORANGE,} from "../constants/constants"
 
 const useStyles = makeStyles(() => ({
     root: {

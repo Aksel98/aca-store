@@ -5,7 +5,7 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import uniqId from 'uniqid';
 import TotalPrice from "./TotalPrice";
-import {ORANGE, BLUE, BLACK} from "../../main/constants/Constants";
+import {ORANGE, BLUE, BLACK} from "../../main/constants/constants";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
@@ -38,7 +38,7 @@ const useStyles = makeStyles({
     },
     emptyCart: {
         textAlign: 'center',
-        color: BLACK
+        color: BLUE
     },
     backIcon: {
         marginLeft: 20

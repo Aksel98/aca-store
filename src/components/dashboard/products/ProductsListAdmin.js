@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import TextField from "@material-ui/core/TextField";
 import ModalDialog from "../../main/popups/ModalDialog";
 import {makeStyles} from "@material-ui/core";
-import {ORANGE} from "../../main/constants/Constants";
+import {ORANGE} from "../../main/constants/constants";
 import uniqId from "uniqid";
 import {db} from "../../services/firebase/Firebase";
 import {useTranslation} from "react-i18next";

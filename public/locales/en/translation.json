@@ -35,6 +35,7 @@
   "add": "Add",
   "view": "View",
   "addDevice": "Add device",
+  "addCategory": "Add category",
   "areYouSure": "Are you sure?",
   "creditFor": "Credit for",
   "month": "months",
@@ -45,5 +46,7 @@
   "buy": "Buy",
   "makeMain": "Make main",
   "yourCartIsEmpty": "Your cart is empty",
-  "confirmAndPay": "Confirm and pay"
+  "confirmAndPay": "Confirm and pay",
+  "loginForPay": "Login for pay",
+  "totalPrice": "Total price"
 }

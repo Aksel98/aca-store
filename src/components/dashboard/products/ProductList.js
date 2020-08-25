@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Product from './Product';
 import uniqId from 'uniqid';
 import {db} from '../../services/firebase/Firebase';
@@ -9,13 +9,14 @@ import {LOGIN_URL} from "../../main/constants/navigations";
 import {useTranslation} from "react-i18next";
 import Filters from "./Filters";
 import Loader from "../../main/loader/Loader";
-import {BLUE, MyButton} from "../../main/constants/Constants";
+import {BLUE, MyButton} from "../../main/constants/constants";
 import Pagination from '@material-ui/lab/Pagination';
 import Fab from '@material-ui/core/Fab';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import ProductsListAdmin from "./ProductsListAdmin";
 import {getError} from "../../services/redux/actions/uiActions";
 import {useDispatch} from "react-redux";
+import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -69,6 +70,7 @@ export default function ProductList() {
     const [page, setPage] = useState(1);
     const [paginationSize, setPaginationSize] = useState(0)
     const [limit] = useState(6)
+    const isAdmin = useContext(TypeContext)
     const dispatch = useDispatch()
     const history = useHistory();
     let {category} = useParams()
@@ -162,9 +164,9 @@ export default function ProductList() {
                     <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
                 </div>}
                 {loader ? <Loader/> : <div>
-                    <div onClick={openPopup} className={classes.btnParent}>
+                    {isAdmin && <div onClick={openPopup} className={classes.btnParent}>
                         <MyButton color="primary" maxwidth="75%" variant="contained">{t('addDevice')}</MyButton>
-                    </div>
+                    </div>}
                     <div className={classes.products}>
                         {products.length ? products.map((item) => (
                             <Product openModal={openModal}

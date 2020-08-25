@@ -1,15 +1,16 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
 import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
 import {makeStyles} from "@material-ui/core/styles";
 import {storageRef} from "../../services/firebase/Firebase";
 import Loader from "../../main/loader/Loader";
-import {WHITE} from "../../main/constants/Constants"
+import {WHITE} from "../../main/constants/constants"
 import Fab from '@material-ui/core/Fab';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CarouselAdmin from "./CarouselAdmin";
 import {getError} from "../../services/redux/actions/uiActions";
 import {useDispatch} from "react-redux";
+import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     display: {
@@ -71,6 +72,7 @@ export default function Carousel() {
     const [url, setUrl] = useState('');
     const [deletedImage, setDeletedImage] = useState(null);
     const dispatch = useDispatch()
+    const isAdmin = useContext(TypeContext)
     const classes = useStyles()
     const isMounted = useRef(null);
 
@@ -128,11 +130,11 @@ export default function Carousel() {
     return (
         imagesList.length ?
             <div className={classes.display}>
-                <div className={classes.upload} onClick={openModal}>
+                {isAdmin && <div className={classes.upload} onClick={openModal}>
                     <Fab color="primary">
                         <CloudUploadIcon/>
                     </Fab>
-                </div>
+                </div>}
                 <ArrowBackIosSharpIcon className={`${classes.arrowIcon} ${classes.leftIcon}`} onClick={backward}/>
                 <img src={imagesList[index]} className={classes.carouselImg} alt=''/>
                 <ArrowForwardIosSharpIcon className={`${classes.arrowIcon} ${classes.rightIcon}`} onClick={forward}/>

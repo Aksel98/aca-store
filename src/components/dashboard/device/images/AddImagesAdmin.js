@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {BLUE, MyButton, ORANGE} from "../../../main/constants/Constants";
+import {BLUE, MyButton, ORANGE} from "../../../main/constants/constants";
 import AddIcon from "@material-ui/icons/Add";
 import {makeStyles} from "@material-ui/core/styles";
 import {db, storage} from "../../../services/firebase/Firebase";

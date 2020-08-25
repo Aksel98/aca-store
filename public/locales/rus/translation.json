@@ -19,6 +19,7 @@
   "modalTitleForAddFavoriteItems": "Если вы хотите иметь любимые предметы, пожалуйста, авторизуйтесь",
   "youHaveNoFavourites": "У вас нет любимых вещей",
   "addToCart": "Добавить в корзину",
+  "addCategory": "Добавить категорию",
   "removeFromCart": "Удалить из корзины",
   "yes": "Да",
   "cancel": "Отмена",
@@ -45,5 +46,7 @@
   "buy": "Купить",
   "makeMain": "Сделать основной",
   "yourCartIsEmpty": "Ваша корзина пуста",
-  "confirmAndPay": "Подтвердить и оплатить"
+  "confirmAndPay": "Подтвердить и оплатить",
+  "loginForPay": "Вход для оплаты",
+  "totalPrice": "Итоговая цена"
 }

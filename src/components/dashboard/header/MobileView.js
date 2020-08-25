@@ -1,5 +1,5 @@
 import React from "react";
-import {ARM_FLAG, BLUE, EN_FLAG, LOGO, ORANGE, RUS_FLAG, WHITE} from "../../main/constants/Constants";
+import {ARM_FLAG, BLUE, EN_FLAG, LOGO, ORANGE, RUS_FLAG, WHITE} from "../../main/constants/constants";
 import {Link, useLocation} from "react-router-dom";
 import {HOME_URL, LOGIN_URL} from "../../main/constants/navigations";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -76,7 +76,11 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'row',
         position: 'relative',
-        margin: '0 5px'
+        margin: '0 5px',
+        borderBottom: '2px solid transparent',
+        '&:hover': {
+            borderBottom: `2px solid ${ORANGE}`
+        },
     },
     display: {
         display: "flex",

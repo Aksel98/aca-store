@@ -1,7 +1,7 @@
 import React from 'react';
 import {makeStyles, styled} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
-import {BLACK} from "../../main/constants/Constants"
+import {BLACK} from "../../main/constants/constants"
 import {Hidden, useMediaQuery} from "@material-ui/core";
 import WebView from "./WebView";
 import MobileView from "./MobileView";
