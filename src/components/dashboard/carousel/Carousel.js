@@ -8,6 +8,8 @@ import {WHITE} from "../../main/constants/Constants"
 import Fab from '@material-ui/core/Fab';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CarouselAdmin from "./CarouselAdmin";
+import {getError} from "../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles({
     display: {
@@ -68,13 +70,14 @@ export default function Carousel() {
     const [modal, setModal] = useState(false)
     const [url, setUrl] = useState('');
     const [deletedImage, setDeletedImage] = useState(null);
+    const dispatch = useDispatch()
     const classes = useStyles()
     const isMounted = useRef(null);
 
     useEffect(() => {
         // isMounted.current = true;
         // if (isMounted.current) {
-            getImageRefs();
+        getImageRefs();
         // }
         // return () => isMounted.current = false;
     }, [])
@@ -104,7 +107,7 @@ export default function Carousel() {
                         setImagesList(newImagesList)
                     }));
                 })
-            }).catch(e => console.log(e));
+            }).catch(err => dispatch(getError(err.message)));
         } catch (e) {
             console.log(e)
         }

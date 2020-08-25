@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import uniqId from 'uniqid';
 import {useEffect} from 'react';
 import {db} from '../../services/firebase/Firebase';
@@ -11,6 +11,7 @@ import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import {BLACK} from "../../main/constants/Constants";
 import {useTranslation} from "react-i18next";
 import Loader from "../../main/loader/Loader";
+import {getError} from "../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     main: {
@@ -31,8 +32,8 @@ const useStyles = makeStyles({
 const FavItemList = () => {
     const classes = useStyles();
     const favIds = useSelector(state => state.favourites);
+    const dispatch = useDispatch()
     const [favItems, setFavItems] = useState([]);
-    const {t} = useTranslation()
     const history = useHistory()
 
     useEffect(() => {
@@ -50,9 +51,9 @@ const FavItemList = () => {
                         tempArr.push(tempObj)
                     })
                     setFavItems(tempArr)
-                }).catch(err => console.log(err))
-        } catch (error) {
-            console.log('Sorry, could not get the Favourites data')
+                }).catch(err => dispatch(getError(err.message)))
+        } catch (e) {
+            console.log(e)
         }
     }
 

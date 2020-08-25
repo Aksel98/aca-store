@@ -7,6 +7,7 @@ import {db} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {updatePrice} from "../../../services/redux/actions/basketAction";
+import {getError} from "../../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     display: {
@@ -56,7 +57,7 @@ export default function Price(props) {
         }).then(() => {
             setPrice(devPrice)
             dispatch(updatePrice(devPrice, id))
-        }).catch(err => console.log(err))
+        }).catch(err => dispatch(getError(err.message)))
     }
 
     return (

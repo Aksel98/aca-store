@@ -52,7 +52,7 @@ export default function CategoryList() {
                 setCategory(tempArr);
             });
         } catch (e) {
-            console.log("can not  get the docs:", e);
+            console.log(e);
         }
     }
 

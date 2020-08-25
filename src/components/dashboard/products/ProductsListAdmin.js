@@ -7,6 +7,8 @@ import uniqId from "uniqid";
 import {db} from "../../services/firebase/Firebase";
 import {useTranslation} from "react-i18next";
 import {useLocation, useHistory} from "react-router-dom";
+import {getError} from "../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles(() => ({
     newCategoryName: {
@@ -17,6 +19,7 @@ const useStyles = makeStyles(() => ({
 export default function ProductsListAdmin(props) {
     const {open, isOpen, setNewDevice, deleteModal, openDeleteModal} = props
     const [newDeviceName, setNewDeviceName] = useState('');
+    const dispatch = useDispatch()
     const location = useLocation();
     const history = useHistory();
     const {t} = useTranslation()
@@ -35,14 +38,14 @@ export default function ProductsListAdmin(props) {
             isOpen(false)
             setNewDevice(true)
             history.push(`${location}/${id}`)
-        }).catch(err => console.log(err))
+        }).catch(err => dispatch(getError(err.message)))
     }
 
     function deleteDevice() {
         db.collection("product").doc(deleteModal.id).delete().then(() => {
             setNewDevice(true)
             openDeleteModal(false)
-        }).catch(err => console.log(err))
+        }).catch(err => dispatch(getError(err.message)))
     }
 
     function onChange(e) {

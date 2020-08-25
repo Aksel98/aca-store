@@ -21,6 +21,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {removeFromBasket} from "../../services/redux/actions/basketAction";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import {getError} from "../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     container: {
@@ -171,9 +172,9 @@ export default function Payment() {
                         tempArr.push({...tempObj});
                     })
                     setChosenItems(tempArr);
-                }).catch(err => console.log('error making basket info query', err));
+                }).catch(err => dispatch(getError(err.message)));
             } catch (e) {
-                console.log("can not  get basket items:", e);
+                console.log(e);
             }
         }
     }

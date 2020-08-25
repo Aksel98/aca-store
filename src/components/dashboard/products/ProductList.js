@@ -14,6 +14,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import Fab from '@material-ui/core/Fab';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import ProductsListAdmin from "./ProductsListAdmin";
+import {getError} from "../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -67,6 +69,7 @@ export default function ProductList() {
     const [page, setPage] = useState(1);
     const [paginationSize, setPaginationSize] = useState(0)
     const [limit] = useState(6)
+    const dispatch = useDispatch()
     const history = useHistory();
     let {category} = useParams()
     const {t} = useTranslation()
@@ -106,9 +109,9 @@ export default function ProductList() {
                 } else {
                     setLoader(false)
                 }
-            }).catch(err => console.log(err));
+            }).catch(err => dispatch(getError(err.message)));
         } catch (e) {
-            console.log("can not  get the docs:", e);
+            console.log(e);
         }
         setNewDevice(false)
     }

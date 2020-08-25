@@ -8,6 +8,8 @@ import AddIcon from "@material-ui/icons/Add";
 import {makeStyles} from "@material-ui/core/styles";
 import {storage} from "../../services/firebase/Firebase";
 import {useTranslation} from "react-i18next";
+import {getError} from "../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles({
     adminCarouselImg: {
@@ -47,6 +49,7 @@ const useStyles = makeStyles({
 export default function CarouselAdmin(props) {
     const [image, setImage] = useState(null);
     const {isOpen, open, images, setUrl, setDeletedImage} = props
+    const dispatch = useDispatch()
     const {t} = useTranslation()
     const classes = useStyles()
 
@@ -86,7 +89,7 @@ export default function CarouselAdmin(props) {
                 setDeletedImage(url)
             }
         ).catch((err) => {
-            console.log(err)
+            dispatch(getError(err.message))
         });
     }
 

@@ -6,6 +6,8 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import {db} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {getError} from "../../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles({
     additionalImagesParent: {
@@ -46,6 +48,7 @@ const useStyles = makeStyles({
 
 export default function DeviceImages(props) {
     const {changeImage, images, setImages, openDeletePopup} = props
+    const dispatch = useDispatch()
     const {id} = useParams()
     const {t} = useTranslation()
     const classes = useStyles()
@@ -60,7 +63,7 @@ export default function DeviceImages(props) {
         }).then(() => {
             setImages(newImages)
             changeImage(img)
-        }).catch(err => console.log(err))
+        }).catch(err => dispatch(getError(err.message)))
     }
 
     return (
