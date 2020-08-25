@@ -9,6 +9,7 @@ import {useSelector} from "react-redux";
 import Header from "../header/Header";
 import FavItemList from "../favourites/FavItemList";
 import Footer from "../footer/Footer";
+import SnackBar from "../../main/popups/SnackBar";
 
 const useStyles = makeStyles({
     loginBg: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles({
 
 export default function Dashboard() {
     const currentUser = useSelector(state => state.user)
+    const error = useSelector(state => state.error)
     const classes = useStyles()
 
     return (
@@ -54,6 +56,7 @@ export default function Dashboard() {
                     </Route>
                     <GeneralRoutes/>
                 </Switch>}
+            {error && <SnackBar message={error} error/>}
         </Router>
     )
 }

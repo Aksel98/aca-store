@@ -8,7 +8,6 @@ import {useTranslation} from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
-import SnackBar from "../main/popups/SnackBar";
 import {HOME_URL} from "../services/api/Navigations";
 import {useDispatch} from "react-redux"
 import {signInUser, signUpUser} from "../services/redux/actions/userAction";
@@ -99,7 +98,6 @@ export default function Login() {
     const [lastname, setLast] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
     const [rightPanel, setRightPanel] = useState(false)
     const dispatch = useDispatch()
     const media = useMediaQuery('(min-width:600px)');
@@ -118,7 +116,6 @@ export default function Login() {
     }
 
     function changePage() {
-        setError('')
         setEmail('')
         setPassword('')
     }
@@ -140,7 +137,6 @@ export default function Login() {
 
     function onValueChange(e) {
         e.target.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)
-        setError('')
     }
 
     return (
@@ -151,7 +147,6 @@ export default function Login() {
                 lastname={lastname}
                 email={email}
                 password={password}
-                error={error}
                 onFirstChange={onFirstChange}
                 onLastChange={onLastChange}
                 onValueChange={onValueChange}
@@ -161,7 +156,6 @@ export default function Login() {
                 media={media}/>
             <SignIn email={email}
                     password={password}
-                    error={error}
                     onValueChange={onValueChange}
                     signIn={signIn}
                     rightPanel={rightPanel}
@@ -185,7 +179,6 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-            {error && <SnackBar message={error} error/>}
         </div>
     )
 }
