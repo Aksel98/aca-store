@@ -85,7 +85,7 @@ export default function FavItem(props) {
 
     return (
         <div className={classes.container}>
-            <img className={classes.image} src={image} alt=""/>
+            <img className={classes.image} src={image} alt="" />
             <div className={classes.main}>
                 <div>
                     <div className={classes.infoName}>{model}</div>
@@ -98,13 +98,13 @@ export default function FavItem(props) {
             </div>
             <div>
                 <MyButton color="primary"
-                          maxwidth="90%"
-                          variant="contained"
-                          onClick={() => dispatch(addToBasket(id, price, device))}>{t('buy')}</MyButton>
+                    maxwidth="90%"
+                    variant="contained"
+                    onClick={() => dispatch(addToBasket(id, price, device))}>{t('buy')}</MyButton>
                 <MyButton maxwidth="90%"
-                          variant="contained"
-                          className={classes.distance}
-                          onClick={removeFavItem}>{t('remove')}</MyButton>
+                    variant="contained"
+                    className={classes.distance}
+                    onClick={removeFavItem}>{t('remove')}</MyButton>
             </div>
         </div>
     )

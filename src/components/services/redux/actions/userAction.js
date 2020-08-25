@@ -75,8 +75,8 @@ export const signUpUser = (email, password, name, surname, history, setPassword)
         .catch(err => {
             dispatch(getError(err.message))
         }).finally(() => {
-        setPassword('')
-    })
+            setPassword('')
+        })
 }
 
 export const getUserData = () => (dispatch) => {

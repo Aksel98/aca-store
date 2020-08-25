@@ -9,7 +9,9 @@ import ProductList from "../products/ProductList";
 import {makeStyles} from "@material-ui/core/styles";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
+import Payment from "../payment/Payment";
 import {useMediaQuery} from "@material-ui/core";
+import UsersList from "../../admin/UsersList";
 
 const useStyles = makeStyles({
     dashboardParent: {
@@ -17,7 +19,7 @@ const useStyles = makeStyles({
     },
     categoryList: {
         minHeight: 790
-    } ,
+    },
     productList: {
         height: props => props ? 790 : 730
     }
@@ -48,9 +50,16 @@ export default function GeneralRoutes() {
                 <Footer/>
             </Route>
             <Route exact path='/categories/:category/:id'>
+                <div className={classes.mainContent}>
                     <Header/>
                     <Device/>
+                </div>
                 <Footer/>
+            </Route>
+            <Route exact path='/userslist'>
+                <div>
+                    <UsersList />
+                </div>
             </Route>
             <Redirect to={HOME_URL}/>
         </Switch>
