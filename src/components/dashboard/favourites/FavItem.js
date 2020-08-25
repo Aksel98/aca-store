@@ -1,7 +1,7 @@
 import React from "react";
-import {makeStyles, useMediaQuery, Button} from "@material-ui/core";
+import {makeStyles, useMediaQuery} from "@material-ui/core";
 import {GREY, MyButton} from "../../main/constants/constants";
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {removeFromFav} from "../../services/redux/actions/favouriteActions";
 import {addToBasket} from "../../services/redux/actions/basketAction";

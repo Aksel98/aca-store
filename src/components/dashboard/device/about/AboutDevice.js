@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import MainParameters from "./MainParameters";
 
 export default function AboutDevice(props) {
