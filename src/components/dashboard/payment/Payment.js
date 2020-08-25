@@ -38,7 +38,7 @@ const useStyles = makeStyles({
         fontSize: "20px"
     },
     tableRow: {
-        display:  props => !props && "flex",
+        display: props => !props && "flex",
         justifyContent: "space-around",
         borderBottom: `1px solid ${ORANGE}`,
         textAlign: "center",
@@ -140,9 +140,7 @@ const useStyles = makeStyles({
 })
 
 export default function Payment() {
-    const [state, setState] = useState({country: '', name: ' ',});
-    const [value, setValue] = useState("5000");
-    const [valuePayment, setValuePayment] = useState("bank");
+    const [order, setOrder] = useState({city: '', address: '', zip: '', ship: '', pay: '', orderItems: []});
     const [chosenItems, setChosenItems] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
     const basketItems = useSelector(state => state.basket);
@@ -180,21 +178,17 @@ export default function Payment() {
         }
     }
 
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
+    const handleDataChange = (e) => {
+        const oldState = {...order};
+        oldState[e.target.id] = e.target.value;
+        console.log(e.target.value)
+        setOrder({...oldState})
+    }
 
-    const handleChange1 = (event) => {
-        setValuePayment(event.target.value);
-    };
-
-    const handleChange2 = (event) => {
-        const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value,
-        })
-    };
+    const handleRadioChange = (e) => {
+        const {name, value} = e.target;
+        setOrder({...order, [name]: value})
+    }
 
     const removeItem = (id) => {
         let tempArr = [...chosenItems];
@@ -248,12 +242,12 @@ export default function Payment() {
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>Sipping Rate</span>
-                <span className={classes.tableRowItemValue}>{numberFormat(Math.ceil(value), ' ֏')}</span>
+                <span className={classes.tableRowItemValue}>{numberFormat(Math.ceil(+order.ship), ' ֏')}</span>
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>Total</span>
                 <span
-                    className={classes.tableRowItemValue}> {numberFormat(Math.ceil(+value + subTotal * 1.2), ' ֏')}</span>
+                    className={classes.tableRowItemValue}> {numberFormat(Math.ceil(+order.ship + subTotal * 1.2), ' ֏')}</span>
             </div>
             <div className={classes.methods}>
                 <div className={classes.shippingMetods}>
@@ -263,15 +257,12 @@ export default function Payment() {
                     </span>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Shipping rate</FormLabel>
-                        <RadioGroup aria-label="shipping" name="shipping" value={value} onChange={handleChange}>
-                            <FormControlLabel value="5000" control={<Radio color="primary"/>}
-                                              label="Custom shipping metod 5,000 ֏"/>
-                            <FormControlLabel value="10000" control={<Radio color="primary"/>}
+                        <RadioGroup aria-label="shipping" id='ship' name="shipping" value={order.ship}
+                                    onChange={handleRadioChange}>
+                            <FormControlLabel name='ship' value="5000" control={<Radio color="primary"/>}
+                                              label="Standart 5,000 ֏"/>
+                            <FormControlLabel name='ship' value="10000" control={<Radio color="primary"/>}
                                               label="FedEx 2 day  10,000 ֏"/>
-                            <FormControlLabel value="12000" control={<Radio color="primary"/>}
-                                              label="UPS 3 day 12,000 ֏"/>
-                            <FormControlLabel value="18000" control={<Radio color="primary"/>}
-                                              label="USPS Media mail 1 day 18,000 ֏"/>
                         </RadioGroup>
                     </FormControl>
                 </div>
@@ -281,25 +272,25 @@ export default function Payment() {
                         <h2 className={classes.methodsTitle}>PAYMENT METHOD</h2>
                     </span>
                     <FormControl>
-                        <RadioGroup aria-label="payment" name="payment" value={valuePayment}
-                                    onChange={handleChange1}>
-                            <FormControlLabel value="bank" control={<Radio color="primary"/>}
+                        <RadioGroup aria-label="payment" value={order.pay}
+                                    onChange={handleRadioChange}>
+                            <FormControlLabel name='pay' value="bank" control={<Radio color="primary"/>}
                                               label="Bank Transfer"/>
-                            <FormControlLabel value="cashe" control={<Radio color="primary"/>}
-                                              label="Cashe on delivery"/>
+                            <FormControlLabel name='pay' value="cash" control={<Radio color="primary"/>}
+                                              label="Cash on delivery"/>
                         </RadioGroup>
                     </FormControl>
                 </div>
             </div>
             <div className={classes.transfersInfo}>
-                <div className={classes.transfersInfoblock}>
+                {order.pay === 'bank' && <div className={classes.transfersInfoblock}>
                     <h2 className={classes.infoTitle}>BANK TRANSFER INSTRUCTIONS</h2>
                     <p className={classes.infoText}>Bank Name: Ameriabank</p>
                     <p className={classes.infoText}>SWIFT / BIC: ARMIAM22</p>
                     <p className={classes.infoText}>a/c: 103002101576</p>
                     <p className={classes.infoText}>Addres: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
                     <p className={classes.infoText}>Your Order will not ship until we receive payment.</p>
-                </div>
+                </div>}
                 {!media && <div className={classes.transfersInfobtn}>
                     <MyButton className={classes.confirmBtn} newcolor={ORANGE} variant="contained">Confirm
                         order</MyButton>
@@ -309,21 +300,14 @@ export default function Payment() {
                     <FormControl required className={classes.formControl}>
                         <InputLabel htmlFor="country-native-required">Country</InputLabel>
                         <Select
-                            native
-                            value={state.country}
-                            onChange={handleChange2}
-                            name="country"
-                            inputProps={{
-                                id: 'country-native-required',
-                            }}
-                        >
-                            <option aria-label="None" value=""/>
-                            <option value={10}>Armenia</option>
-                            <option value={20}>Georgia</option>
-                            <option value={30}>iran</option>
-                            <option value={40}>Russia</option>
-                            <option value={50}>United Kingdom</option>
-                            <option value={60}>United States</option>
+                            id='country'
+                            onChange={handleDataChange}>
+                            <option aria-label="None" value={order.country}/>
+                            <option id="country">Armenia</option>
+                            <option id="country">Georgia</option>
+                            <option id="country">Iran</option>
+                            <option id="country">Russia</option>
+                            <option id="country">United States</option>
                         </Select>
                     </FormControl>
                     <TextField
@@ -331,19 +315,22 @@ export default function Payment() {
                         id="city"
                         label="City"
                         placeholder="eg. Yerevan"
-                    />
+                        onChange={handleDataChange}
+                        value={order.city}/>
                     <TextField
                         required
-                        id="address1"
-                        label="Address Line 1"
+                        id="address"
+                        label="Address"
                         placeholder="Street address, company name"
-                    />
+                        onChange={handleDataChange}
+                        value={order.address}/>
                     <TextField
                         required
                         id="zip"
                         label="Zip"
                         placeholder="eg. 1520"
-                    />
+                        onChange={handleDataChange}
+                        value={order.zip}/>
                 </div>
             </div>
             {media && <div className={classes.transfersInfobtn}>

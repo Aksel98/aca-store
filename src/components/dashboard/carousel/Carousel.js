@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
 import ArrowBackIosSharpIcon from '@material-ui/icons/ArrowBackIosSharp';
 import {makeStyles} from "@material-ui/core/styles";
@@ -69,9 +69,14 @@ export default function Carousel() {
     const [url, setUrl] = useState('');
     const [deletedImage, setDeletedImage] = useState(null);
     const classes = useStyles()
+    const isMounted = useRef(null);
 
     useEffect(() => {
-        getImageRefs();
+        // isMounted.current = true;
+        // if (isMounted.current) {
+            getImageRefs();
+        // }
+        // return () => isMounted.current = false;
     }, [])
 
     useEffect(() => {
