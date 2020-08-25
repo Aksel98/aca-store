@@ -300,6 +300,7 @@ export default function Payment() {
                     <FormControl required className={classes.formControl}>
                         <InputLabel htmlFor="country-native-required">Country</InputLabel>
                         <Select
+                            native
                             id='country'
                             onChange={handleDataChange}>
                             <option aria-label="None" value={order.country}/>
