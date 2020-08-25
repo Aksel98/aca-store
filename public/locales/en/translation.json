@@ -72,5 +72,7 @@
   "city": "City",
   "address": "Address",
   "zip": "ZIP",
-  "bankDetails": "Wire Transfer Details"
+  "bankDetails": "Wire Transfer Details",
+  "bank": "Bank",
+  "yourOrderWillShipAfterWeReceivePayment": "Your order will be shipped after we receive the payment"
 }

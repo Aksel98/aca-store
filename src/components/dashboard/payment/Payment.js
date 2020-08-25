@@ -310,11 +310,11 @@ export default function Payment() {
             <div className={classes.transfersInfo}>
                 {order.pay === 'bank' && <div className={classes.transfersInfoblock}>
                     <h2 className={classes.infoTitle}>{t("bankDetails")}</h2>
-                    <p className={classes.infoText}>Bank Name: Ameriabank</p>
+                    <p className={classes.infoText}>{t('bank')}: Ameriabank</p>
                     <p className={classes.infoText}>SWIFT / BIC: ARMIAM22</p>
                     <p className={classes.infoText}>a/c: 103002101576</p>
-                    <p className={classes.infoText}>Addres: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
-                    <p className={classes.infoText}>Your Order will not ship until we receive payment.</p>
+                    <p className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
+                    <p className={classes.infoText}>{t('yourOrderWillShipAfterWeReceivePayment')}</p>
                 </div>}
                 {!media && <div className={classes.transfersInfobtn}>
                     <MyButton className={classes.confirmBtn} newcolor={ORANGE} variant="contained">{t("confirmOrder")}</MyButton>
