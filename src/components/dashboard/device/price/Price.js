@@ -55,7 +55,7 @@ export default function Price(props) {
             price: devPrice
         }).then(() => {
             setPrice(devPrice)
-            dispatch(updatePrice(count, id))
+            dispatch(updatePrice(devPrice, id))
         }).catch(err => console.log(err))
     }
 
