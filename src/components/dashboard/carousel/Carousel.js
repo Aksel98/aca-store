@@ -69,13 +69,15 @@ export default function Carousel() {
     const [url, setUrl] = useState('');
     const [deletedImage, setDeletedImage] = useState(null);
     const classes = useStyles()
-
+    const isMounted = useRef(null);
     useEffect(() => {
-        getImageRefs();
+        isMounted.current = true;
+        if (isMounted.current) getImageRefs();
+        return () => isMounted.current = false;
     }, [])
 
     useEffect(() => {
-        setImagesList([...imagesList, url])
+        if (isMounted.current) { setImagesList([...imagesList, url]) }
     }, [url])
 
     useEffect(() => {
@@ -96,7 +98,7 @@ export default function Carousel() {
                 res.items.forEach((itemRef) => {
                     (itemRef.getDownloadURL().then((url) => {
                         newImagesList.push(url);
-                        setImagesList(newImagesList)
+                        if (isMounted.current) { setImagesList(newImagesList) }
                     }));
                 })
             }).catch(e => console.log(e));

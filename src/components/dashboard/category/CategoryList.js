@@ -45,11 +45,11 @@ export default function CategoryList() {
     }, []);
 
     useEffect(() => {
-        isMountedRef.current = true;
+
         if (isMountedRef.current) {
             getAllCategoryInfo();
         }
-        return () => isMountedRef.current = false
+
     }, [url, isDelete]);
 
     function getAllCategoryInfo() {
@@ -60,7 +60,8 @@ export default function CategoryList() {
                     let temp = doc.data();
                     tempArr.push({ ...temp, id: doc.id });
                 });
-                setCategory(tempArr);
+                if (isMountedRef) { setCategory(tempArr) }
+
             });
         } catch (e) {
             console.log("can not  get the docs:", e);
@@ -75,6 +76,7 @@ export default function CategoryList() {
         setIsDelete(false)
         setId(id)
         setDeletePopup(val)
+
     }
 
     return (
