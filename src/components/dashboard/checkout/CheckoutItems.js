@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     },
     totalPrice: {
         position: 'fixed',
-        top: props => props.media ? (props.mediaMobile ? 140 : 80) : 40,
+        top: props => props.media ? (props.mediaMobile ? 140 : 80) : 55,
         right: 40,
         zIndex: 1
     },
