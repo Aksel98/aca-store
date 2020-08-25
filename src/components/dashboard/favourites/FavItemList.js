@@ -28,13 +28,20 @@ const useStyles = makeStyles({
         textAlign: 'center',
         color: BLACK
     },
+    emptyCart: {
+        color: BLACK,
+        textAlign: 'center'
+    },
 })
 const FavItemList = () => {
-    const classes = useStyles();
+    const [favItems, setFavItems] = useState([]);
+    const [loader, setLoader] = useState(true);
     const favIds = useSelector(state => state.favourites);
     const dispatch = useDispatch()
-    const [favItems, setFavItems] = useState([]);
     const history = useHistory()
+    const {t} = useTranslation()
+    const classes = useStyles();
+
 
     useEffect(() => {
         getFavItems()
@@ -42,35 +49,43 @@ const FavItemList = () => {
 
     function getFavItems() {
         try {
-            db.collection('product')
-                .where('id', 'in', favIds).get()
-                .then(querySnapshot => {
-                    const tempArr = [];
-                    querySnapshot.docs.forEach(doc => {
-                        let tempObj = doc.data();
-                        tempArr.push(tempObj)
-                    })
-                    setFavItems(tempArr)
-                }).catch(err => dispatch(getError(err.message)))
+            if (favIds.length) {
+                db.collection('product')
+                    .where('id', 'in', favIds).get()
+                    .then(querySnapshot => {
+                        const tempArr = [];
+                        querySnapshot.docs.forEach(doc => {
+                            let tempObj = doc.data();
+                            tempArr.push(tempObj)
+                        })
+                        setFavItems(tempArr)
+                        setLoader(false)
+                    }).catch(err => dispatch(getError(err.message)))
+            } else {
+                setLoader(false)
+            }
         } catch (e) {
             console.log(e)
         }
     }
 
+    console.log(favItems)
+
     return (
-        <div className={classes.main}>
+        loader ? <Loader/> : <div className={classes.main}>
             <div onClick={() => history.goBack()} className={classes.backIcon}>
                 <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
             </div>
-            <div className={classes.favItems}>{favItems.map(data =>
+            {favItems.length ? <div className={classes.favItems}>{favItems.map(data =>
                 <FavItem key={uniqId()}
                          image={data?.images[0]}
                          model={data.model}
                          id={data.id}
                          price={data.price}
                          device={data.device}
+                         favItems={favItems}
                          setFavItems={setFavItems}/>)}
-            </div>
+            </div> : <h1 className={classes.emptyCart}>{t('youHaveNoFavourites')}</h1>}
         </div>
     )
 }

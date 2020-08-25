@@ -69,8 +69,7 @@ const useStyles = makeStyles({
 })
 
 export default function FavItem(props) {
-    const {image, model, id, price, device, setFavItems} = props;
-    const favourites = useSelector(state => state.favourites)
+    const {image, model, id, price, device, favItems, setFavItems} = props;
     const dispatch = useDispatch()
     const {t} = useTranslation()
     const media = useMediaQuery('(max-width:600px)');
@@ -78,7 +77,10 @@ export default function FavItem(props) {
 
     function removeFavItem() {
         dispatch(removeFromFav(id))
-        // setFavItems(favourites)
+        const favorites = [...favItems]
+        const currentIndex = favorites.findIndex(el => el.id === id)
+        favorites.splice(currentIndex, 1)
+        setFavItems(favorites)
     }
 
     return (
