@@ -5,22 +5,20 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import uniqId from 'uniqid';
 import TotalPrice from "./TotalPrice";
-import {ORANGE, BLUE, BLACK} from "../../main/constants/constants";
+import {ORANGE, BLUE} from "../../main/constants/constants";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import {getError} from "../../services/redux/actions/uiActions";
+import BackRouter from "../../main/BackRouter";
 
 const useStyles = makeStyles({
     mainWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        marginTop: 70,
+        marginTop: props =>  props.mediaMobile ? 130 : 110,
         justifyContent: 'space-between',
-        height: props => props ? 720 : 678,
+        height: props =>  props.media ? (props.mediaMobile ? 'calc(100vh - 390px)' : 'calc(100vh - 370px)') : 'calc(100vh - 285px)',
         overflow: 'auto',
     },
     cartIcon: {
@@ -32,16 +30,13 @@ const useStyles = makeStyles({
     },
     totalPrice: {
         position: 'fixed',
-        top: 80,
+        top: props => props.media ? (props.mediaMobile ? 140 : 80) : 40,
         right: 40,
         zIndex: 1
     },
     emptyCart: {
         textAlign: 'center',
         color: BLUE
-    },
-    backIcon: {
-        marginLeft: 20
     },
     fullHeight: {
         height: '100%'
@@ -53,9 +48,9 @@ const CheckoutItems = () => {
     const basketItems = useSelector(state => state.basket);
     const dispatch = useDispatch()
     const {t} = useTranslation()
-    const media = useMediaQuery('(min-width:600px)');
-    const classes = useStyles(media);
-    const history = useHistory();
+    const media = useMediaQuery('(max-width:600px)');
+    const mediaMobile = useMediaQuery('(max-width:400px)');
+    const classes = useStyles({media, mediaMobile});
 
     useEffect(() => {
         getCartItems();
@@ -93,9 +88,7 @@ const CheckoutItems = () => {
         <React.Fragment>
             <Header/>
             <div className={classes.mainWrapper}>
-                <div onClick={() => history.goBack()} className={classes.backIcon}>
-                    <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
-                </div>
+                <BackRouter/>
                 <div className={classes.totalPrice}>
                     <TotalPrice/>
                 </div>

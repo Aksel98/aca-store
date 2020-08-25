@@ -4,26 +4,19 @@ import uniqId from 'uniqid';
 import {useEffect} from 'react';
 import {db} from '../../services/firebase/Firebase';
 import FavItem from './FavItem';
-import {useHistory} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from '@material-ui/core';
-import Fab from "@material-ui/core/Fab";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import {BLACK, BLUE} from "../../main/constants/constants";
 import {useTranslation} from "react-i18next";
 import Loader from "../../main/loader/Loader";
 import {getError} from "../../services/redux/actions/uiActions";
+import BackRouter from "../../main/BackRouter";
 
 const useStyles = makeStyles({
     main: {
         marginTop: props => props ? 40 : 100,
     },
-    backIcon: {
-        position: 'fixed',
-        top: props => props ? 90 : 60,
-        left: 10
-    },
     favItems: {
-        height:  props => props ? 'calc(100vh - 295px)' : 'calc(100vh - 270px)',
+        height: props => props ? 'calc(100vh - 300px)' : 'calc(100vh - 275px)',
         overflow: 'auto'
     },
     noFavourites: {
@@ -40,7 +33,6 @@ const FavItemList = () => {
     const [loader, setLoader] = useState(true);
     const favIds = useSelector(state => state.favourites);
     const dispatch = useDispatch()
-    const history = useHistory()
     const {t} = useTranslation()
     const media = useMediaQuery('(max-width:600px)')
     const classes = useStyles(media);
@@ -74,9 +66,7 @@ const FavItemList = () => {
 
     return (
         loader ? <Loader/> : <div className={classes.main}>
-            <div onClick={() => history.goBack()} className={classes.backIcon}>
-                <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
-            </div>
+            <BackRouter/>
             {favItems.length ? <div className={classes.favItems}>{favItems.map(data =>
                 <FavItem key={uniqId()}
                          image={data?.images[0]}

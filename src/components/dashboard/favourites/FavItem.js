@@ -38,6 +38,7 @@ const useStyles = makeStyles({
         }
     },
     infoName: {
+        fontSize:  props => props && 13,
         fontWeight: 'bold',
         fontStyle: 'italic',
         flex: 2,

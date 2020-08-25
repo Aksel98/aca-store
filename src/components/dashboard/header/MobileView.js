@@ -33,7 +33,7 @@ const useStyles = makeStyles({
         textAlign: 'center',
     },
     title: {
-        fontSize: props => props.media ? 15 : 24,
+        fontSize: 18,
         fontWeight: 'bold',
         color: ORANGE,
         fontStyle: 'italic',
@@ -106,14 +106,6 @@ export default function (props) {
                     <Link to={HOME_URL} className={classes.title}>ACA store</Link>
                 </div>
                 <div className={classes.display}>
-                    {currentUser && <Link className={classes.checkoutLink} to='/favourites'>
-                        <FavoriteTwoToneIcon className={classes.menuItem}/>
-                        {favItems?.length > 0 && <div className={classes.cardItems}>{favItems?.length}</div>}
-                    </Link>}
-                    <Link className={classes.checkoutLink} to='/checkout'>
-                        <ShoppingCartIcon className={classes.menuItem}/>
-                        {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
-                    </Link>
                     {currentUser ? <div className={classes.menuItem}>
                         <DropDown
                             name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
@@ -124,6 +116,14 @@ export default function (props) {
                                     </div>
                                 </React.Fragment>}/>
                     </div> : <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
+                    {currentUser && <Link className={classes.checkoutLink} to='/favourites'>
+                        <FavoriteTwoToneIcon className={classes.menuItem}/>
+                        {favItems?.length > 0 && <div className={classes.cardItems}>{favItems?.length}</div>}
+                    </Link>}
+                    <Link className={classes.checkoutLink} to='/checkout'>
+                        <ShoppingCartIcon className={classes.menuItem}/>
+                        {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
+                    </Link>
                 </div>
             </div>
             <div>

@@ -58,6 +58,7 @@ const useStyles = makeStyles(() => ({
         },
     },
     item: {
+        fontSize: 15,
         display: "flex",
         justifyContent: 'center',
         textDecoration: 'none',
