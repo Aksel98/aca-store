@@ -6,7 +6,7 @@ import Slider from "@material-ui/core/Slider";
 import {makeStyles} from "@material-ui/core/styles";
 import {useTranslation} from "react-i18next";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {BLUE} from "../../main/constants/Constants";
+import {BLUE} from "../../main/constants/constants";
 import {useMediaQuery} from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -84,10 +84,8 @@ export default function Filters(props) {
                     step={50000}
                     value={price}
                     onChange={onPrice}
-                    aria-labelledby="range-slider"
-                />
-                <div
-                    className={classes.formatNums}>{numberFormat(price[0], '֏')} - {numberFormat(price[1], '֏')}</div>
+                    aria-labelledby="range-slider"/>
+                <div className={classes.formatNums}>{numberFormat(price[0], '֏')} - {numberFormat(price[1], '֏')}</div>
             </div>
         </div>
     )

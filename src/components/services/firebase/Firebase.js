@@ -9,22 +9,8 @@ const config = {
     storageBucket: "online-shop-6c690.appspot.com",
     messagingSenderId: "310863986745",
     appId: "1:310863986745:web:f69a48f7cdaea09b148de8",
-    measurementId: "G-ZEBECM4ES0"
+    measurementId: "G-ZEBECM4ES0",
 };
-
-const uiConfig = {
-    signInFlow: "popup",
-    signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-        signInSuccess: () => false
-    }
-}
 
 firebase.initializeApp(config)
 

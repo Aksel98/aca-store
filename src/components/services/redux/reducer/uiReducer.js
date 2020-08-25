@@ -1,20 +1,17 @@
-import {CLEAR_ERRORS, SET_ERRORS} from "../types";
+import {SET_ERROR, SET_SUCCESS} from "../types";
+import {initialState} from "./reducers";
 
-const initialState = {
-    errors: null
-}
-
-export default function (state = initialState, action) {
+export default function (state = initialState.ui, action) {
     switch (action.type) {
-        case SET_ERRORS:
+        case SET_ERROR:
             return {
                 ...state,
-                errors: action.payload
+                error: action.payload
             }
-        case CLEAR_ERRORS:
+            case SET_SUCCESS:
             return {
                 ...state,
-                errors: null
+                success: action.payload
             }
         default:
             return state

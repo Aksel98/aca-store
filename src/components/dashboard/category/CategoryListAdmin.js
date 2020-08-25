@@ -5,8 +5,10 @@ import Fab from "@material-ui/core/Fab";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import {db, storage} from "../../services/firebase/Firebase";
 import {makeStyles} from "@material-ui/core";
-import {ORANGE} from "../../main/constants/Constants";
+import {ORANGE} from "../../main/constants/constants";
 import {useTranslation} from "react-i18next";
+import {getError} from "../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles(() => ({
     newCategoryName: {
@@ -19,6 +21,7 @@ export default function CategoryListAdmin(props) {
     const [categoryName, setCategoryName] = useState('');
     const [image, setImage] = useState(null);
     const [disabled, setDisabled] = useState(false);
+    const dispatch = useDispatch()
     const classes = useStyles()
     const {t} = useTranslation()
 
@@ -54,7 +57,7 @@ export default function CategoryListAdmin(props) {
         db.collection('categories').doc(deletedId).delete().then(() => {
             setDeletePopup(false)
             setIsDelete(true)
-        }).catch(err => console.log(err))
+        }).catch(err => dispatch(getError(err.message)))
     }
 
     function addFile(e) {

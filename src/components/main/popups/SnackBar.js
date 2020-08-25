@@ -1,10 +1,22 @@
-import React from "react";
+import React, {useEffect} from "react";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import PropTypes from 'prop-types';
+import {useDispatch} from "react-redux";
+import {getError, getSuccess} from "../../services/redux/actions/uiActions";
 
 export default function SnackBar(props) {
     const [open, setOpen] = React.useState(true);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        setTimeout(() => removeUi(), props.duration || 5000)
+    }, [])
+
+    function removeUi() {
+        dispatch(getSuccess(''))
+        dispatch(getError(false))
+    }
 
     const handleClose = () => {
         setOpen(false);

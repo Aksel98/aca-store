@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {MyButton, ORANGE} from "../../main/constants/Constants";
+import {MyButton, ORANGE} from "../../main/constants/constants";
 
 const useStyles = makeStyles({
     price: {
@@ -32,6 +32,7 @@ const useStyles = makeStyles({
 const TotalPrice = () => {
     const [quantity, setQuantity] = useState(0)
     const basketItems = useSelector(state => state.basket)
+    const currentUser = useSelector(state => state.user)
     const [amount, setAmount] = useState(0)
     const classes = useStyles();
     const {t} = useTranslation()
@@ -44,9 +45,9 @@ const TotalPrice = () => {
     }, [basketItems])
 
     return (
-        <div className={classes.mainWrapper}>
+        currentUser ? <div className={classes.mainWrapper}>
             <div className={classes.price}>
-                <span>Total price`</span>
+                <span>{t('totalPrice')}`</span>
                 <span className={classes.bold}>{numberFormat(amount, '֏')}</span>
             </div>
             <MyButton className={classes.btn} disabled={!basketItems.length} variant="contained">
@@ -57,7 +58,9 @@ const TotalPrice = () => {
                     }
                 }}>{t('confirmAndPay')}</Link>
             </MyButton>
-        </div>
+        </div> : <MyButton className={classes.btn} disabled={!basketItems.length} variant="contained">
+            <Link className={classes.link} to={{pathname: '/login'}}>{t('loginForPay')}</Link>
+        </MyButton>
     )
 }
 export default TotalPrice

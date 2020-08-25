@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import {db} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {BLACK, GREY} from "../../../main/constants/Constants";
+import {BLACK, GREY} from "../../../main/constants/constants";
+import {getError} from "../../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
+import {TypeContext} from "../../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     about: {
@@ -37,7 +40,9 @@ const useStyles = makeStyles({
 })
 
 export default function MainParameters(props) {
-    const {name, parameter, refs, isAdmin} = props
+    const {name, parameter, refs} = props
+    const isAdmin = useContext(TypeContext)
+    const dispatch = useDispatch()
     const {id} = useParams()
     const classes = useStyles()
     const {t} = useTranslation()
@@ -45,7 +50,7 @@ export default function MainParameters(props) {
     function onBlur(key, e) {
         db.collection('product').doc(id).update({
             [key]: e.target.value
-        }).catch(err => console.log(err))
+        }).catch(err => dispatch(getError(err.message)))
     }
 
     return (

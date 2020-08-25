@@ -14,14 +14,15 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import { MyButton, ORANGE, BLUE } from "../../main/constants/Constants";
-import { numberFormat } from "../../main/format-numbers/NumberFormat";
-import { useMediaQuery } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { removeFromBasket } from "../../services/redux/actions/basketAction";
+import {MyButton, ORANGE, BLUE} from "../../main/constants/constants";
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {useMediaQuery} from "@material-ui/core";
+import {useDispatch, useSelector} from "react-redux";
+import {removeFromBasket} from "../../services/redux/actions/basketAction";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import { useTranslation } from "react-i18next";
+import {getError} from "../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     container: {
@@ -163,10 +164,10 @@ export default function Payment() {
         setSubTotal(chosenItems.map((item, ind) => {
             return item.price * location.state.quantity[ind]
         }).reduce((acc, Value) => (acc + Value), 0));
+
         const orderItems = [...chosenItems];
         setOrder({ ...order, orderItems: orderItems })
         setFinalPrice(subTotal * 1.2 + order.ship * 1)
-
     }, [chosenItems, order.ship, order.bank])
 
     const getCartItems = () => {
@@ -180,18 +181,17 @@ export default function Payment() {
                         tempArr.push({ ...tempObj });
                     })
                     setChosenItems(tempArr);
-                }).catch(err => console.log('error making basket info query', err));
+                }).catch(err => dispatch(getError(err.message)));
             } catch (e) {
-                console.log("can not  get basket items:", e);
+                console.log(e);
             }
         }
     }
 
     const handleDataChange = (e) => {
-        const oldState = { ...order };
+        const oldState = {...order};
         oldState[e.target.id] = e.target.value;
-
-        setOrder({ ...oldState })
+        setOrder({...oldState})
     }
 
     const handleRadioChange = (e) => {

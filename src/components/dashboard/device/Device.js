@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {Link, useParams} from 'react-router-dom'
 import {db} from "../../services/firebase/Firebase";
-import {GREY, MyButton} from "../../main/constants/Constants";
+import {GREY, MyButton} from "../../main/constants/constants";
 import Loader from "../../main/loader/Loader";
 import AboutDevice from "./about/AboutDevice";
 import {useTranslation} from "react-i18next";
@@ -20,6 +20,7 @@ import ReactImageMagnify from "react-image-magnify";
 import {useMediaQuery} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {addToBasket} from "../../services/redux/actions/basketAction";
+import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     container: {
@@ -76,6 +77,7 @@ export default function Device() {
     const basketItems = useSelector(state => state.basket)
     const [basket] = basketItems.filter(item => item.id === id)
     const [deviceCount, setDeviceCount] = useState(basket?.quantity || 1)
+    const isAdmin = useContext(TypeContext)
     const dispatch = useDispatch()
     const media = useMediaQuery('(min-width:990px)');
     const classes = useStyles(media)
@@ -125,12 +127,12 @@ export default function Device() {
                     <ReactImageMagnify  {...{
                         smallImage: {
                             isFluidWidth: false,
-                            src: mainImage,
+                            src: `${mainImage}`,
                             width: 160,
                             height: 220,
                         },
                         largeImage: {
-                            src: mainImage,
+                            src: `${mainImage}`,
                             width: 500,
                             height: 600,
                         }
@@ -138,10 +140,11 @@ export default function Device() {
                     <div className={`${classes.displayFlex} ${classes.flexWrap}`}>
                         <DeviceImages images={images} setImages={setImages} changeImage={changeImage}
                                       openDeletePopup={openDeletePopup}/>
-                        <AddImagesAdmin images={images} setImages={setImages} type={device.device}/>
+                        {isAdmin && <AddImagesAdmin images={images} setImages={setImages} type={device.device}/>}
                     </div>
                 </div>
-                <DeleteImagesAdmin images={images} setImages={setImages}
+                <DeleteImagesAdmin images={images}
+                                   setImages={setImages}
                                    openDeleteModal={openDeleteModal}
                                    isDeleteModal={setOpenDeleteModal}
                                    deletedImage={deletedImage}

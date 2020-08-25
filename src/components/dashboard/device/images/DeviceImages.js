@@ -1,11 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
 import uniqId from "uniqid";
 import {makeStyles} from "@material-ui/core/styles";
-import {BLUE, MyButton, ORANGE} from "../../../main/constants/Constants";
+import {BLUE, MyButton, ORANGE} from "../../../main/constants/constants";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import {db} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {getError} from "../../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
+import {TypeContext} from "../../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     additionalImagesParent: {
@@ -46,6 +49,8 @@ const useStyles = makeStyles({
 
 export default function DeviceImages(props) {
     const {changeImage, images, setImages, openDeletePopup} = props
+    const dispatch = useDispatch()
+    const isAdmin = useContext(TypeContext)
     const {id} = useParams()
     const {t} = useTranslation()
     const classes = useStyles()
@@ -60,7 +65,7 @@ export default function DeviceImages(props) {
         }).then(() => {
             setImages(newImages)
             changeImage(img)
-        }).catch(err => console.log(err))
+        }).catch(err => dispatch(getError(err.message)))
     }
 
     return (
@@ -68,13 +73,13 @@ export default function DeviceImages(props) {
             {images?.map(image => {
                 return (
                     <div key={uniqId()} className={classes.additionalImagesParent}>
-                        <div onClick={() => openDeletePopup(true, image)} className={classes.deleteBtn}>
+                        {isAdmin && <div onClick={() => openDeletePopup(true, image)} className={classes.deleteBtn}>
                             <MyButton className={classes.padding} newcolor={ORANGE}><HighlightOffIcon/></MyButton>
-                        </div>
+                        </div>}
                         <div onClick={() => changeImage(image)}>
                             <img src={image} className={classes.additionalImage} alt=""/>
                         </div>
-                        {image !== images[0] && <MyButton className={classes.btn}
+                        {(isAdmin && image !== images[0]) && <MyButton className={classes.btn}
                                    variant="contained"
                                    color="primary"
                                    onClick={() => changeMainImage(image)}>{t('makeMain')}</MyButton>}

@@ -1,11 +1,11 @@
 import React from "react";
-import { makeStyles, useMediaQuery, Button } from "@material-ui/core";
-import { GREY, MyButton } from "../../main/constants/Constants";
-import { useDispatch, useSelector } from 'react-redux';
-import { numberFormat } from "../../main/format-numbers/NumberFormat";
-import { removeFromFav } from "../../services/redux/actions/favouriteActions";
-import { addToBasket } from "../../services/redux/actions/basketAction";
-import { useTranslation } from "react-i18next";
+import {makeStyles, useMediaQuery} from "@material-ui/core";
+import {GREY, MyButton} from "../../main/constants/constants";
+import {useDispatch} from 'react-redux';
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {removeFromFav} from "../../services/redux/actions/favouriteActions";
+import {addToBasket} from "../../services/redux/actions/basketAction";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     container: {
@@ -69,16 +69,18 @@ const useStyles = makeStyles({
 })
 
 export default function FavItem(props) {
-    const { image, model, id, price, device, setFavItems } = props;
-    const favourites = useSelector(state => state.favourites)
+    const {image, model, id, price, device, favItems, setFavItems} = props;
     const dispatch = useDispatch()
-    const { t } = useTranslation()
+    const {t} = useTranslation()
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
 
     function removeFavItem() {
         dispatch(removeFromFav(id))
-        // setFavItems(favourites)
+        const favorites = [...favItems]
+        const currentIndex = favorites.findIndex(el => el.id === id)
+        favorites.splice(currentIndex, 1)
+        setFavItems(favorites)
     }
 
     return (

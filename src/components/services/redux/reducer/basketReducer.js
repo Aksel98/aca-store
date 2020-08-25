@@ -1,4 +1,4 @@
-import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_FROM_BASKET, UPDATE_BASKET, UPDATE_PRICE} from "../types";
+import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_FROM_BASKET, UPDATE_PRICE} from "../types";
 import {initialState} from "./reducers";
 
 export default function (state = initialState.basketItems, action) {

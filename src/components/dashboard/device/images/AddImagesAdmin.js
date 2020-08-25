@@ -1,10 +1,12 @@
 import React, {useState} from "react";
-import {BLUE, MyButton, ORANGE} from "../../../main/constants/Constants";
+import {BLUE, MyButton, ORANGE} from "../../../main/constants/constants";
 import AddIcon from "@material-ui/icons/Add";
 import {makeStyles} from "@material-ui/core/styles";
 import {db, storage} from "../../../services/firebase/Firebase";
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {getError} from "../../../services/redux/actions/uiActions";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles({
     additionalImage: {
@@ -42,6 +44,7 @@ const useStyles = makeStyles({
 export default function AddImagesAdmin(props) {
     const {images, setImages, type} = props
     const [newImage, setNewImage] = useState(null);
+    const dispatch = useDispatch()
     const {id} = useParams()
     const {t} = useTranslation()
     const classes = useStyles()
@@ -73,7 +76,7 @@ export default function AddImagesAdmin(props) {
                             }).then(() => {
                                 setImages(imgs)
                                 setNewImage(null)
-                            }).catch(err => console.log(err))
+                            }).catch(err => dispatch(getError(err.message)))
                         }
                     )
             }

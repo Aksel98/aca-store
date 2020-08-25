@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/constants/Constants';
+import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/constants/constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {useMediaQuery} from "@material-ui/core";
@@ -11,6 +11,7 @@ import {useSelector} from "react-redux";
 import {useDispatch} from 'react-redux';
 import {addToFav, removeFromFav} from '../../services/redux/actions/favouriteActions';
 import {addToBasket, removeFromBasket} from "../../services/redux/actions/basketAction";
+import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     root: {
@@ -102,9 +103,10 @@ export default function Product(props) {
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const mediaMobile = useMediaQuery('(max-width:475px)');
     const [liked, setLiked] = useState(false);
+    const [btnText, setText] = useState('')
+    const isAdmin = useContext(TypeContext)
     const classes = useStyles({mediaTablet, mediaMobile, currentUser, liked});
     const {t} = useTranslation()
-    const [btnText, setText] = useState('')
     const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
 
     useEffect(() => {
@@ -135,9 +137,9 @@ export default function Product(props) {
 
     return (
         <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <div onClick={() => openDeleteModal(true, id)} className={classes.deleteBtn}>
+            {isAdmin && <div onClick={() => openDeleteModal(true, id)} className={classes.deleteBtn}>
                 <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
-            </div>
+            </div>}
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
                 {images?.length && <img className={classes.productImage} src={images[0]} alt=""/>}
                 <div className={classes.modelInfo}>

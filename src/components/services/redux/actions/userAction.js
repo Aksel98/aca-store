@@ -1,18 +1,51 @@
-import { CLEAR_ERRORS, SET_ERRORS, SET_USER } from "../types"
-import { auth, db } from "../../firebase/Firebase";
-import { HOME_URL } from "../../api/Navigations";
+import {SET_USER} from "../types"
+import {auth, db} from "../../firebase/Firebase";
 import firebase from "firebase";
+import {getError, getSuccess} from "./uiActions";
+
+export const signInGoogle = (history) => (dispatch) =>  {
+    auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
+        history.goBack()
+        dispatch(getSuccess('Success'))
+    }).catch(err => {
+        dispatch(getError(err.message))
+    })
+}
+
+export const signInFacebook = (history) => (dispatch) =>  {
+    auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(() => {
+        history.goBack()
+        dispatch(getSuccess('Success'))
+    }).catch(err => {
+        dispatch(getError(err.message))
+    })
+}
+
+export const signInGithub = (history) => (dispatch) => {
+    auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(() => {
+        history.goBack()
+        dispatch(getSuccess('Success'))
+    }).catch(err => {
+        dispatch(getError(err.message))
+    })
+}
+
+export const signInPhoneNumber = (history) => (dispatch) => {
+    auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(() => {
+        history.goBack()
+        dispatch(getSuccess('Success'))
+    }).catch(err => {
+        dispatch(getError(err.message))
+    })
+}
 
 export const signInUser = (email, password, history, setPassword) => (dispatch) => {
     auth.signInWithEmailAndPassword(email, password).then(() => {
         dispatch(getUserData())
-        dispatch({ type: CLEAR_ERRORS })
-        history.push(HOME_URL)
+        dispatch(getSuccess('Success'))
+        history.goBack()
     }).catch(err => {
-        dispatch({
-            type: SET_ERRORS,
-            payload: err.message
-        })
+        dispatch(getError(err.message))
     }).finally(() => {
         setPassword('')
     })
@@ -31,19 +64,16 @@ export const signUpUser = (email, password, name, surname, history, setPassword)
                 name: name,
                 surname: surname,
                 email: email,
-                id: user.uid
+                type: 'user'
             })
         })
         .then(() => {
             dispatch(getUserData())
-            dispatch({ type: CLEAR_ERRORS })
-            history.push(HOME_URL)
+            history.goBack()
+            dispatch(getSuccess('Success'))
         })
         .catch(err => {
-            dispatch({
-                type: SET_ERRORS,
-                payload: err.message
-            })
+            dispatch(getError(err.message))
         }).finally(() => {
             setPassword('')
         })
@@ -64,5 +94,8 @@ export const logoutUser = () => (dispatch) => {
             type: SET_USER,
             payload: null
         })
+        window.location.reload()
+    }).catch(err => {
+        dispatch(getError(err.message))
     })
 }

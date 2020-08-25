@@ -5,13 +5,14 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import uniqId from 'uniqid';
 import TotalPrice from "./TotalPrice";
-import {ORANGE, BLUE, BLACK} from "../../main/constants/Constants";
+import {ORANGE, BLUE, BLACK} from "../../main/constants/constants";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {getError} from "../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     mainWrapper: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles({
     },
     emptyCart: {
         textAlign: 'center',
-        color: BLACK
+        color: BLUE
     },
     backIcon: {
         marginLeft: 20
@@ -50,6 +51,7 @@ const useStyles = makeStyles({
 const CheckoutItems = () => {
     const [chosenItems, setChosenItems] = useState([]);
     const basketItems = useSelector(state => state.basket);
+    const dispatch = useDispatch()
     const {t} = useTranslation()
     const media = useMediaQuery('(min-width:600px)');
     const classes = useStyles(media);
@@ -74,10 +76,10 @@ const CheckoutItems = () => {
                         })
                         setChosenItems(tempArr);
                         return tempArr
-                    }).catch(err => console.log('error making basket info query', err));
+                    }).catch(err => dispatch(getError(err.message)));
             }
         } catch (e) {
-            console.log("can not  get basket items:", e);
+            console.log(e);
         }
     }
 

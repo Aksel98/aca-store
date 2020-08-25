@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Category from './Category';
 import {makeStyles} from '@material-ui/core';
-import {MyButton, ORANGE, WHITE} from "../../main/constants/Constants"
+import {MyButton, ORANGE, WHITE} from "../../main/constants/constants"
 import {db} from "../../services/firebase/Firebase";
 import CategoryListAdmin from "./CategoryListAdmin";
+import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles(() => ({
     categoryView: {
         backgroundColor: WHITE,
         minHeight: 180,
-        padding: '80px 40px 0',
+        padding: '80px 40px',
         display: 'flex',
         flexDirection: 'row',
         flexFlow: 'wrap',
@@ -31,6 +32,7 @@ export default function CategoryList() {
     const [url, setUrl] = useState('');
     const [isDelete, setIsDelete] = useState(false);
     const [id, setId] = useState('');
+    const isAdmin = useContext(TypeContext)
     const classes = useStyles();
 
     useEffect(() => {
@@ -52,7 +54,7 @@ export default function CategoryList() {
                 setCategory(tempArr);
             });
         } catch (e) {
-            console.log("can not  get the docs:", e);
+            console.log(e);
         }
     }
 
@@ -86,9 +88,9 @@ export default function CategoryList() {
                                setIsDelete={setIsDelete}
                                deletePopup={deletePopup}
                                deletedId={id}/>
-            <div onClick={openAddedCategory} className={classes.btnParent}>
+            {isAdmin && <div onClick={openAddedCategory} className={classes.btnParent}>
                 <MyButton newcolor={ORANGE} variant="contained">Add Category</MyButton>
-            </div>
+            </div>}
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import uniqId from 'uniqid';
 import {useEffect} from 'react';
 import {db} from '../../services/firebase/Firebase';
@@ -8,9 +8,10 @@ import {useHistory} from 'react-router-dom';
 import {Button, makeStyles} from '@material-ui/core';
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import {BLACK} from "../../main/constants/Constants";
+import {BLACK, BLUE} from "../../main/constants/constants";
 import {useTranslation} from "react-i18next";
 import Loader from "../../main/loader/Loader";
+import {getError} from "../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     main: {
@@ -27,13 +28,20 @@ const useStyles = makeStyles({
         textAlign: 'center',
         color: BLACK
     },
+    emptyFavourites: {
+        color: BLUE,
+        textAlign: 'center'
+    },
 })
 const FavItemList = () => {
-    const classes = useStyles();
-    const favIds = useSelector(state => state.favourites);
     const [favItems, setFavItems] = useState([]);
-    const {t} = useTranslation()
+    const [loader, setLoader] = useState(true);
+    const favIds = useSelector(state => state.favourites);
+    const dispatch = useDispatch()
     const history = useHistory()
+    const {t} = useTranslation()
+    const classes = useStyles();
+
 
     useEffect(() => {
         getFavItems()
@@ -41,35 +49,41 @@ const FavItemList = () => {
 
     function getFavItems() {
         try {
-            db.collection('product')
-                .where('id', 'in', favIds).get()
-                .then(querySnapshot => {
-                    const tempArr = [];
-                    querySnapshot.docs.forEach(doc => {
-                        let tempObj = doc.data();
-                        tempArr.push(tempObj)
-                    })
-                    setFavItems(tempArr)
-                }).catch(err => console.log(err))
-        } catch (error) {
-            console.log('Sorry, could not get the Favourites data')
+            if (favIds.length) {
+                db.collection('product')
+                    .where('id', 'in', favIds).get()
+                    .then(querySnapshot => {
+                        const tempArr = [];
+                        querySnapshot.docs.forEach(doc => {
+                            let tempObj = doc.data();
+                            tempArr.push(tempObj)
+                        })
+                        setFavItems(tempArr)
+                        setLoader(false)
+                    }).catch(err => dispatch(getError(err.message)))
+            } else {
+                setLoader(false)
+            }
+        } catch (e) {
+            console.log(e)
         }
     }
 
     return (
-        <div className={classes.main}>
+        loader ? <Loader/> : <div className={classes.main}>
             <div onClick={() => history.goBack()} className={classes.backIcon}>
                 <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
             </div>
-            <div className={classes.favItems}>{favItems.map(data =>
+            {favItems.length ? <div className={classes.favItems}>{favItems.map(data =>
                 <FavItem key={uniqId()}
                          image={data?.images[0]}
                          model={data.model}
                          id={data.id}
                          price={data.price}
                          device={data.device}
+                         favItems={favItems}
                          setFavItems={setFavItems}/>)}
-            </div>
+            </div> : <h1 className={classes.emptyFavourites}>{t('youHaveNoFavourites')}</h1>}
         </div>
     )
 }
