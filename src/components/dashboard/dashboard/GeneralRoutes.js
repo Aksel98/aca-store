@@ -9,19 +9,12 @@ import ProductList from "../products/ProductList";
 import {makeStyles} from "@material-ui/core/styles";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
-import Payment from "../payment/Payment";
 import {useMediaQuery} from "@material-ui/core";
 import UsersList from "../../admin/UsersList";
 
 const useStyles = makeStyles({
     dashboardParent: {
         overflowX: 'hidden'
-    },
-    categoryList: {
-        minHeight: 790
-    },
-    productList: {
-        height: props => props ? 790 : 730
     }
 })
 
@@ -32,33 +25,27 @@ export default function GeneralRoutes() {
     return (
         <Switch className={classes.dashboardParent}>
             <Route path={HOME_URL}>
-                <div className={classes.categoryList}>
-                    <Header/>
-                    <Carousel/>
-                    <CategoryList/>
-                </div>
+                <Header/>
+                <Carousel/>
+                <CategoryList/>
                 <Footer/>
             </Route>
             <Route exact path='/checkout'>
                 <CheckoutItems/>
             </Route>
             <Route exact path='/categories/:category'>
-                <div className={classes.productList}>
-                    <Header/>
-                    <ProductList/>
-                </div>
+                <Header/>
+                <ProductList/>
                 <Footer/>
             </Route>
             <Route exact path='/categories/:category/:id'>
-                <div className={classes.mainContent}>
-                    <Header/>
-                    <Device/>
-                </div>
+                <Header/>
+                <Device/>
                 <Footer/>
             </Route>
             <Route exact path='/userslist'>
                 <div>
-                    <UsersList />
+                    <UsersList/>
                 </div>
             </Route>
             <Redirect to={HOME_URL}/>

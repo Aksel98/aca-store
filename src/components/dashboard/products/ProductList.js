@@ -11,12 +11,11 @@ import Filters from "./Filters";
 import Loader from "../../main/loader/Loader";
 import {BLUE, MyButton} from "../../main/constants/constants";
 import Pagination from '@material-ui/lab/Pagination';
-import Fab from '@material-ui/core/Fab';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import ProductsListAdmin from "./ProductsListAdmin";
 import {getError} from "../../services/redux/actions/uiActions";
 import {useDispatch} from "react-redux";
 import {TypeContext} from "../../main/contexts/typeContext";
+import BackRouter from "../../main/BackRouter";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -30,7 +29,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center'
     },
     products: {
-        height: props => props.mediaTablet ? (props.mediaMobile ? 336 : 375) : 640,
+        height: props => props.mediaTablet ? (props.mediaMobile ? 'calc(100vh - 560px)' : 'calc(100vh - 530px)') : 'calc(100vh - 320px)',
         margin: props => props.mediaTablet ? 0 : '20px 0 0',
         overflow: 'auto',
         justifyContent: 'center',
@@ -41,8 +40,6 @@ const useStyles = makeStyles(() => ({
     btnParent: {
         display: 'flex',
         justifyContent: 'center',
-        marginLeft: 50,
-        marginBottom: props => props.mediaTablet && 20,
     },
     pagination: {
         display: 'flex',
@@ -150,9 +147,7 @@ export default function ProductList() {
 
     return (
         <div className={classes.container}>
-            {mediaTablet && <div onClick={() => history.goBack()} className={classes.backIcon}>
-                <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
-            </div>}
+            <BackRouter/>
             <Filters name={nameFilter}
                      orderBy={orderBy}
                      price={priceFilter}
@@ -160,9 +155,6 @@ export default function ProductList() {
                      onOrder={orderHandler}
                      onPrice={priceHandler}/>
             <div className={classes.productsParent}>
-                {!mediaTablet && <div onClick={() => history.goBack()} className={classes.backIcon}>
-                    <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
-                </div>}
                 {loader ? <Loader/> : <div>
                     {isAdmin && <div onClick={openPopup} className={classes.btnParent}>
                         <MyButton color="primary" maxwidth="75%" variant="contained">{t('addDevice')}</MyButton>

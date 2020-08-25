@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     root: {
         position: 'relative',
         width: props => props.mediaTablet ? (props.mediaMobile ? 135 : 200) : 205,
-        height: props => props.mediaTablet ? (props.mediaMobile ? 215 : 255) : 300,
+        height: props => props.mediaTablet ? (props.mediaMobile ? 215 : 235) : 300,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',

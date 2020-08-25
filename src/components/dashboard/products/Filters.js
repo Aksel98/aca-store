@@ -12,7 +12,7 @@ import {useMediaQuery} from "@material-ui/core";
 const useStyles = makeStyles({
     filters: {
         minWidth: 100,
-        padding: props => !props && '0 10px',
+        padding: props => !props && '50px 10px',
     },
     searchAndOrder: props => props && {
         textAlign: 'center',
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
         alignItems: 'center'
     },
     filterType: {
-        padding: 10
+        padding: props => props ? '2px 10px' : 10
     },
     filtersTitle: {
         fontSize: 19,
