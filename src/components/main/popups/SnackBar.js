@@ -3,7 +3,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import PropTypes from 'prop-types';
 import {useDispatch} from "react-redux";
-import {SET_ERROR, SET_SUCCESS} from "../../services/redux/types";
+import {getError, getSuccess} from "../../services/redux/actions/uiActions";
 
 export default function SnackBar(props) {
     const [open, setOpen] = React.useState(true);
@@ -14,14 +14,8 @@ export default function SnackBar(props) {
     }, [])
 
     function removeUi() {
-        dispatch({
-            type: SET_ERROR,
-            payload: false
-        })
-        dispatch({
-            type: SET_SUCCESS,
-            payload: false
-        })
+        dispatch(getSuccess(''))
+        dispatch(getError(false))
     }
 
     const handleClose = () => {
