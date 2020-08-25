@@ -26,9 +26,6 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         padding: '150px 10px',
         opacity: '0.6',
-    },
-    favouritesPage: {
-        height: 710
     }
 })
 
@@ -57,9 +54,7 @@ export default function Dashboard() {
                     <Switch>
                         <Route path='/favourites'>
                             <Header/>
-                            <div className={classes.favouritesPage}>
-                                <FavItemList/>
-                            </div>
+                            <FavItemList/>
                             <Footer/>
                         </Route>
                         <Route path='/payment'>

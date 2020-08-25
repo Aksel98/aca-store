@@ -5,7 +5,7 @@ import {useEffect} from 'react';
 import {db} from '../../services/firebase/Firebase';
 import FavItem from './FavItem';
 import {useHistory} from 'react-router-dom';
-import {Button, makeStyles} from '@material-ui/core';
+import {makeStyles, useMediaQuery} from '@material-ui/core';
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import {BLACK, BLUE} from "../../main/constants/constants";
@@ -15,13 +15,15 @@ import {getError} from "../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     main: {
-        marginTop: '80px',
+        marginTop: props => props ? 40 : 100,
     },
     backIcon: {
-        margin: '10px 14px'
+        position: 'fixed',
+        top: props => props ? 90 : 60,
+        left: 10
     },
     favItems: {
-        height: 640,
+        height:  props => props ? 'calc(100vh - 295px)' : 'calc(100vh - 270px)',
         overflow: 'auto'
     },
     noFavourites: {
@@ -40,7 +42,8 @@ const FavItemList = () => {
     const dispatch = useDispatch()
     const history = useHistory()
     const {t} = useTranslation()
-    const classes = useStyles();
+    const media = useMediaQuery('(max-width:600px)')
+    const classes = useStyles(media);
 
 
     useEffect(() => {

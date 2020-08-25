@@ -10,8 +10,11 @@ import {HOME_URL} from "../../main/constants/navigations";
 const useStyles = makeStyles(() => ({
     container: {
         backgroundColor: BLACK,
+        width: '100%',
+        height: 170,
+        position: 'absolute',
+        bottom: 0,
         opacity: '0.7',
-        paddingTop: 10,
     },
     main: {
         display: "flex",
