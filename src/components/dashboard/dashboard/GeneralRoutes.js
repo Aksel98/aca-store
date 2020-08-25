@@ -1,6 +1,6 @@
 import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
-import {HOME_URL} from "../../services/api/Navigations";
+import {HOME_URL} from "../../main/constants/navigations";
 import Header from "../header/Header";
 import Carousel from "../carousel/Carousel";
 import CategoryList from "../category/CategoryList";
@@ -56,10 +56,8 @@ export default function GeneralRoutes() {
                 <Footer/>
             </Route>
             <Route exact path='/categories/:category/:id'>
-                <div className={classes.mainContent}>
                     <Header/>
                     <Device/>
-                </div>
                 <Footer/>
             </Route>
             <Redirect to={HOME_URL}/>

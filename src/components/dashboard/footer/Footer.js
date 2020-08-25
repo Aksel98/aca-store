@@ -5,7 +5,7 @@ import {BLACK, WHITE, ORANGE} from "../../main/constants/Constants";
 import MailIcon from '@material-ui/icons/Mail';
 import {Link, useLocation} from "react-router-dom";
 import {LOGO} from "../../main/constants/Constants";
-import {HOME_URL} from "../../services/api/Navigations";
+import {HOME_URL} from "../../main/constants/navigations";
 
 const useStyles = makeStyles(() => ({
     container: {

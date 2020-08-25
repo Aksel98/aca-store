@@ -10,8 +10,9 @@ import EmailIcon from '@material-ui/icons/Email';
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import {useTranslation} from "react-i18next";
-import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../services/api/SignInPopups";
 import {useHistory} from "react-router-dom";
+import {signInFacebook, signInGithub, signInGoogle, signInPhoneNumber} from "../services/redux/actions/userAction";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles({
     signUpContainer: {
@@ -52,6 +53,7 @@ const MyBtn = styled(MyButton)({
 export default function SignUp(props) {
     const [showPassword, setShowPassword] = useState(false)
     const {firstname, lastname, email, password, error, onFirstChange, onLastChange, onValueChange, signUp, rightPanel, classFormContainer, media} = props
+    const dispatch = useDispatch()
     const history = useHistory()
     const classes = useStyles({rightPanel, media})
     const {t} = useTranslation()
@@ -61,10 +63,10 @@ export default function SignUp(props) {
             <form>
                 {media ? <h2>{t('createAccount')}</h2> : <h3>{t('createAccount')}</h3>}
                 <div className={classes.socialContainer}>
-                    <div onClick={() => signInGoogle(history)} className={classes.social}><MailIcon/></div>
-                    <div onClick={() => signInFacebook(history)} className={classes.social}><FacebookIcon/></div>
-                    <div onClick={() => signInGithub(history)} className={classes.social}><GitHubIcon/></div>
-                    <div onClick={() => signInPhoneNumber(history)} className={classes.social}><PhoneIcon/></div>
+                    <div onClick={() => dispatch(signInGoogle(history))} className={classes.social}><MailIcon/></div>
+                    <div onClick={() => dispatch(signInFacebook(history))} className={classes.social}><FacebookIcon/></div>
+                    <div onClick={() => dispatch(signInGithub(history))} className={classes.social}><GitHubIcon/></div>
+                    <div onClick={() => dispatch(signInPhoneNumber(history))} className={classes.social}><PhoneIcon/></div>
                 </div>
                 <span>{t('useYourEmailForRegistration')}</span>
                 <MyTextField label={`${t('First Name')}`}

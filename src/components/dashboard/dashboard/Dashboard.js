@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import Login from "../../auth/Login";
 import {BLACK} from "../../main/constants/Constants"
-import {LOGIN_URL} from "../../services/api/Navigations";
+import {LOGIN_URL} from "../../main/constants/navigations";
 import GeneralRoutes from "./GeneralRoutes";
 import {useSelector} from "react-redux";
 import Header from "../header/Header";
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 
 export default function Dashboard() {
     const currentUser = useSelector(state => state.user)
-    const error = useSelector(state => state.error)
+    const ui = useSelector(state => state.ui)
     const classes = useStyles()
 
     return (
@@ -56,7 +56,8 @@ export default function Dashboard() {
                     </Route>
                     <GeneralRoutes/>
                 </Switch>}
-            {error && <SnackBar message={error} error/>}
+            {ui.error && <SnackBar message={ui.error} error/>}
+            {ui.success && <SnackBar message={ui.success}/>}
         </Router>
     )
 }

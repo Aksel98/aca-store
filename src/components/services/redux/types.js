@@ -9,5 +9,6 @@ export const UPDATE_PRICE = 'UPDATE_PRICE'
 //used by favouriteReducer
 export const ADD_TO_FAVOURITES = 'ADD_TO_FAVOURITES'
 export const REMOVE_FROM_FAVOURITES = 'REMOVE_FROM_FAVOURITES'
-//used errors
-export const SET_ERRORS = 'SET_ERRORS'
+//used ui
+export const SET_ERROR = 'SET_ERROR'
+export const SET_SUCCESS = 'SET_SUCCESS'

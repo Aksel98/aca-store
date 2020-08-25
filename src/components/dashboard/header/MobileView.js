@@ -1,7 +1,7 @@
 import React from "react";
 import {ARM_FLAG, BLUE, EN_FLAG, LOGO, ORANGE, RUS_FLAG, WHITE} from "../../main/constants/Constants";
 import {Link, useLocation} from "react-router-dom";
-import {HOME_URL, LOGIN_URL} from "../../services/api/Navigations";
+import {HOME_URL, LOGIN_URL} from "../../main/constants/navigations";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import DropDown from "../../main/dropdown/Dropdown";
 import {useDispatch, useSelector} from "react-redux";

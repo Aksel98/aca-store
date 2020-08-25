@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {Link} from "react-router-dom";
 import {useHistory} from "react-router-dom";
-import {HOME_URL} from "../services/api/Navigations";
+import {HOME_URL} from "../main/constants/navigations";
 import {useDispatch} from "react-redux"
 import {signInUser, signUpUser} from "../services/redux/actions/userAction";
 

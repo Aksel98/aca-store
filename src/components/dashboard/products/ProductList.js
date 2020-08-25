@@ -5,7 +5,7 @@ import {db} from '../../services/firebase/Firebase';
 import {useHistory, useParams} from 'react-router-dom';
 import {makeStyles, useMediaQuery} from "@material-ui/core";
 import ModalDialog from "../../main/popups/ModalDialog";
-import {LOGIN_URL} from "../../services/api/Navigations";
+import {LOGIN_URL} from "../../main/constants/navigations";
 import {useTranslation} from "react-i18next";
 import Filters from "./Filters";
 import Loader from "../../main/loader/Loader";
