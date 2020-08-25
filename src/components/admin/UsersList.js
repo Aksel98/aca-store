@@ -7,10 +7,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { db } from '../services/firebase/Firebase';
 import uniqId from 'uniqid';
-import { GREY, BLUE, ORANGE } from '../main/constants/Constants';
+import { GREY, BLUE, ORANGE } from '../main/constants/constants';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { HOME_URL } from '../services/api/Navigations';
+import {HOME_URL} from "../main/constants/navigations";
+
 const useStyles = makeStyles({
     table: {
         width: 'auto',
