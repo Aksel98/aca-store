@@ -1,11 +1,11 @@
 import React from "react";
-import {makeStyles, useMediaQuery, Button} from "@material-ui/core";
-import {GREY, MyButton} from "../../main/constants/Constants";
-import {useDispatch, useSelector} from 'react-redux';
-import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {removeFromFav} from "../../services/redux/actions/favouriteActions";
-import {addToBasket} from "../../services/redux/actions/basketAction";
-import {useTranslation} from "react-i18next";
+import { makeStyles, useMediaQuery, Button } from "@material-ui/core";
+import { GREY, MyButton } from "../../main/constants/Constants";
+import { useDispatch, useSelector } from 'react-redux';
+import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { removeFromFav } from "../../services/redux/actions/favouriteActions";
+import { addToBasket } from "../../services/redux/actions/basketAction";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
     container: {
@@ -69,10 +69,10 @@ const useStyles = makeStyles({
 })
 
 export default function FavItem(props) {
-    const {image, model, id, price, device, setFavItems} = props;
+    const { image, model, id, price, device, setFavItems } = props;
     const favourites = useSelector(state => state.favourites)
     const dispatch = useDispatch()
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const media = useMediaQuery('(max-width:600px)');
     const classes = useStyles(media);
 
@@ -83,7 +83,7 @@ export default function FavItem(props) {
 
     return (
         <div className={classes.container}>
-            <img className={classes.image} src={image} alt=""/>
+            <img className={classes.image} src={image} alt="" />
             <div className={classes.main}>
                 <div>
                     <div className={classes.infoName}>{model}</div>
@@ -96,13 +96,13 @@ export default function FavItem(props) {
             </div>
             <div>
                 <MyButton color="primary"
-                          maxwidth="90%"
-                          variant="contained"
-                          onClick={() => dispatch(addToBasket(id, price, device))}>{t('buy')}</MyButton>
+                    maxwidth="90%"
+                    variant="contained"
+                    onClick={() => dispatch(addToBasket(id, price, device))}>{t('buy')}</MyButton>
                 <MyButton maxwidth="90%"
-                          variant="contained"
-                          className={classes.distance}
-                          onClick={removeFavItem}>{t('remove')}</MyButton>
+                    variant="contained"
+                    className={classes.distance}
+                    onClick={removeFavItem}>{t('remove')}</MyButton>
             </div>
         </div>
     )

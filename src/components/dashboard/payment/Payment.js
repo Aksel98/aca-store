@@ -1,9 +1,9 @@
-import React, {useEffect, useState,} from 'react';
-import {useHistory, useLocation} from "react-router-dom";
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useEffect, useState, } from 'react';
+import { useHistory, useLocation } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
 import ConfirmationNumberOutlinedIcon from "@material-ui/icons/ConfirmationNumberOutlined";
 import uniqId from 'uniqid';
-import {db} from "../../services/firebase/Firebase";
+import { db } from "../../services/firebase/Firebase";
 import TextField from '@material-ui/core/TextField';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
@@ -14,11 +14,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import {MyButton, ORANGE, BLUE} from "../../main/constants/Constants";
-import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {useMediaQuery} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
-import {removeFromBasket} from "../../services/redux/actions/basketAction";
+import { MyButton, ORANGE, BLUE } from "../../main/constants/Constants";
+import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { useMediaQuery } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromBasket } from "../../services/redux/actions/basketAction";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
@@ -140,7 +140,7 @@ const useStyles = makeStyles({
 })
 
 export default function Payment() {
-    const [order, setOrder] = useState({city: '', address: '', zip: '', ship: '', pay: '', orderItems: []});
+    const [order, setOrder] = useState({ city: '', address: '', zip: '', ship: '', pay: '', orderItems: [] });
     const [chosenItems, setChosenItems] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
     const basketItems = useSelector(state => state.basket);
@@ -149,6 +149,9 @@ export default function Payment() {
     const classes = useStyles(media);
     const location = useLocation()
     const history = useHistory();
+    const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0)
+    const currentUser = useSelector(state => state.user);
+
 
     useEffect(() => {
         getCartItems();
@@ -157,8 +160,12 @@ export default function Payment() {
     useEffect(() => {
         setSubTotal(chosenItems.map((item, ind) => {
             return item.price * location.state.quantity[ind]
-        }).reduce((acc, Value) => (acc + Value), 0))
-    }, [chosenItems])
+        }).reduce((acc, Value) => (acc + Value), 0));
+        const orderItems = [...chosenItems];
+        setOrder({ ...order, orderItems: orderItems })
+        setFinalPrice(subTotal * 1.2 + order.ship * 1)
+        console.log(order.orderItems)
+    }, [chosenItems, order.ship, order.bank])
 
     const getCartItems = () => {
         const basketIds = basketItems.map(item => item.id)
@@ -168,7 +175,7 @@ export default function Payment() {
                     const tempArr = [];
                     querySnapshot.docs.forEach(doc => {
                         let tempObj = doc.data();
-                        tempArr.push({...tempObj});
+                        tempArr.push({ ...tempObj });
                     })
                     setChosenItems(tempArr);
                 }).catch(err => console.log('error making basket info query', err));
@@ -179,15 +186,15 @@ export default function Payment() {
     }
 
     const handleDataChange = (e) => {
-        const oldState = {...order};
+        const oldState = { ...order };
         oldState[e.target.id] = e.target.value;
         console.log(e.target.value)
-        setOrder({...oldState})
+        setOrder({ ...oldState })
     }
 
     const handleRadioChange = (e) => {
-        const {name, value} = e.target;
-        setOrder({...order, [name]: value})
+        const { name, value } = e.target;
+        setOrder({ ...order, [name]: value })
     }
 
     const removeItem = (id) => {
@@ -196,14 +203,27 @@ export default function Payment() {
         setChosenItems(tempArr);
         dispatch(removeFromBasket(id))
     }
-
+    const confirmOrder = () => {
+        try {
+            db.collection('orders').doc(currentUser.uid).set({
+                items: order.orderItems,
+                price: finalPrice,
+                address: order.address + ', ' + order.city + ', ' + order.country + ', ' + order.zip,
+                shipping: order.ship,
+                payment: order.pay
+            })
+                .then(() => console.log('order received'))
+        } catch (error) {
+            console.log('could not finalize the order')
+        }
+    }
     return (
         <div className={classes.container}>
             <div onClick={() => history.goBack()} className={classes.backIcon}>
-                <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
+                <Fab color="primary"><KeyboardBackspaceIcon /></Fab>
             </div>
             <div className={classes.confirmIconBlock}>
-                <ConfirmationNumberOutlinedIcon/>
+                <ConfirmationNumberOutlinedIcon />
                 <h1 className={classes.confirmIconText}>CONFIRM YOUR ORDER</h1>
             </div>
             {!media && <div className={classes.tableRow}>
@@ -223,61 +243,61 @@ export default function Payment() {
                     {media && <div className={classes.tableRowTitle}>Quantity</div>}
                     <span className={classes.collParam}> {location.state.quantity[ind]} </span>
                     {media && <div className={classes.tableRowTitle}>Price</div>}
-                    <span className={classes.collParam}> {numberFormat(Math.ceil(item.price), ' ֏')}</span>
+                    <span className={classes.collParam}> {numberFormat(item.price, ' ֏')}</span>
                     {media && <div className={classes.tableRowTitle}>Total</div>}
                     <span
-                        className={classes.collParam}> {numberFormat(Math.ceil(item.price * location.state.quantity[ind]), ' ֏')}</span>
+                        className={classes.collParam}> {numberFormat(subTotal, ' ֏')}</span>
                     <span className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
-                                                                   newcolor={ORANGE}
-                                                                   variant="contained">Remove</MyButton></span>
+                        newcolor={ORANGE}
+                        variant="contained">Remove</MyButton></span>
                 </div>)}
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>Sub-Total</span>
-                <span className={classes.tableRowItemValue}>{numberFormat(Math.ceil(subTotal), ' ֏')}</span>
+                <span className={classes.tableRowItemValue}>{numberFormat(subTotal, ' ֏')}</span>
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>VAT 20%</span>
-                <span className={classes.tableRowItemValue}> {numberFormat(Math.ceil(subTotal * 0.2), ' ֏')}</span>
+                <span className={classes.tableRowItemValue}> {numberFormat(subTotal * 0.2, ' ֏')}</span>
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>Sipping Rate</span>
-                <span className={classes.tableRowItemValue}>{numberFormat(Math.ceil(+order.ship), ' ֏')}</span>
+                <span className={classes.tableRowItemValue}>{numberFormat(+order.ship, ' ֏')}</span>
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>Total</span>
                 <span
-                    className={classes.tableRowItemValue}> {numberFormat(Math.ceil(+order.ship + subTotal * 1.2), ' ֏')}</span>
+                    className={classes.tableRowItemValue}> {numberFormat(finalPrice, ' ֏')}</span>
             </div>
             <div className={classes.methods}>
                 <div className={classes.shippingMetods}>
                     <span className={classes.shippingIcom}>
-                        <LocalShippingIcon/>
+                        <LocalShippingIcon />
                         <h2 className={classes.methodsTitle}>SHIPPING METHOD</h2>
                     </span>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Shipping rate</FormLabel>
                         <RadioGroup aria-label="shipping" id='ship' name="shipping" value={order.ship}
-                                    onChange={handleRadioChange}>
-                            <FormControlLabel name='ship' value="5000" control={<Radio color="primary"/>}
-                                              label="Standart 5,000 ֏"/>
-                            <FormControlLabel name='ship' value="10000" control={<Radio color="primary"/>}
-                                              label="FedEx 2 day  10,000 ֏"/>
+                            onChange={handleRadioChange}>
+                            <FormControlLabel name='ship' value="5000" control={<Radio color="primary" />}
+                                label="Standart 5,000 ֏" />
+                            <FormControlLabel name='ship' value="10000" control={<Radio color="primary" />}
+                                label="FedEx 2 day  10,000 ֏" />
                         </RadioGroup>
                     </FormControl>
                 </div>
                 <div className={classes.paymentMetods}>
                     <span className={classes.paymentIcon}>
-                        <AccountBalanceIcon/>
+                        <AccountBalanceIcon />
                         <h2 className={classes.methodsTitle}>PAYMENT METHOD</h2>
                     </span>
                     <FormControl>
                         <RadioGroup aria-label="payment" value={order.pay}
-                                    onChange={handleRadioChange}>
-                            <FormControlLabel name='pay' value="bank" control={<Radio color="primary"/>}
-                                              label="Bank Transfer"/>
-                            <FormControlLabel name='pay' value="cash" control={<Radio color="primary"/>}
-                                              label="Cash on delivery"/>
+                            onChange={handleRadioChange}>
+                            <FormControlLabel name='pay' value="bank" control={<Radio color="primary" />}
+                                label="Bank Transfer" />
+                            <FormControlLabel name='pay' value="cash" control={<Radio color="primary" />}
+                                label="Cash on delivery" />
                         </RadioGroup>
                     </FormControl>
                 </div>
@@ -303,7 +323,7 @@ export default function Payment() {
                             native
                             id='country'
                             onChange={handleDataChange}>
-                            <option aria-label="None" value={order.country}/>
+                            <option aria-label="None" value={order.country} />
                             <option id="country">Armenia</option>
                             <option id="country">Georgia</option>
                             <option id="country">Iran</option>
@@ -317,25 +337,25 @@ export default function Payment() {
                         label="City"
                         placeholder="eg. Yerevan"
                         onChange={handleDataChange}
-                        value={order.city}/>
+                        value={order.city} />
                     <TextField
                         required
                         id="address"
                         label="Address"
                         placeholder="Street address, company name"
                         onChange={handleDataChange}
-                        value={order.address}/>
+                        value={order.address} />
                     <TextField
                         required
                         id="zip"
                         label="Zip"
                         placeholder="eg. 1520"
                         onChange={handleDataChange}
-                        value={order.zip}/>
+                        value={order.zip} />
                 </div>
             </div>
             {media && <div className={classes.transfersInfobtn}>
-                <MyButton className={classes.confirmBtn} newcolor={ORANGE} variant="contained">Confirm order</MyButton>
+                <MyButton className={classes.confirmBtn} onClick={confirmOrder} newcolor={ORANGE} variant="contained">Confirm order</MyButton>
             </div>}
         </div>
     )
