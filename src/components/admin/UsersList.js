@@ -70,7 +70,6 @@ export default function UsersList() {
             <TableHead >
                 <TableRow key={uniqId()}  >
                     <TableCell key={uniqId()} className={classes.head} >FULLNAME</TableCell>
-                    <TableCell key={uniqId()} className={classes.head} >UID</TableCell>
                     <TableCell key={uniqId()} className={classes.head} >E-MAIL</TableCell>
                     <TableCell key={uniqId()} className={classes.head} > ADDRESS</TableCell >
                     <TableCell key={uniqId()} className={classes.head} >ORDER PRICE</TableCell>
@@ -83,9 +82,6 @@ export default function UsersList() {
 
                         <TableCell key={uniqId()} className={classes.cells}>
                             {user.name + ' ' + user.surname}
-                        </TableCell>
-                        <TableCell key={uniqId()} className={classes.cells}>
-                            {user.id}
                         </TableCell>
                         <TableCell key={uniqId()} className={classes.cells}>{user.email}</TableCell>
                         <TableCell key={uniqId()} className={classes.cells}>{user.order?.address}</TableCell>
