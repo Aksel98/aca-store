@@ -21,16 +21,21 @@ import {useMediaQuery} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {addToBasket} from "../../services/redux/actions/basketAction";
 import {TypeContext} from "../../main/contexts/typeContext";
+import BackRouter from "../../main/BackRouter";
 
 const useStyles = makeStyles({
     container: {
-        minHeight: 628,
-        margin: '60px 30px'
+        height:  props => props.mediaTablet ? 'calc(100vh - 320px)' : 'calc(100vh - 240px)',
+        overflow: 'auto',
+        margin: '60px 0',
+        padding: '0 20px'
     },
     main: {
         display: 'flex',
         flexWrap: 'wrap',
+        alignItems: 'center',
         justifyContent: 'center',
+        textAlign: 'center',
     },
     images: {
         width: 302,
@@ -39,8 +44,8 @@ const useStyles = makeStyles({
         alignItems: 'center'
     },
     deviceInfoPart: {
-        marginLeft: props => props && 101,
-        width: props => !props && '100%'
+        marginLeft: props => props.media && 101,
+        width: props => !props.media && '100%'
     },
     info: {
         borderBottom: `2px solid ${GREY}`
@@ -80,7 +85,8 @@ export default function Device() {
     const isAdmin = useContext(TypeContext)
     const dispatch = useDispatch()
     const media = useMediaQuery('(min-width:990px)');
-    const classes = useStyles(media)
+    const mediaTablet = useMediaQuery('(max-width:600px)');
+    const classes = useStyles({media, mediaTablet})
     const {t} = useTranslation()
     const history = useHistory()
 
@@ -119,9 +125,7 @@ export default function Device() {
 
     return (
         <div className={classes.container}>
-            <div onClick={() => history.goBack()} className={classes.backIcon}>
-                <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
-            </div>
+            <BackRouter/>
             <div className={classes.main}>
                 <div className={classes.images}>
                     <ReactImageMagnify  {...{
