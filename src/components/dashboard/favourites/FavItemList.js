@@ -69,8 +69,6 @@ const FavItemList = () => {
         }
     }
 
-    console.log(favItems)
-
     return (
         loader ? <Loader/> : <div className={classes.main}>
             <div onClick={() => history.goBack()} className={classes.backIcon}>

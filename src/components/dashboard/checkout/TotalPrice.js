@@ -32,6 +32,7 @@ const useStyles = makeStyles({
 const TotalPrice = () => {
     const [quantity, setQuantity] = useState(0)
     const basketItems = useSelector(state => state.basket)
+    const currentUser = useSelector(state => state.user)
     const [amount, setAmount] = useState(0)
     const classes = useStyles();
     const {t} = useTranslation()
@@ -44,7 +45,7 @@ const TotalPrice = () => {
     }, [basketItems])
 
     return (
-        <div className={classes.mainWrapper}>
+        currentUser && <div className={classes.mainWrapper}>
             <div className={classes.price}>
                 <span>Total price`</span>
                 <span className={classes.bold}>{numberFormat(amount, '֏')}</span>

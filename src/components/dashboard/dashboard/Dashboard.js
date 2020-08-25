@@ -10,6 +10,7 @@ import Header from "../header/Header";
 import FavItemList from "../favourites/FavItemList";
 import Footer from "../footer/Footer";
 import SnackBar from "../../main/popups/SnackBar";
+import Payment from "../payment/Payment";
 
 const useStyles = makeStyles({
     loginBg: {
@@ -43,6 +44,13 @@ export default function Dashboard() {
                             <FavItemList/>
                         </div>
                         <Footer/>
+                    </Route>
+                    <Route path='/payment'>
+                        <div>
+                            <Header/>
+                            <Payment/>
+                            <Footer/>
+                        </div>
                     </Route>
                     <GeneralRoutes/>
                 </Switch>

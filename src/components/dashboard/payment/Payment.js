@@ -182,7 +182,6 @@ export default function Payment() {
     const handleDataChange = (e) => {
         const oldState = {...order};
         oldState[e.target.id] = e.target.value;
-        console.log(e.target.value)
         setOrder({...oldState})
     }
 
