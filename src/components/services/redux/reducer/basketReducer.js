@@ -1,4 +1,4 @@
-import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_FROM_BASKET, UPDATE_PRICE} from "../types";
+import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_BASKET, REMOVE_FROM_BASKET, UPDATE_PRICE} from "../types";
 import {initialState} from "./reducers";
 
 export default function (state = initialState.basketItems, action) {
@@ -45,6 +45,9 @@ export default function (state = initialState.basketItems, action) {
             newState = newState.filter(item => item.id !== action.id)
             localStorage.setItem('basketItems', JSON.stringify(newState))
             return newState
+        }
+        case REMOVE_BASKET: {
+            return []
         }
         case UPDATE_PRICE: {
             let newState = [...state];

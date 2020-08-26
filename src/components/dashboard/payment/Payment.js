@@ -17,12 +17,12 @@ import {MyButton, ORANGE, BLUE} from "../../main/constants/constants";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {useMediaQuery} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {removeFromBasket} from "../../services/redux/actions/basketAction";
+import {removeBasket, removeFromBasket} from "../../services/redux/actions/basketAction";
 import { useTranslation } from "react-i18next";
 import {getError, getSuccess} from "../../services/redux/actions/uiActions";
 import { HOME_URL } from '../../main/constants/navigations';
 import BackRouter from "../../main/BackRouter";
-
+import {useHistory} from "react-router-dom";
 const useStyles = makeStyles({
     container: {
         display: "flex",
@@ -229,9 +229,10 @@ export default function Payment() {
                     if (order.address && order.city && order.country && order.zip) {
                         history.push(HOME_URL);
                         dispatch(getSuccess('Order received'));
-                    } else { setError(true); dispatch(getError('Invalid entries')) }
-
-
+                        dispatch(removeBasket())
+                    } else {
+                        setError(true); dispatch(getError('Invalid entries'))
+                    }
                 })
                 .catch(e => dispatch(getError(e.message)))
 
