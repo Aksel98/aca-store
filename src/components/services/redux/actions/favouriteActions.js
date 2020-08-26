@@ -1,16 +1,16 @@
 import { ADD_TO_FAVOURITES, REMOVE_FROM_FAVOURITES } from "../types"
 
-export const addToFav = (id, user) => {
+export const addToFav = (id, uid) => {
     return {
         type: ADD_TO_FAVOURITES,
         id,
-        user
+        uid
     }
 }
-export const removeFromFav = (id, user) => {
+export const removeFromFav = (id, uid) => {
     return {
         type: REMOVE_FROM_FAVOURITES,
         id,
-        user
+        uid
     }
 }

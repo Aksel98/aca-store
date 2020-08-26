@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { addToFav, removeFromFav } from '../../services/redux/actions/favouriteActions';
 import { addToBasket, removeFromBasket } from "../../services/redux/actions/basketAction";
 import { TypeContext } from "../../main/contexts/typeContext";
+import { db } from '../../services/firebase/Firebase';
 
 const useStyles = makeStyles({
     root: {
@@ -107,10 +108,23 @@ export default function Product(props) {
     const isAdmin = useContext(TypeContext)
     const classes = useStyles({ mediaTablet, mediaMobile, currentUser, liked });
     const { t } = useTranslation()
-    const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
+    // const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
+    const [favFromDB, setFavFromDB] = useState();
+    useEffect(() => {
+        if (currentUser) {
+            let tempArr = [];
+            db.collection('users').doc(currentUser.uid).get()
+                .then(info => (info.data()))
+                .then(data => (data.favourites ? tempArr = [...data.favourites] : []))
+                .then(arr => setFavFromDB(arr))
+                .catch(e => console.log('could not get favourites'))
+        }
+
+    })
+
 
     useEffect(() => {
-        currentUser && favFromLocal?.includes(id) ? setLiked(true) : setLiked(false)
+        currentUser && favFromDB?.includes(id) ? setLiked(true) : setLiked(false)
     })
 
     useEffect(() => {

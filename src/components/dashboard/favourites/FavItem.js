@@ -76,11 +76,13 @@ export default function FavItem(props) {
     const classes = useStyles(media);
     const currentUser = useSelector(state => state.user);
     function removeFavItem() {
-        dispatch(removeFromFav(id, currentUser.uid))
-        const favorites = [...favItems]
-        const currentIndex = favorites.findIndex(el => el.id === id)
-        favorites.splice(currentIndex, 1)
-        setFavItems(favorites)
+        if (currentUser) {
+            dispatch(removeFromFav(id, currentUser.uid))
+            const favorites = [...favItems]
+            const currentIndex = favorites.findIndex(el => el.id === id)
+            favorites.splice(currentIndex, 1)
+            setFavItems(favorites)
+        }
     }
 
     return (

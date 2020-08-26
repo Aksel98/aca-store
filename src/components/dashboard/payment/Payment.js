@@ -22,7 +22,8 @@ import { removeFromBasket } from "../../services/redux/actions/basketAction";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import { useTranslation } from "react-i18next";
-import { getError } from "../../services/redux/actions/uiActions";
+import { getError, getSuccess } from "../../services/redux/actions/uiActions";
+import { HOME_URL } from '../../main/constants/navigations';
 
 const useStyles = makeStyles({
     container: {
@@ -143,17 +144,17 @@ const useStyles = makeStyles({
 
 export default function Payment() {
     const currentUser = useSelector(state => state.user);
-    const [order, setOrder] = useState({ city: '', address: '', zip: '', ship: '', pay: '', orderItems: [], id: currentUser.uid });
+    const [order, setOrder] = useState({ city: '', address: '', zip: '', ship: '5000', pay: 'bank', orderItems: [], country: '', uid: currentUser.uid });
     const [chosenItems, setChosenItems] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
     const basketItems = useSelector(state => state.basket);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const media = useMediaQuery('(max-width:968px)');
     const classes = useStyles(media);
-    const location = useLocation()
+    const location = useLocation();
     const history = useHistory();
-    const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0)
-    const { t } = useTranslation()
+    const [finalPrice, setFinalPrice] = useState(0);
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -189,12 +190,15 @@ export default function Payment() {
     }
 
     const handleDataChange = (e) => {
+        e.preventDefault();
         const oldState = { ...order };
         oldState[e.target.id] = e.target.value;
+        console.log(e.target.value);
         setOrder({ ...oldState })
     }
 
     const handleRadioChange = (e) => {
+        e.preventDefault();
         const { name, value } = e.target;
         setOrder({ ...order, [name]: value })
     }
@@ -217,7 +221,12 @@ export default function Payment() {
                     id: order.id
                 }
             }, { merge: true })
-                .then(() => console.log('order received'))
+                .then(() => {
+                    history.push(HOME_URL);
+                    dispatch(getSuccess('Order Received'));
+
+                })
+                .catch(e => console.log('can not get the order details'))
         } catch (error) {
             console.log('could not finalize the order')
         }
@@ -284,9 +293,9 @@ export default function Payment() {
 
                         <RadioGroup aria-label="shipping" id='ship' name="shipping" value={order.ship}
                             onChange={handleRadioChange}>
-                            <FormControlLabel name='ship' value="5000" control={<Radio color="primary" />}
+                            <FormControlLabel key={uniqId()} name='ship' value="5000" control={<Radio color="primary" />}
                                 label={t("standart 5,000 ֏")} />
-                            <FormControlLabel name='ship' value="10000" control={<Radio color="primary" />}
+                            <FormControlLabel key={uniqId()} name='ship' value="10000" control={<Radio color="primary" />}
                                 label={t("FedEx 2 day  10,000 ֏")} />
                         </RadioGroup>
                     </FormControl>
@@ -327,29 +336,29 @@ export default function Payment() {
                             native
                             id='country'
                             onChange={handleDataChange}>
-                            <option key={uniqId()} aria-label="None" value={order.country} />
-                            <option key={uniqId()} id="country">{t("armenia")}</option>
-                            <option key={uniqId()} id="country">{t("georgia")}</option>
-                            <option key={uniqId()} id="country">{t("iran")}</option>
-                            <option key={uniqId()} id="country">{t("russia")}</option>
-                            <option key={uniqId()} id="country">{t("usa")}</option>
+                            <option aria-label="None" value={order.country} />
+                            <option id="country">{t("armenia")}</option>
+                            <option id="country">{t("georgia")}</option>
+                            <option id="country">{t("iran")}</option>
+                            <option id="country">{t("russia")}</option>
+                            <option id="country">{t("usa")}</option>
                         </Select>
                     </FormControl>
-                    <TextField key={uniqId()}
+                    <TextField
                         required
                         id="city"
                         label={t("city")}
                         placeholder="eg. Yerevan"
                         onChange={handleDataChange}
                         value={order.city} />
-                    <TextField key={uniqId()}
+                    <TextField
                         required
                         id="address"
                         label={t("address")}
-                        placeholder="Street address, company name"
+                        placeholder="Street address"
                         onChange={handleDataChange}
                         value={order.address} />
-                    <TextField key={uniqId()}
+                    <TextField
                         required
                         id="zip"
                         label={t("zip")}
