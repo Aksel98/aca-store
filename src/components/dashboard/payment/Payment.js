@@ -14,15 +14,15 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import {MyButton, ORANGE, BLUE} from "../../main/constants/constants";
-import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {useMediaQuery} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
-import {removeFromBasket} from "../../services/redux/actions/basketAction";
+import { MyButton, ORANGE, BLUE } from "../../main/constants/constants";
+import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { useMediaQuery } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromBasket } from "../../services/redux/actions/basketAction";
 import Fab from "@material-ui/core/Fab";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import { useTranslation } from "react-i18next";
-import {getError} from "../../services/redux/actions/uiActions";
+import { getError } from "../../services/redux/actions/uiActions";
 
 const useStyles = makeStyles({
     container: {
@@ -189,9 +189,9 @@ export default function Payment() {
     }
 
     const handleDataChange = (e) => {
-        const oldState = {...order};
+        const oldState = { ...order };
         oldState[e.target.id] = e.target.value;
-        setOrder({...oldState})
+        setOrder({ ...oldState })
     }
 
     const handleRadioChange = (e) => {
@@ -224,59 +224,59 @@ export default function Payment() {
     }
     return (
         <div className={classes.container}>
-            <div onClick={() => history.goBack()} className={classes.backIcon}>
+            <div key={uniqId()} onClick={() => history.goBack()} className={classes.backIcon}>
                 <Fab color="primary"><KeyboardBackspaceIcon /></Fab>
             </div>
-            <div className={classes.confirmIconBlock}>
+            <div key={uniqId()} className={classes.confirmIconBlock}>
                 <ConfirmationNumberOutlinedIcon />
                 <h1 className={classes.confirmIconText}>{t("confirmOrder")}</h1>
             </div>
             {!media && <div className={classes.tableRow}>
-                <h2 className={classes.tableRowTitle}>{t('productName')}</h2>
-                <h2 className={classes.tableRowTitle}>{t('model')}</h2>
-                <h2 className={classes.tableRowTitle}>{t('quantity')}</h2>
-                <h2 className={classes.tableRowTitle}>{t('price')}</h2>
-                <h2 className={classes.tableRowTitle}>{t('total')}</h2>
-                <h2 className={classes.tableRowTitle}>{t('action')}</h2>
+                <h2 key={uniqId()} className={classes.tableRowTitle}>{t('productName')}</h2>
+                <h2 key={uniqId()} className={classes.tableRowTitle}>{t('model')}</h2>
+                <h2 key={uniqId()} className={classes.tableRowTitle}>{t('quantity')}</h2>
+                <h2 key={uniqId()} className={classes.tableRowTitle}>{t('price')}</h2>
+                <h2 key={uniqId()} className={classes.tableRowTitle}>{t('total')}</h2>
+                <h2 key={uniqId()} className={classes.tableRowTitle}>{t('action')}</h2>
             </div>}
             <div>{!basketItems ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
-                <div key={uniqId} className={classes.tableRow}>
-                    {media && <div className={classes.tableRowTitle}>{t('productName')}</div>}
-                    <span className={classes.collParam}> {item.device}</span>
-                    {media && <div className={classes.tableRowTitle}>{t('model')}</div>}
-                    <span className={classes.collParam}> {item.model}</span>
-                    {media && <div className={classes.tableRowTitle}>{t('quantity')}</div>}
-                    <span className={classes.collParam}> {location.state.quantity[ind]} </span>
-                    {media && <div className={classes.tableRowTitle}>{t('price')}</div>}
-                    <span className={classes.collParam}> {numberFormat(item.price, ' ֏')}</span>
-                    {media && <div className={classes.tableRowTitle}>{t('total')}</div>}
-                    <span
+                <div key={uniqId()} className={classes.tableRow}>
+                    {media && <div key={uniqId()} className={classes.tableRowTitle}>{t('productName')}</div>}
+                    <span key={uniqId()} className={classes.collParam}> {item.device}</span>
+                    {media && <div key={uniqId()} className={classes.tableRowTitle}>{t('model')}</div>}
+                    <span key={uniqId()} className={classes.collParam}> {item.model}</span>
+                    {media && <div key={uniqId()} className={classes.tableRowTitle}>{t('quantity')}</div>}
+                    <span key={uniqId()} className={classes.collParam}> {location.state.quantity[ind]} </span>
+                    {media && <div key={uniqId()} className={classes.tableRowTitle}>{t('price')}</div>}
+                    <span key={uniqId()} className={classes.collParam}> {numberFormat(item.price, ' ֏')}</span>
+                    {media && <div key={uniqId()} className={classes.tableRowTitle}>{t('total')}</div>}
+                    <span key={uniqId()}
                         className={classes.collParam}> {numberFormat(subTotal, ' ֏')}</span>
-                    <span className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
+                    <span key={uniqId()} className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
                         newcolor={ORANGE}
                         variant="contained">{t("remove")}</MyButton></span>
                 </div>)}
             </div>
-            <div className={classes.tableRow}>
-                <span className={classes.tableRowItemName}>{t("subTotal")}</span>
-                <span className={classes.tableRowItemValue}>{numberFormat(subTotal, ' ֏')}</span>
+            <div key={uniqId()} className={classes.tableRow}>
+                <span key={uniqId()} className={classes.tableRowItemName}>{t("subTotal")}</span>
+                <span key={uniqId()} className={classes.tableRowItemValue}>{numberFormat(subTotal, ' ֏')}</span>
             </div>
-            <div className={classes.tableRow}>
-                <span className={classes.tableRowItemName}>{t("vat 20%")}</span>
-                <span className={classes.tableRowItemValue}> {numberFormat(subTotal * 0.2, ' ֏')}</span>
+            <div key={uniqId()} className={classes.tableRow}>
+                <span key={uniqId()} className={classes.tableRowItemName}>{t("vat 20%")}</span>
+                <span key={uniqId()} className={classes.tableRowItemValue}> {numberFormat(subTotal * 0.2, ' ֏')}</span>
             </div>
-            <div className={classes.tableRow}>
-                <span className={classes.tableRowItemName}>{t("shippingRate")}</span>
-                <span className={classes.tableRowItemValue}>{numberFormat(+order.ship, ' ֏')}</span>
+            <div key={uniqId()} className={classes.tableRow}>
+                <span key={uniqId()} className={classes.tableRowItemName}>{t("shippingRate")}</span>
+                <span key={uniqId()} className={classes.tableRowItemValue}>{numberFormat(+order.ship, ' ֏')}</span>
             </div>
-            <div className={classes.tableRow}>
-                <span className={classes.tableRowItemName}>{t("total")}</span>
-                <span
+            <div key={uniqId()} className={classes.tableRow}>
+                <span key={uniqId()} className={classes.tableRowItemName}>{t("total")}</span>
+                <span key={uniqId()}
                     className={classes.tableRowItemValue}> {numberFormat(finalPrice, ' ֏')}</span>
             </div>
-            <div className={classes.methods}>
-                <div className={classes.shippingMetods}>
-                    <span className={classes.shippingIcom}>
+            <div key={uniqId()} className={classes.methods}>
+                <div key={uniqId()} className={classes.shippingMetods}>
+                    <span key={uniqId()} className={classes.shippingIcom}>
                         <LocalShippingIcon />
                         <h2 className={classes.methodsTitle}>{t("shipping")} </h2>
                     </span>
@@ -291,8 +291,8 @@ export default function Payment() {
                         </RadioGroup>
                     </FormControl>
                 </div>
-                <div className={classes.paymentMetods}>
-                    <span className={classes.paymentIcon}>
+                <div key={uniqId()} className={classes.paymentMetods}>
+                    <span key={uniqId()} className={classes.paymentIcon}>
                         <AccountBalanceIcon />
                         <h2 className={classes.methodsTitle}>{t("payment")}</h2>
                     </span>
@@ -307,49 +307,49 @@ export default function Payment() {
                     </FormControl>
                 </div>
             </div>
-            <div className={classes.transfersInfo}>
+            <div key={uniqId()} className={classes.transfersInfo}>
                 {order.pay === 'bank' && <div className={classes.transfersInfoblock}>
-                    <h2 className={classes.infoTitle}>{t("bankDetails")}</h2>
-                    <p className={classes.infoText}>{t('bank')}: Ameriabank</p>
-                    <p className={classes.infoText}>SWIFT / BIC: ARMIAM22</p>
-                    <p className={classes.infoText}>a/c: 103002101576</p>
-                    <p className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
-                    <p className={classes.infoText}>{t('yourOrderWillShipAfterWeReceivePayment')}</p>
+                    <h2 key={uniqId()} className={classes.infoTitle}>{t("bankDetails")}</h2>
+                    <p key={uniqId()} className={classes.infoText}>{t('bank')}: Ameriabank</p>
+                    <p key={uniqId()} className={classes.infoText}>SWIFT / BIC: ARMIAM22</p>
+                    <p key={uniqId()} className={classes.infoText}>a/c: 103002101576</p>
+                    <p key={uniqId()} className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
+                    <p key={uniqId()} className={classes.infoText}>{t('yourOrderWillShipAfterWeReceivePayment')}</p>
                 </div>}
-                {!media && <div className={classes.transfersInfobtn}>
+                {!media && <div key={uniqId()} className={classes.transfersInfobtn}>
                     <MyButton className={classes.confirmBtn} newcolor={ORANGE} variant="contained">{t("confirmOrder")}</MyButton>
                 </div>}
-                <div className={classes.transfersInfoblock}>
-                    <h2 className={classes.infoTitle}>{t("shippingAddress")}</h2>
+                <div key={uniqId()} className={classes.transfersInfoblock}>
+                    <h2 key={uniqId()} className={classes.infoTitle}>{t("shippingAddress")}</h2>
                     <FormControl required className={classes.formControl}>
                         <InputLabel htmlFor="country-native-required">{t("country")}</InputLabel>
                         <Select
                             native
                             id='country'
                             onChange={handleDataChange}>
-                            <option aria-label="None" value={order.country} />
-                            <option id="country">{t("armenia")}</option>
-                            <option id="country">{t("georgia")}</option>
-                            <option id="country">{t("iran")}</option>
-                            <option id="country">{t("russia")}</option>
-                            <option id="country">{t("usa")}</option>
+                            <option key={uniqId()} aria-label="None" value={order.country} />
+                            <option key={uniqId()} id="country">{t("armenia")}</option>
+                            <option key={uniqId()} id="country">{t("georgia")}</option>
+                            <option key={uniqId()} id="country">{t("iran")}</option>
+                            <option key={uniqId()} id="country">{t("russia")}</option>
+                            <option key={uniqId()} id="country">{t("usa")}</option>
                         </Select>
                     </FormControl>
-                    <TextField
+                    <TextField key={uniqId()}
                         required
                         id="city"
                         label={t("city")}
                         placeholder="eg. Yerevan"
                         onChange={handleDataChange}
                         value={order.city} />
-                    <TextField
+                    <TextField key={uniqId()}
                         required
                         id="address"
                         label={t("address")}
                         placeholder="Street address, company name"
                         onChange={handleDataChange}
                         value={order.address} />
-                    <TextField
+                    <TextField key={uniqId()}
                         required
                         id="zip"
                         label={t("zip")}
