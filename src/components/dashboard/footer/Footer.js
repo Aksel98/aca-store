@@ -6,6 +6,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import {Link, useLocation} from "react-router-dom";
 import {LOGO} from "../../main/constants/constants";
 import {HOME_URL} from "../../main/constants/navigations";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -47,6 +48,7 @@ const useStyles = makeStyles(() => ({
         cursor: props => props && 'unset'
     },
     subTitle: {
+        fontSize: 15,
         color: ORANGE,
         margin: 5,
     },
@@ -58,7 +60,7 @@ const useStyles = makeStyles(() => ({
         },
     },
     item: {
-        fontSize: 15,
+        fontSize: 14,
         display: "flex",
         justifyContent: 'center',
         textDecoration: 'none',
@@ -113,6 +115,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function Footer() {
+    const {t} = useTranslation()
     const location = useLocation();
     const classes = useStyles(location.pathname === HOME_URL);
 
@@ -124,7 +127,7 @@ function Footer() {
                         <img src={LOGO} width={40} height={30} alt=""/>
                         <Link to={HOME_URL} className={classes.title}>ACA store</Link>
                     </div>
-                    <h3 className={classes.subTitle}>Contact Us</h3>
+                    <h3 className={classes.subTitle}>{t('ContactUs')}</h3>
                     <div className={classes.logo}>
                         <CallIcon style={{color: ORANGE}}/>
                         <p className={classes.contactInfo}>+374 99 11 11 11</p>
@@ -135,12 +138,12 @@ function Footer() {
                     </div>
                 </div>
                 <div className={classes.itemsParent}>
-                    <h3 className={classes.subTitle}>Helpful links</h3>
+                    <h3 className={classes.subTitle}>{t('helpfulLinks')}</h3>
                     <div>
-                        <Link to="" className={classes.item}>Services</Link>
-                        <Link to="" className={classes.item}>Supports</Link>
-                        <Link to="" className={classes.item}>Terms & conditions</Link>
-                        <Link to="" className={classes.item}>Privacy Policy</Link>
+                        <Link to="" className={classes.item}>{t('services')}</Link>
+                        <Link to="" className={classes.item}>{t('supports')}</Link>
+                        <Link to="" className={classes.item}>{t('Terms&Conditions')}</Link>
+                        <Link to="" className={classes.item}>{t('privacyPolicy')}</Link>
                     </div>
                 </div>
             </div>

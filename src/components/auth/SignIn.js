@@ -55,7 +55,7 @@ const MyTextField = styled(TextField)({
 
 export default function SignIn(props) {
     const [showPassword, setShowPassword] = useState(false)
-    const {email, password, error, onValueChange, signIn, classFormContainer, media} = props
+    const {email, password, onValueChange, signIn, classFormContainer, media} = props
     const dispatch = useDispatch()
     const history = useHistory()
     const classes = useStyles(props)
@@ -78,8 +78,7 @@ export default function SignIn(props) {
                                  InputProps={{endAdornment: <EmailIcon position="start"/>}}
                                  value={email}
                                  onChange={onValueChange}
-                                 autoComplete="on"
-                                 error={!!error}/>
+                                 autoComplete="on"/>
                     <MyTextField label={`${t('password')}...`}
                                  type={showPassword ? 'text' : 'password'}
                                  InputProps={{
@@ -92,8 +91,7 @@ export default function SignIn(props) {
                                  }}
                                  value={password}
                                  onChange={onValueChange}
-                                 autoComplete="off"
-                                 error={!!error}/>
+                                 autoComplete="off"/>
                     <div className={classes.forgotPassword}>{t('forgotPassword')}</div>
                     <MyButton color="primary"
                               variant="contained"
