@@ -153,8 +153,9 @@ export default function Payment() {
     const classes = useStyles(media);
     const location = useLocation()
     const history = useHistory();
-    const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0)
-    const { t } = useTranslation()
+    const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0);
+    const { t } = useTranslation();
+    const [error, setError] = useState(false);
 
 
     useEffect(() => {
@@ -193,7 +194,9 @@ export default function Payment() {
     const handleDataChange = (e) => {
         const oldState = { ...order };
         oldState[e.target.id] = e.target.value;
-        setOrder({ ...oldState })
+        setError(false);
+        setOrder({ ...oldState });
+
     }
 
     const handleRadioChange = (e) => {
@@ -223,9 +226,11 @@ export default function Payment() {
                 }
             }, { merge: true })
                 .then(() => {
+                    if (order.address && order.city && order.country && order.zip) {
+                        history.push(HOME_URL);
+                        dispatch(getSuccess('Order received'));
+                    } else { setError(true); dispatch(getError('Invalid entries')) }
 
-                    history.push(HOME_URL);
-                    dispatch(getSuccess('Order received'));
 
                 })
                 .catch(e => dispatch(getError(e.message)))
@@ -329,7 +334,7 @@ export default function Payment() {
                     <p className={classes.infoText}>{t('yourOrderWillShipAfterWeReceivePayment')}</p>
                 </div>}
                 {!media && <div className={classes.transfersInfobtn}>
-                    <MyButton className={classes.confirmBtn} newcolor={ORANGE} variant="contained">{t("confirmOrder")}</MyButton>
+                    <MyButton className={classes.confirmBtn} newcolor={ORANGE} onClick={confirmOrder} variant="contained">{t("confirmOrder")}</MyButton>
                 </div>}
                 <div className={classes.transfersInfoblock}>
                     <h2 className={classes.infoTitle}>{t("shippingAddress")}</h2>
@@ -353,21 +358,24 @@ export default function Payment() {
                         label={t("city")}
                         placeholder="eg. Yerevan"
                         onChange={handleDataChange}
-                        value={order.city} />
+                        value={order.city}
+                        error={error} />
                     <TextField
                         required
                         id="address"
                         label={t("address")}
                         placeholder="Street address, company name"
                         onChange={handleDataChange}
-                        value={order.address} />
+                        value={order.address}
+                        error={error} />
                     <TextField
                         required
                         id="zip"
                         label={t("zip")}
                         placeholder="eg. 1520"
                         onChange={handleDataChange}
-                        value={order.zip} />
+                        value={order.zip}
+                        error={error} />
                 </div>
             </div>
             {media && <div className={classes.transfersInfobtn}>
