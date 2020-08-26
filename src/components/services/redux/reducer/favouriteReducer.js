@@ -1,20 +1,18 @@
-import {initialState} from './reducers';
-import {ADD_TO_FAVOURITES, REMOVE_FROM_FAVOURITES} from '../types';
+import { initialState } from './reducers';
+import { ADD_TO_FAVOURITES, REMOVE_FROM_FAVOURITES } from '../types';
+import { db } from '../../firebase/Firebase';
+
+
 
 const favouriteReducer = (state = initialState.favourites, action) => {
     switch (action.type) {
         case ADD_TO_FAVOURITES: {
-            const newState = [...state];
-            newState.push(action.id);
-            localStorage.setItem('favourites', JSON.stringify(newState))
-            return newState;
+            return action.payload
         }
 
         case REMOVE_FROM_FAVOURITES: {
-            const newState = [...state];
-            newState.splice(newState.indexOf(action.id), 1);
-            localStorage.setItem('favourites', JSON.stringify(newState))
-            return newState;
+
+            return action.payload
         }
         default:
             return state

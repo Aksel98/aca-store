@@ -18,8 +18,9 @@ import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {useMediaQuery} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {removeFromBasket} from "../../services/redux/actions/basketAction";
-import {useTranslation} from "react-i18next";
-import {getError} from "../../services/redux/actions/uiActions";
+import { useTranslation } from "react-i18next";
+import {getError, getSuccess} from "../../services/redux/actions/uiActions";
+import { HOME_URL } from '../../main/constants/navigations';
 import BackRouter from "../../main/BackRouter";
 
 const useStyles = makeStyles({
@@ -145,15 +146,7 @@ const useStyles = makeStyles({
 
 export default function Payment() {
     const currentUser = useSelector(state => state.user);
-    const [order, setOrder] = useState({
-        city: '',
-        address: '',
-        zip: '',
-        ship: '',
-        pay: '',
-        orderItems: [],
-        id: currentUser.uid
-    });
+    const [order, setOrder] = useState({ city: '', address: '', zip: '', ship: '5000', pay: 'bank', orderItems: [], uid: currentUser.uid });
     const [chosenItems, setChosenItems] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
     const basketItems = useSelector(state => state.basket);
@@ -162,8 +155,10 @@ export default function Payment() {
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const classes = useStyles({media, mediaTablet});
     const location = useLocation()
-    const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0)
-    const {t} = useTranslation()
+    const history = useHistory();
+    const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0);
+    const { t } = useTranslation();
+    const [error, setError] = useState(false);
 
 
     useEffect(() => {
@@ -171,13 +166,14 @@ export default function Payment() {
     }, []);
 
     useEffect(() => {
-        setSubTotal(chosenItems.map((item, ind) => {
+        const tempTotal = chosenItems.map((item, ind) => {
             return item.price * location.state.quantity[ind]
-        }).reduce((acc, Value) => (acc + Value), 0));
-
+        }).reduce((acc, Value) => (acc + Value), 0);
+        setSubTotal(tempTotal);
         const orderItems = [...chosenItems];
-        setOrder({...order, orderItems: orderItems})
-        setFinalPrice(subTotal * 1.2 + order.ship * 1)
+        setOrder({ ...order, orderItems: orderItems })
+        const tempFinalPrice = subTotal * 1.2 + order.ship * 1;
+        setFinalPrice(tempFinalPrice);
     }, [chosenItems, order.ship, order.bank])
 
     const getCartItems = () => {
@@ -199,9 +195,11 @@ export default function Payment() {
     }
 
     const handleDataChange = (e) => {
-        const oldState = {...order};
+        const oldState = { ...order };
         oldState[e.target.id] = e.target.value;
-        setOrder({...oldState})
+        setError(false);
+        setOrder({ ...oldState });
+
     }
 
     const handleRadioChange = (e) => {
@@ -218,18 +216,27 @@ export default function Payment() {
     const confirmOrder = () => {
         try {
             db.collection('users').doc(currentUser.uid).set({
-                    order: {
-                        items: order.orderItems,
-                        price: finalPrice,
-                        address: order.address + ', ' + order.city + ', ' + order.country + ', ' + order.zip,
-                        shipping: order.ship,
-                        payment: order.pay,
-                        id: order.id
-                    }
-                },
-                {merge: true}).then(() => console.log('order received'))
-        } catch (error) {
-            console.log('could not finalize the order')
+                order: {
+                    items: order.orderItems,
+                    price: finalPrice,
+                    address: order.address + ', ' + order.city + ', ' + order.country + ', ' + order.zip,
+                    shipping: order.ship,
+                    payment: order.pay,
+                    id: order.uid
+                }
+            }, { merge: true })
+                .then(() => {
+                    if (order.address && order.city && order.country && order.zip) {
+                        history.push(HOME_URL);
+                        dispatch(getSuccess('Order received'));
+                    } else { setError(true); dispatch(getError('Invalid entries')) }
+
+
+                })
+                .catch(e => dispatch(getError(e.message)))
+
+        } catch (err) {
+            console.log(err)
         }
     }
     return (
@@ -248,7 +255,7 @@ export default function Payment() {
                 <h2 className={classes.tableRowTitle}>{t('action')}</h2>
             </div>}
             <div>{!basketItems ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
-                <div key={uniqId} className={classes.tableRow}>
+                <div key={uniqId()} className={classes.tableRow}>
                     {!media &&
                     <React.Fragment>
                         <span className={classes.collParam}> {item.model}</span>
@@ -273,10 +280,10 @@ export default function Payment() {
                             <span className={classes.collParam}>{item.price}</span>
                         </div>
                     </>}
-                    <span className={classes.collParam}> {numberFormat(subTotal, ' ֏')}</span>
+                    <span className={classes.collParam}> {numberFormat(location.state.quantity[ind] * item.price, ' ֏')}</span>
                     <span className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
-                                                                   newcolor={ORANGE}
-                                                                   variant="contained">{t("remove")}</MyButton></span>
+                        newcolor={ORANGE}
+                        variant="contained">{t("remove")}</MyButton></span>
                 </div>)}
             </div>
             <div className={classes.tableRow}>
@@ -335,13 +342,11 @@ export default function Payment() {
                     <p className={classes.infoText}>{t('bank')}: Ameriabank</p>
                     <p className={classes.infoText}>SWIFT / BIC: ARMIAM22</p>
                     <p className={classes.infoText}>a/c: 103002101576</p>
-                    <p className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of
-                        Armenia</p>
+                    <p className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
                     <p className={classes.infoText}>{t('yourOrderWillShipAfterWeReceivePayment')}</p>
                 </div>}
                 {!media && <div className={classes.transfersInfobtn}>
-                    <MyButton className={classes.confirmBtn} newcolor={ORANGE}
-                              variant="contained">{t("confirmOrder")}</MyButton>
+                    <MyButton className={classes.confirmBtn} newcolor={ORANGE} onClick={confirmOrder} variant="contained">{t("confirmOrder")}</MyButton>
                 </div>}
                 <div className={classes.transfersInfoblock}>
                     <h2 className={classes.infoTitle}>{t("shippingAddress")}</h2>
@@ -365,21 +370,24 @@ export default function Payment() {
                         label={t("city")}
                         placeholder="eg. Yerevan"
                         onChange={handleDataChange}
-                        value={order.city}/>
+                        value={order.city}
+                        error={error} />
                     <TextField
                         required
                         id="address"
                         label={t("address")}
                         placeholder="Street address, company name"
                         onChange={handleDataChange}
-                        value={order.address}/>
+                        value={order.address}
+                        error={error} />
                     <TextField
                         required
                         id="zip"
                         label={t("zip")}
                         placeholder="eg. 1520"
                         onChange={handleDataChange}
-                        value={order.zip}/>
+                        value={order.zip}
+                        error={error} />
                 </div>
             </div>
             {media && <div className={classes.transfersInfobtn}>

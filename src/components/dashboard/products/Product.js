@@ -1,17 +1,18 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {BLACK, GREY, MyButton, ORANGE, WHITE} from '../../main/constants/constants';
+import React, { useState, useEffect, useContext } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { BLACK, GREY, MyButton, ORANGE, WHITE } from '../../main/constants/constants';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import {useMediaQuery} from "@material-ui/core";
-import {useTranslation} from "react-i18next";
-import {Link} from "react-router-dom";
-import {numberFormat} from "../../main/format-numbers/NumberFormat";
-import {useSelector} from "react-redux";
-import {useDispatch} from 'react-redux';
-import {addToFav, removeFromFav} from '../../services/redux/actions/favouriteActions';
-import {addToBasket, removeFromBasket} from "../../services/redux/actions/basketAction";
-import {TypeContext} from "../../main/contexts/typeContext";
+import { useMediaQuery } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { numberFormat } from "../../main/format-numbers/NumberFormat";
+import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
+import { addToFav, removeFromFav } from '../../services/redux/actions/favouriteActions';
+import { addToBasket, removeFromBasket } from "../../services/redux/actions/basketAction";
+import { TypeContext } from "../../main/contexts/typeContext";
+import { db } from '../../services/firebase/Firebase';
 
 const useStyles = makeStyles({
     root: {
@@ -95,7 +96,7 @@ const useStyles = makeStyles({
 });
 
 export default function Product(props) {
-    const {device, images, name, id, price, openModal, openDeleteModal} = props
+    const { device, images, name, id, price, openModal, openDeleteModal } = props
     const [hover, setHover] = useState(false);
     const basketItems = useSelector(state => state.basket)
     const currentUser = useSelector(state => state.user)
@@ -105,12 +106,25 @@ export default function Product(props) {
     const [liked, setLiked] = useState(false);
     const [btnText, setText] = useState('')
     const isAdmin = useContext(TypeContext)
-    const classes = useStyles({mediaTablet, mediaMobile, currentUser, liked});
-    const {t} = useTranslation()
-    const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
+    const classes = useStyles({ mediaTablet, mediaMobile, currentUser, liked });
+    const { t } = useTranslation()
+    // const favFromLocal = JSON.parse(localStorage.getItem('favourites'));
+    const [favFromDB, setFavFromDB] = useState();
+    useEffect(() => {
+        if (currentUser) {
+            let tempArr = [];
+            db.collection('users').doc(currentUser.uid).get()
+                .then(info => (info.data()))
+                .then(data => (data.favourites ? tempArr = [...data.favourites] : []))
+                .then(arr => setFavFromDB(arr))
+                .catch(e => console.log('could not get favourites'))
+        }
+
+    })
+
 
     useEffect(() => {
-        currentUser && favFromLocal?.includes(id) ? setLiked(true) : setLiked(false)
+        currentUser && favFromDB?.includes(id) ? setLiked(true) : setLiked(false)
     })
 
     useEffect(() => {
@@ -123,10 +137,10 @@ export default function Product(props) {
             openModal(t('modalTitleForAddFavoriteItems'));
         }
         if (currentUser && !liked) {
-            dispatch(addToFav(id));
+            dispatch(addToFav(id, currentUser.uid));
             setLiked(!liked)
         } else if (currentUser && liked) {
-            dispatch(removeFromFav(id));
+            dispatch(removeFromFav(id, currentUser.uid));
             setLiked(!liked)
         }
     }
@@ -138,27 +152,27 @@ export default function Product(props) {
     return (
         <div className={classes.root} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             {isAdmin && <div onClick={() => openDeleteModal(true, id)} className={classes.deleteBtn}>
-                <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
+                <MyButton newcolor={ORANGE}><HighlightOffIcon /></MyButton>
             </div>}
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
-                {images?.length && <img className={classes.productImage} src={images[0]} alt=""/>}
+                {images?.length && <img className={classes.productImage} src={images[0]} alt="" />}
                 <div className={classes.modelInfo}>
                     <div className={classes.productName}>{name}</div>
                     <div className={classes.price}>{numberFormat(price, '֏')}</div>
                 </div>
             </Link>
             {hover && (<div className={classes.btnWrapper}>
-                    <div style={{display: 'flex'}}>
-                        <MyButton className={classes.favIconColor}
-                                  onClick={() => favItemHandler()}
-                        ><FavoriteTwoToneIcon/></MyButton>
-                    </div>
-                    <div className={classes.btnParent}>
-                        <MyButton newcolor={ORANGE}
-                                  className={classes.btn}
-                                  onClick={addOrRemove}>{t(btnText)}</MyButton>
-                    </div>
+                <div style={{ display: 'flex' }}>
+                    <MyButton className={classes.favIconColor}
+                        onClick={() => favItemHandler()}
+                    ><FavoriteTwoToneIcon /></MyButton>
                 </div>
+                <div className={classes.btnParent}>
+                    <MyButton newcolor={ORANGE}
+                        className={classes.btn}
+                        onClick={addOrRemove}>{t(btnText)}</MyButton>
+                </div>
+            </div>
             )}
         </div>
     )
