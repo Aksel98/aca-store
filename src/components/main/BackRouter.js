@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     backIcon: {
         position: 'fixed',
         zIndex: 1,
-        top: props => props ? 90 : 60,
+        top: props => props ? 120 : 60,
         left: 10
     },
 })

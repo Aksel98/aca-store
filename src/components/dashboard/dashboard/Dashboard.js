@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import Login from "../../auth/Login";
@@ -14,6 +14,7 @@ import Payment from "../payment/Payment";
 import {db} from "../../services/firebase/Firebase";
 import {ADMIN} from "../../main/constants/types";
 import {TypeContext} from "../../main/contexts/typeContext";
+import UsersList from "../../admin/UsersList";
 
 const useStyles = makeStyles({
     loginBg: {
@@ -30,25 +31,12 @@ const useStyles = makeStyles({
 })
 
 export default function Dashboard() {
-    const [isAdmin, setIsAdmin] = useState(false)
     const currentUser = useSelector(state => state.user)
+    const isAdmin = useContext(TypeContext)
     const ui = useSelector(state => state.ui)
     const classes = useStyles()
-
-    useEffect(() => {
-        getUserType()
-    }, [currentUser])
-
-    function getUserType() {
-        if (currentUser) {
-            db.collection('users').doc(currentUser.uid).get().then(user => {
-                setIsAdmin(user.data()?.type === ADMIN)
-            })
-        }
-    }
-
+    console.log(isAdmin)
     return (
-        <TypeContext.Provider value={isAdmin}>
             <Router>
                 {currentUser ?
                     <Switch>
@@ -64,6 +52,9 @@ export default function Dashboard() {
                                 <Footer/>
                             </div>
                         </Route>
+                        {isAdmin && <Route path='/users-list'>
+                            <UsersList/>
+                        </Route>}
                         <GeneralRoutes/>
                     </Switch>
                     : <Switch>
@@ -79,6 +70,5 @@ export default function Dashboard() {
                 {ui.error && <SnackBar message={ui.error} error/>}
                 {ui.success && <SnackBar message={ui.success}/>}
             </Router>
-        </TypeContext.Provider>
     )
 }

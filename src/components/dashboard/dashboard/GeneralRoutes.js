@@ -13,12 +13,12 @@ import {Hidden, withStyles} from "@material-ui/core";
 
 const styles = () => ({
     main: {
-        height: 'calc(100vh - 180px)',
+        height: 'calc(100vh - 170px)',
         overflow: 'auto',
         overflowX: 'hidden'
     },
     mainTablet: {
-        height: 'calc(100vh - 260px)',
+        height: 'calc(100vh - 285px)',
         overflow: 'auto',
         overflowX: 'hidden'
     }
@@ -58,11 +58,6 @@ class GeneralRoutes extends React.Component {
                     <Header/>
                     <Device/>
                     <Footer/>
-                </Route>
-                <Route exact path='/userslist'>
-                    <div>
-                        <UsersList/>
-                    </div>
                 </Route>
                 <Redirect to={HOME_URL}/>
             </Switch>

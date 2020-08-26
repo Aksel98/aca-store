@@ -25,7 +25,7 @@ import BackRouter from "../../main/BackRouter";
 
 const useStyles = makeStyles({
     container: {
-        height:  props => props.mediaTablet ? 'calc(100vh - 320px)' : 'calc(100vh - 240px)',
+        height:  props => props.mediaTablet ? 'calc(100vh - 345px)' : 'calc(100vh - 240px)',
         overflow: 'auto',
         margin: '60px 0',
         padding: '0 20px'

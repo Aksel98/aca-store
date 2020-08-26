@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     container: {
         display: "flex",
         flexDirection: "column",
-        height:  props => props.mediaTablet ? 'calc(100vh - 310px)' : 'calc(100vh - 280px)',
+        height: props => props.mediaTablet ? 'calc(100vh - 340px)' : 'calc(100vh - 280px)',
         overflow: 'auto',
         margin: props => props.mediaTablet ? "50px 0" : "105px 0",
         padding: "10 20px",
@@ -218,16 +218,16 @@ export default function Payment() {
     const confirmOrder = () => {
         try {
             db.collection('users').doc(currentUser.uid).set({
-                order: {
-                    items: order.orderItems,
-                    price: finalPrice,
-                    address: order.address + ', ' + order.city + ', ' + order.country + ', ' + order.zip,
-                    shipping: order.ship,
-                    payment: order.pay,
-                    id: order.id
-                }
-            }, {merge: true})
-                .then(() => console.log('order received'))
+                    order: {
+                        items: order.orderItems,
+                        price: finalPrice,
+                        address: order.address + ', ' + order.city + ', ' + order.country + ', ' + order.zip,
+                        shipping: order.ship,
+                        payment: order.pay,
+                        id: order.id
+                    }
+                },
+                {merge: true}).then(() => console.log('order received'))
         } catch (error) {
             console.log('could not finalize the order')
         }

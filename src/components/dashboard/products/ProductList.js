@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center'
     },
     products: {
-        height: props => props.mediaTablet ? (props.mediaMobile ? 'calc(100vh - 560px)' : 'calc(100vh - 530px)') : 'calc(100vh - 320px)',
+        height: props => props.mediaTablet ? 'calc(100vh - 560px)' : 'calc(100vh - 320px)',
         margin: props => props.mediaTablet ? 0 : '20px 0 0',
         overflow: 'auto',
         justifyContent: 'center',

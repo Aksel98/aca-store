@@ -18,7 +18,7 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         marginTop: props =>  props.mediaMobile ? 130 : 110,
         justifyContent: 'space-between',
-        height: props =>  props.media ? (props.mediaMobile ? 'calc(100vh - 390px)' : 'calc(100vh - 370px)') : 'calc(100vh - 285px)',
+        height: props =>  props.media ? (props.mediaMobile ? 'calc(100vh - 420px)' : 'calc(100vh - 400px)') : 'calc(100vh - 285px)',
         overflow: 'auto',
     },
     cartIcon: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     },
     totalPrice: {
         position: 'fixed',
-        top: props => props.media ? (props.mediaMobile ? 140 : 80) : 55,
+        top: props => props.media ? (props.mediaMobile ? 140 : 100) : 55,
         right: 40,
         zIndex: 1
     },

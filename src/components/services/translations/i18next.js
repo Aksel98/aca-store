@@ -5,8 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 const languages = ['en', 'arm', 'rus']
 
-i18n
-    .use(Backend)
+i18n.use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({

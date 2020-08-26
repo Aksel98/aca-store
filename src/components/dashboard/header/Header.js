@@ -12,7 +12,7 @@ const useStyles = makeStyles({
         position: props => props && 'unset'
     },
     menu: {
-        height: props => props ? 85 : 50,
+        height: props => props ? 115 : 50,
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: "center",

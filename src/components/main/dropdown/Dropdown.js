@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         borderBottom: '2px solid transparent',
-        paddingBottom: 5,
+        paddingBottom: 2,
         cursor: 'pointer',
         '&:hover': {
             borderBottom: `2px solid ${ORANGE}`
@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            margin: '10px 5px',
+            margin: '0 5px',
             padding: '5px 0',
             fontWeight: 'bold',
             cursor: 'pointer',

@@ -16,7 +16,7 @@ const useStyles = makeStyles({
         marginTop: props => props ? 40 : 100,
     },
     favItems: {
-        height: props => props ? 'calc(100vh - 300px)' : 'calc(100vh - 275px)',
+        height: props => props ? 'calc(100vh - 330px)' : 'calc(100vh - 275px)',
         overflow: 'auto'
     },
     noFavourites: {
