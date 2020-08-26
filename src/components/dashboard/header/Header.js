@@ -19,7 +19,7 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         background: BLACK,
         opacity: '0.7',
-        padding: '0 20px'
+        padding: '0 50px 0 20px'
     }
 });
 

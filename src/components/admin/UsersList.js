@@ -9,6 +9,7 @@ import {db} from '../services/firebase/Firebase';
 import uniqId from 'uniqid';
 import {GREY, BLUE, ORANGE, MyButton} from '../main/constants/constants';
 import {useHistory} from 'react-router-dom';
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles({
     table: {
@@ -37,9 +38,10 @@ const useStyles = makeStyles({
 });
 
 export default function UsersList() {
-    const classes = useStyles();
     const [users, setUsers] = useState([]);
+    const {t} = useTranslation()
     const history = useHistory();
+    const classes = useStyles();
 
     function usersList() {
         db.collection('users').get()
@@ -60,7 +62,7 @@ export default function UsersList() {
     return (<div>
             <MyButton className={classes.btn}
                       variant="contained"
-                      onClick={() => history.goBack()}>Back</MyButton>
+                      onClick={() => history.goBack()}>{t('goBack')}</MyButton>
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow key={uniqId()}>

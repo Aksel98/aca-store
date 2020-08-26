@@ -54,6 +54,13 @@ const useStyles = makeStyles({
         alignItems: 'center',
         padding: '4px 5px',
     },
+    login: {
+        borderBottom: '2px solid transparent',
+        cursor: 'pointer',
+        '&:hover': {
+            borderBottom: `2px solid ${ORANGE}`
+        }
+    },
     title: {
         fontSize: props => props.media ? 15 : 24,
         fontWeight: 'bold',
@@ -106,24 +113,6 @@ export default function WebView(props) {
                 <Link to={HOME_URL} className={classes.title}>ACA store</Link>
             </div>
             <div className={classes.subMenu}>
-                {currentUser &&
-                    <DropDown name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
-                              dropdownContent={
-                                  <React.Fragment>
-                                      {isAdmin && <div>
-                                          <Link to={'/admin/users-list'} className={classes.link}>{t('users')}</Link>
-                                      </div>}
-                                      <div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>
-                                  </React.Fragment>}
-                    />}
-                {currentUser && <Link className={classes.checkoutLink} to='/favourites'>
-                    <FavoriteTwoToneIcon className={classes.menuItem}/>
-                    {favItems?.length > 0 && <div className={classes.cardItems}>{favItems?.length}</div>}
-                </Link>}
-                <Link className={classes.checkoutLink} to='/checkout'>
-                    <ShoppingCartIcon className={classes.menuItem}/>
-                    {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
-                </Link>
                 <DropDown name={<div className={classes.menuItem}>{t('languages')}</div>} dropdownContent={<>
                     <div>
                         <span onClick={() => changeLanguage('en')}>{t('english')}</span>
@@ -138,7 +127,26 @@ export default function WebView(props) {
                         <img className={classes.flagsImg} src={RUS_FLAG} alt=""/>
                     </div>
                 </>}/>
-                {!currentUser && <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
+                {currentUser && <Link className={classes.checkoutLink} to='/favourites'>
+                    <FavoriteTwoToneIcon className={classes.menuItem}/>
+                    {favItems?.length > 0 && <div className={classes.cardItems}>{favItems?.length}</div>}
+                </Link>}
+                <Link className={classes.checkoutLink} to='/checkout'>
+                    <ShoppingCartIcon className={classes.menuItem}/>
+                    {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
+                </Link>
+
+                {currentUser &&
+                <DropDown name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
+                          dropdownContent={
+                              <React.Fragment>
+                                  {isAdmin && <div>
+                                      <Link to={'/admin/users-list'} className={classes.link}>{t('users')}</Link>
+                                  </div>}
+                                  <div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>
+                              </React.Fragment>}
+                />}
+                {!currentUser && <Link to={LOGIN_URL} className={`${classes.menuItem} ${classes.login}`}> {t('login')}</Link>}
             </div>
         </React.Fragment>
     )
