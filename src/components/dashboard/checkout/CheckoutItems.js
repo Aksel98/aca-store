@@ -11,6 +11,7 @@ import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import {getError} from "../../services/redux/actions/uiActions";
 import BackRouter from "../../main/BackRouter";
+import Loader from "../../main/loader/Loader";
 
 const useStyles = makeStyles({
     mainWrapper: {
@@ -45,6 +46,7 @@ const useStyles = makeStyles({
 
 const CheckoutItems = () => {
     const [chosenItems, setChosenItems] = useState([]);
+    const [loader, setLoader] = useState(true);
     const basketItems = useSelector(state => state.basket);
     const dispatch = useDispatch()
     const {t} = useTranslation()
@@ -71,7 +73,9 @@ const CheckoutItems = () => {
                         })
                         setChosenItems(tempArr);
                         return tempArr
-                    }).catch(err => dispatch(getError(err.message)));
+                    }).catch(err => dispatch(getError(err.message))).finally(() => setLoader(false));
+            } else {
+                setLoader(false)
             }
         } catch (e) {
             console.log(e);
@@ -87,7 +91,7 @@ const CheckoutItems = () => {
     return (
         <React.Fragment>
             <Header/>
-            <div className={classes.mainWrapper}>
+            {loader ? <Loader/> : <div className={classes.mainWrapper}>
                 <BackRouter/>
                 <div className={classes.totalPrice}>
                     <TotalPrice/>
@@ -101,7 +105,7 @@ const CheckoutItems = () => {
                         remove={removeItem}
                         key={uniqId()}/>) : <h1 className={classes.emptyCart}>{t('yourCartIsEmpty')}</h1>}
                 </div>
-            </div>
+            </div>}
             <Footer/>
         </React.Fragment>
     )

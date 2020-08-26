@@ -25,7 +25,7 @@ import BackRouter from "../../main/BackRouter";
 
 const useStyles = makeStyles({
     container: {
-        height:  props => props.mediaTablet ? 'calc(100vh - 345px)' : 'calc(100vh - 240px)',
+        height: props => props.mediaTablet ? 'calc(100vh - 345px)' : 'calc(100vh - 240px)',
         overflow: 'auto',
         margin: '60px 0',
         padding: '0 20px'
@@ -124,55 +124,58 @@ export default function Device() {
     }
 
     return (
-        <div className={classes.container}>
-            <BackRouter/>
-            <div className={classes.main}>
-                <div className={classes.images}>
-                    <ReactImageMagnify  {...{
-                        smallImage: {
-                            isFluidWidth: false,
-                            src: `${mainImage}`,
-                            width: 160,
-                            height: 220,
-                        },
-                        largeImage: {
-                            src: `${mainImage}`,
-                            width: 500,
-                            height: 600,
-                        }
-                    }}/>
-                    <div className={`${classes.displayFlex} ${classes.flexWrap}`}>
-                        <DeviceImages images={images} setImages={setImages} changeImage={changeImage}
-                                      openDeletePopup={openDeletePopup}/>
-                        {isAdmin && <AddImagesAdmin images={images} setImages={setImages} type={device.device}/>}
+        <React.Fragment>
+            {loader ? <Loader/> : <div className={classes.container}>
+                <BackRouter/>
+                <div className={classes.main}>
+                    <div className={classes.images}>
+                        <ReactImageMagnify  {...{
+                            smallImage: {
+                                isFluidWidth: false,
+                                src: `${mainImage}`,
+                                width: 160,
+                                height: 220,
+                            },
+                            largeImage: {
+                                src: `${mainImage}`,
+                                width: 500,
+                                height: 600,
+                            }
+                        }}/>
+                        <div className={`${classes.displayFlex} ${classes.flexWrap}`}>
+                            <DeviceImages images={images} setImages={setImages} changeImage={changeImage}
+                                          openDeletePopup={openDeletePopup}/>
+                            {isAdmin && <AddImagesAdmin images={images} setImages={setImages} type={device.device}/>}
+                        </div>
+                    </div>
+                    <DeleteImagesAdmin images={images}
+                                       setImages={setImages}
+                                       openDeleteModal={openDeleteModal}
+                                       isDeleteModal={setOpenDeleteModal}
+                                       deletedImage={deletedImage}
+                                       setMainImage={setMainImage}
+                                       type={device.device}/>
+                    <div className={classes.deviceInfoPart}>
+                        <div className={classes.info}>
+                            <div className={classes.model}>{device.model}</div>
+                        </div>
+                        <div className={classes.info}>
+                            <Price price={price} setPrice={setPrice} count={deviceCount}/>
+                            <Credits price={price} count={deviceCount}/>
+                            <DeviceCount count={deviceCount} add={addCount} reduce={reduceCount}
+                                         setCount={setDeviceCount}/>
+                        </div>
+                        <div className={classes.info}>
+                            <AboutDevice device={device}/>
+                        </div>
+                        <Link to="/checkout" onClick={buy} className={classes.btnParent}>
+                            <MyButton className={classes.btnDistance} variant="contained"
+                                      color="primary">{t('buy')}</MyButton>
+                        </Link>
                     </div>
                 </div>
-                <DeleteImagesAdmin images={images}
-                                   setImages={setImages}
-                                   openDeleteModal={openDeleteModal}
-                                   isDeleteModal={setOpenDeleteModal}
-                                   deletedImage={deletedImage}
-                                   setMainImage={setMainImage}
-                                   type={device.device}/>
-                <div className={classes.deviceInfoPart}>
-                    <div className={classes.info}>
-                        <div className={classes.model}>{device.model}</div>
-                    </div>
-                    <div className={classes.info}>
-                        <Price price={price} setPrice={setPrice} count={deviceCount}/>
-                        <Credits price={price} count={deviceCount}/>
-                        <DeviceCount count={deviceCount} add={addCount} reduce={reduceCount} setCount={setDeviceCount}/>
-                    </div>
-                    <div className={classes.info}>
-                        <AboutDevice device={device}/>
-                    </div>
-                    <Link to="/checkout" onClick={buy} className={classes.btnParent}>
-                        <MyButton className={classes.btnDistance} variant="contained" color="primary">{t('buy')}</MyButton>
-                    </Link>
-                </div>
-                {loader && <Loader/>}
-            </div>
-            <DeviceDescription/>
-        </div>
+                <DeviceDescription/>
+            </div>}
+        </React.Fragment>
     )
 }
