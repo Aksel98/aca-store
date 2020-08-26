@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import Login from "../../auth/Login";
@@ -11,9 +11,7 @@ import FavItemList from "../favourites/FavItemList";
 import Footer from "../footer/Footer";
 import SnackBar from "../../main/popups/SnackBar";
 import Payment from "../payment/Payment";
-import {db} from "../../services/firebase/Firebase";
 import {ADMIN} from "../../main/constants/types";
-import {TypeContext} from "../../main/contexts/typeContext";
 import UsersList from "../../admin/UsersList";
 
 const useStyles = makeStyles({

@@ -6,10 +6,6 @@ import {GREY, MyButton} from "../../main/constants/constants";
 import Loader from "../../main/loader/Loader";
 import AboutDevice from "./about/AboutDevice";
 import {useTranslation} from "react-i18next";
-import DeviceDescription from "./description/DeviceDescription";
-import Fab from "@material-ui/core/Fab";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import {useHistory} from "react-router-dom";
 import Price from "./price/Price";
 import Credits from "./price/Credits";
 import DeviceCount from "./count/DeviceCount";
@@ -88,7 +84,6 @@ export default function Device() {
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const classes = useStyles({media, mediaTablet})
     const {t} = useTranslation()
-    const history = useHistory()
 
     useEffect(() => {
         db.collection('product').doc(id).get().then(doc => {
@@ -174,7 +169,6 @@ export default function Device() {
                         </Link>
                     </div>
                 </div>
-                <DeviceDescription/>
             </div>}
         </React.Fragment>
     )

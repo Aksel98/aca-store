@@ -140,10 +140,10 @@ function Footer() {
                 <div className={classes.itemsParent}>
                     <h3 className={classes.subTitle}>{t('helpfulLinks')}</h3>
                     <div>
-                        <Link to="" className={classes.item}>{t('services')}</Link>
-                        <Link to="" className={classes.item}>{t('supports')}</Link>
-                        <Link to="" className={classes.item}>{t('Terms&Conditions')}</Link>
-                        <Link to="" className={classes.item}>{t('privacyPolicy')}</Link>
+                        <Link to="/info" className={classes.item}>{t('services')}</Link>
+                        <Link to="/info" className={classes.item}>{t('supports')}</Link>
+                        <Link to="/info" className={classes.item}>{t('Terms&Conditions')}</Link>
+                        <Link to="/info" className={classes.item}>{t('privacyPolicy')}</Link>
                     </div>
                 </div>
             </div>

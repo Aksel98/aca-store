@@ -8,8 +8,8 @@ import Footer from "../footer/Footer";
 import ProductList from "../products/ProductList";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
-import UsersList from "../../admin/UsersList";
 import {Hidden, withStyles} from "@material-ui/core";
+import Info from "../info/Info";
 
 const styles = () => ({
     main: {
@@ -58,6 +58,9 @@ class GeneralRoutes extends React.Component {
                     <Header/>
                     <Device/>
                     <Footer/>
+                </Route>
+                <Route exact path='/info'>
+                    <Info/>
                 </Route>
                 <Redirect to={HOME_URL}/>
             </Switch>
