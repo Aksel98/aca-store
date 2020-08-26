@@ -76,7 +76,7 @@ export default function UsersList() {
                     {users.map((user) => (
                         <TableRow key={uniqId()}>
                             <TableCell key={uniqId()} className={classes.cells}>
-                                {user.name + ' ' + user.surname}
+                                {user.name ? (user.name + ' ' + user.surname) : '...'}
                             </TableCell>
                             <TableCell key={uniqId()} className={classes.cells}>{user.email}</TableCell>
                             <TableCell key={uniqId()} className={classes.cells}>{user.order?.address}</TableCell>
