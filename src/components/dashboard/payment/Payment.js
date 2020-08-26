@@ -1,9 +1,9 @@
-import React, { useEffect, useState, } from 'react';
-import { useHistory, useLocation } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useEffect, useState,} from 'react';
+import {useLocation} from "react-router-dom";
+import {makeStyles} from '@material-ui/core/styles';
 import ConfirmationNumberOutlinedIcon from "@material-ui/icons/ConfirmationNumberOutlined";
 import uniqId from 'uniqid';
-import { db } from "../../services/firebase/Firebase";
+import {db} from "../../services/firebase/Firebase";
 import TextField from '@material-ui/core/TextField';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
@@ -13,23 +13,24 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { MyButton, ORANGE, BLUE } from "../../main/constants/constants";
-import { numberFormat } from "../../main/format-numbers/NumberFormat";
-import { useMediaQuery } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { removeFromBasket } from "../../services/redux/actions/basketAction";
-import Fab from "@material-ui/core/Fab";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import {MyButton, ORANGE, BLUE} from "../../main/constants/constants";
+import {numberFormat} from "../../main/format-numbers/NumberFormat";
+import {useMediaQuery} from "@material-ui/core";
+import {useDispatch, useSelector} from "react-redux";
+import {removeBasket, removeFromBasket} from "../../services/redux/actions/basketAction";
 import { useTranslation } from "react-i18next";
-import { getError, getSuccess } from "../../services/redux/actions/uiActions";
+import {getError, getSuccess} from "../../services/redux/actions/uiActions";
 import { HOME_URL } from '../../main/constants/navigations';
-
+import BackRouter from "../../main/BackRouter";
+import {useHistory} from "react-router-dom";
 const useStyles = makeStyles({
     container: {
         display: "flex",
         flexDirection: "column",
-        margin: props => props ? "60px 20px" : "60px 40px",
+        height: props => props.mediaTablet ? 'calc(100vh - 340px)' : 'calc(100vh - 280px)',
+        overflow: 'auto',
+        margin: props => props.mediaTablet ? "50px 0" : "105px 0",
+        padding: "10 20px",
     },
     confirmIconBlock: {
         display: "flex",
@@ -41,15 +42,16 @@ const useStyles = makeStyles({
         fontSize: "20px"
     },
     tableRow: {
-        display: props => !props && "flex",
+        display: props => !props.media && "flex",
         justifyContent: "space-around",
         borderBottom: `1px solid ${ORANGE}`,
         textAlign: "center",
+        padding: '5px 0'
     },
     tableRowTitle: {
         display: "flex",
         justifyContent: "center",
-        width: "100%",
+        width: props => !props.media && "100%",
         color: ORANGE,
         fontSize: "16px",
         borderRight: `1px dotted ${ORANGE}`,
@@ -59,7 +61,7 @@ const useStyles = makeStyles({
     collParam: {
         display: "flex",
         justifyContent: "center",
-        width: "100%",
+        width: props => !props.media && "100%",
         color: "grey",
         fontWeight: "900",
         fontSize: "16px",
@@ -81,7 +83,7 @@ const useStyles = makeStyles({
         padding: "10px 5px"
     },
     methods: {
-        display: props => !props && "flex",
+        display: props => !props.media && "flex",
         justifyContent: "center",
         padding: "20px"
     },
@@ -113,8 +115,8 @@ const useStyles = makeStyles({
         paddingLeft: "5px"
     },
     transfersInfo: {
-        display: props => !props && "flex",
-        margin: "20px 0px"
+        display: props => !props.media && "flex",
+        margin: 20
     },
     infoTitle: {
         color: ORANGE,
@@ -127,7 +129,7 @@ const useStyles = makeStyles({
         width: "70%"
     },
     transfersInfoblock: {
-        textAlign: props => props && 'center',
+        textAlign: props => props.media && 'center',
         display: "flex",
         flexDirection: "column",
         width: "100%",
@@ -150,7 +152,8 @@ export default function Payment() {
     const basketItems = useSelector(state => state.basket);
     const dispatch = useDispatch()
     const media = useMediaQuery('(max-width:968px)');
-    const classes = useStyles(media);
+    const mediaTablet = useMediaQuery('(max-width:600px)');
+    const classes = useStyles({media, mediaTablet});
     const location = useLocation()
     const history = useHistory();
     const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0);
@@ -181,7 +184,7 @@ export default function Payment() {
                     const tempArr = [];
                     querySnapshot.docs.forEach(doc => {
                         let tempObj = doc.data();
-                        tempArr.push({ ...tempObj });
+                        tempArr.push({...tempObj});
                     })
                     setChosenItems(tempArr);
                 }).catch(err => dispatch(getError(err.message)));
@@ -200,21 +203,18 @@ export default function Payment() {
     }
 
     const handleRadioChange = (e) => {
-        const { name, value } = e.target;
-        setOrder({ ...order, [name]: value })
+        const {name, value} = e.target;
+        setOrder({...order, [name]: value})
     }
 
     const removeItem = (id) => {
-
         let tempArr = [...chosenItems];
         tempArr = tempArr.filter(objItem => (objItem.id !== id))
         setChosenItems(tempArr);
         dispatch(removeFromBasket(id))
     }
     const confirmOrder = () => {
-
         try {
-
             db.collection('users').doc(currentUser.uid).set({
                 order: {
                     items: order.orderItems,
@@ -229,9 +229,10 @@ export default function Payment() {
                     if (order.address && order.city && order.country && order.zip) {
                         history.push(HOME_URL);
                         dispatch(getSuccess('Order received'));
-                    } else { setError(true); dispatch(getError('Invalid entries')) }
-
-
+                        dispatch(removeBasket())
+                    } else {
+                        setError(true); dispatch(getError('Invalid entries'))
+                    }
                 })
                 .catch(e => dispatch(getError(e.message)))
 
@@ -241,11 +242,9 @@ export default function Payment() {
     }
     return (
         <div className={classes.container}>
-            <div onClick={() => history.goBack()} className={classes.backIcon}>
-                <Fab color="primary"><KeyboardBackspaceIcon /></Fab>
-            </div>
+            <BackRouter/>
             <div className={classes.confirmIconBlock}>
-                <ConfirmationNumberOutlinedIcon />
+                <ConfirmationNumberOutlinedIcon/>
                 <h1 className={classes.confirmIconText}>{t("confirmOrder")}</h1>
             </div>
             {!media && <div className={classes.tableRow}>
@@ -258,17 +257,31 @@ export default function Payment() {
             </div>}
             <div>{!basketItems ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
                 <div key={uniqId()} className={classes.tableRow}>
-                    {media && <div className={classes.tableRowTitle}>{t('productName')}</div>}
-                    <span className={classes.collParam}> {item.device}</span>
-                    {media && <div className={classes.tableRowTitle}>{t('model')}</div>}
-                    <span className={classes.collParam}> {item.model}</span>
-                    {media && <div className={classes.tableRowTitle}>{t('quantity')}</div>}
-                    <span className={classes.collParam}> {location.state.quantity[ind]} </span>
-                    {media && <div className={classes.tableRowTitle}>{t('price')}</div>}
-                    <span className={classes.collParam}> {numberFormat(item.price, ' ֏')}</span>
-                    {media && <div className={classes.tableRowTitle}>{t('total')}</div>}
-                    <span
-                        className={classes.collParam}> {numberFormat(location.state.quantity[ind] * item.price, ' ֏')}</span>
+                    {!media &&
+                    <React.Fragment>
+                        <span className={classes.collParam}> {item.model}</span>
+                        <span className={classes.collParam}> {location.state.quantity[ind]} </span>
+                        <span className={classes.collParam}> {numberFormat(item.price, ' ֏')}</span>
+                    </React.Fragment>}
+                    {media && <>
+                        <div>
+                            <div className={classes.tableRowTitle}>{t('productName')}</div>
+                            <span className={classes.collParam}>{item.device}</span>
+                        </div>
+                        <div>
+                            <div className={classes.tableRowTitle}>{t('model')}</div>
+                            <span className={classes.collParam}>{item.model}</span>
+                        </div>
+                        <div>
+                            <div className={classes.tableRowTitle}>{t('quantity')}</div>
+                            <span className={classes.collParam}>{location.state.quantity[ind]}</span>
+                        </div>
+                        <div>
+                            <div className={classes.tableRowTitle}>{t('price')}</div>
+                            <span className={classes.collParam}>{item.price}</span>
+                        </div>
+                    </>}
+                    <span className={classes.collParam}> {numberFormat(location.state.quantity[ind] * item.price, ' ֏')}</span>
                     <span className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
                         newcolor={ORANGE}
                         variant="contained">{t("remove")}</MyButton></span>
@@ -293,33 +306,33 @@ export default function Payment() {
             </div>
             <div className={classes.methods}>
                 <div className={classes.shippingMetods}>
-                    <span className={classes.shippingIcom}>
-                        <LocalShippingIcon />
-                        <h2 className={classes.methodsTitle}>{t("shipping")} </h2>
-                    </span>
+                <span className={classes.shippingIcom}>
+                <LocalShippingIcon/>
+                <h2 className={classes.methodsTitle}>{t("shipping")} </h2>
+                </span>
                     <FormControl component="fieldset">
 
                         <RadioGroup aria-label="shipping" id='ship' name="shipping" value={order.ship}
-                            onChange={handleRadioChange}>
-                            <FormControlLabel name='ship' value="5000" control={<Radio color="primary" />}
-                                label={t("standart 5,000 ֏")} />
-                            <FormControlLabel name='ship' value="10000" control={<Radio color="primary" />}
-                                label={t("FedEx 2 day  10,000 ֏")} />
+                                    onChange={handleRadioChange}>
+                            <FormControlLabel name='ship' value="5000" control={<Radio color="primary"/>}
+                                              label={t("standart 5,000 ֏")}/>
+                            <FormControlLabel name='ship' value="10000" control={<Radio color="primary"/>}
+                                              label={t("FedEx 2 day  10,000 ֏")}/>
                         </RadioGroup>
                     </FormControl>
                 </div>
                 <div className={classes.paymentMetods}>
-                    <span className={classes.paymentIcon}>
-                        <AccountBalanceIcon />
-                        <h2 className={classes.methodsTitle}>{t("payment")}</h2>
-                    </span>
+                <span className={classes.paymentIcon}>
+                <AccountBalanceIcon/>
+                <h2 className={classes.methodsTitle}>{t("payment")}</h2>
+                </span>
                     <FormControl>
                         <RadioGroup aria-label="payment" value={order.pay}
-                            onChange={handleRadioChange}>
-                            <FormControlLabel name='pay' value="bank" control={<Radio color="primary" />}
-                                label={t("bankTransfer")} />
-                            <FormControlLabel name='pay' value="cash" control={<Radio color="primary" />}
-                                label={t("cashOnDelivery")} />
+                                    onChange={handleRadioChange}>
+                            <FormControlLabel name='pay' value="bank" control={<Radio color="primary"/>}
+                                              label={t("bankTransfer")}/>
+                            <FormControlLabel name='pay' value="cash" control={<Radio color="primary"/>}
+                                              label={t("cashOnDelivery")}/>
                         </RadioGroup>
                     </FormControl>
                 </div>
@@ -344,7 +357,7 @@ export default function Payment() {
                             native
                             id='country'
                             onChange={handleDataChange}>
-                            <option aria-label="None" value={order.country} />
+                            <option aria-label="None" value={order.country}/>
                             <option id="country">{t("armenia")}</option>
                             <option id="country">{t("georgia")}</option>
                             <option id="country">{t("iran")}</option>
@@ -379,7 +392,8 @@ export default function Payment() {
                 </div>
             </div>
             {media && <div className={classes.transfersInfobtn}>
-                <MyButton className={classes.confirmBtn} onClick={confirmOrder} newcolor={ORANGE} variant="contained">{t("confirmOrder")}</MyButton>
+                <MyButton className={classes.confirmBtn} onClick={confirmOrder} newcolor={ORANGE}
+                          variant="contained">{t("confirmOrder")}</MyButton>
             </div>}
         </div>
     )

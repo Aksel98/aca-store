@@ -6,62 +6,66 @@ import Carousel from "../carousel/Carousel";
 import CategoryList from "../category/CategoryList";
 import Footer from "../footer/Footer";
 import ProductList from "../products/ProductList";
-import {makeStyles} from "@material-ui/core/styles";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
-import Payment from "../payment/Payment";
-import {useMediaQuery} from "@material-ui/core";
-import UsersList from "../../admin/UsersList";
+import {Hidden, withStyles} from "@material-ui/core";
+import Info from "../info/Info";
 
-const useStyles = makeStyles({
-    dashboardParent: {
+const styles = () => ({
+    main: {
+        height: 'calc(100vh - 170px)',
+        overflow: 'auto',
         overflowX: 'hidden'
     },
-    categoryList: {
-        minHeight: 790
-    },
-    productList: {
-        height: props => props ? 790 : 730
+    mainTablet: {
+        height: 'calc(100vh - 285px)',
+        overflow: 'auto',
+        overflowX: 'hidden'
     }
 })
 
-export default function GeneralRoutes() {
-    const media = useMediaQuery('(max-width:600px)');
-    const classes = useStyles(media);
+class GeneralRoutes extends React.Component {
 
-    return (
-        <Switch className={classes.dashboardParent}>
-            <Route path={HOME_URL}>
-                <div className={classes.categoryList}>
+    render() {
+        const {classes} = this.props;
+        return (
+            <Switch>
+                <Route path={HOME_URL}>
                     <Header/>
-                    <Carousel/>
-                    <CategoryList/>
-                </div>
-                <Footer/>
-            </Route>
-            <Route exact path='/checkout'>
-                <CheckoutItems/>
-            </Route>
-            <Route exact path='/categories/:category'>
-                <div className={classes.productList}>
+                    <Hidden  only={['xs']}>
+                        <div className={classes.main}>
+                            <Carousel/>
+                            <CategoryList/>
+                        </div>
+                    </Hidden>
+                    <Hidden only={['lg', 'md', 'sm', 'xl']}>
+                        <div className={classes.mainTablet}>
+                            <Carousel/>
+                            <CategoryList/>
+                        </div>
+                    </Hidden>
+                    <Footer/>
+                </Route>
+                <Route exact path='/checkout'>
+                    <CheckoutItems/>
+                </Route>
+                <Route exact path='/categories/:category'>
                     <Header/>
                     <ProductList/>
-                </div>
-                <Footer/>
-            </Route>
-            <Route exact path='/categories/:category/:id'>
-                <div className={classes.mainContent}>
+                    <Footer/>
+                </Route>
+                <Route exact path='/categories/:category/:id'>
                     <Header/>
                     <Device/>
-                </div>
-                <Footer/>
-            </Route>
-            <Route exact path='/userslist'>
-                <div>
-                    <UsersList />
-                </div>
-            </Route>
-            <Redirect to={HOME_URL}/>
-        </Switch>
-    )
+                    <Footer/>
+                </Route>
+                <Route exact path='/info'>
+                    <Info/>
+                </Route>
+                <Redirect to={HOME_URL}/>
+            </Switch>
+        )
+    }
 }
+
+export default withStyles(styles)(GeneralRoutes)

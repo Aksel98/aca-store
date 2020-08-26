@@ -12,13 +12,14 @@ const useStyles = makeStyles({
         position: props => props && 'unset'
     },
     menu: {
+        height: props => props ? 115 : 50,
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: "center",
         justifyContent: 'space-between',
         background: BLACK,
         opacity: '0.7',
-        padding: '0 20px'
+        padding: '0 50px 0 20px'
     }
 });
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
 import Login from "../../auth/Login";
@@ -11,9 +11,8 @@ import FavItemList from "../favourites/FavItemList";
 import Footer from "../footer/Footer";
 import SnackBar from "../../main/popups/SnackBar";
 import Payment from "../payment/Payment";
-import {db} from "../../services/firebase/Firebase";
 import {ADMIN} from "../../main/constants/types";
-import {TypeContext} from "../../main/contexts/typeContext";
+import UsersList from "../../admin/UsersList";
 
 const useStyles = makeStyles({
     loginBg: {
@@ -26,64 +25,47 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         padding: '150px 10px',
         opacity: '0.6',
-    },
-    favouritesPage: {
-        height: 710
     }
 })
 
 export default function Dashboard() {
-    const [isAdmin, setIsAdmin] = useState(false)
     const currentUser = useSelector(state => state.user)
     const ui = useSelector(state => state.ui)
     const classes = useStyles()
 
-    useEffect(() => {
-        getUserType()
-    }, [currentUser])
-
-    function getUserType() {
-        if (currentUser) {
-            db.collection('users').doc(currentUser.uid).get().then(user => {
-                setIsAdmin(user.data()?.type === ADMIN)
-            })
-        }
-    }
-
     return (
-        <TypeContext.Provider value={isAdmin}>
-            <Router>
-                {currentUser ?
-                    <Switch>
-                        <Route path='/favourites'>
+        <Router>
+            {currentUser ?
+                <Switch>
+                    <Route path='/favourites'>
+                        <Header/>
+                        <FavItemList/>
+                        <Footer/>
+                    </Route>
+                    <Route path='/payment'>
+                        <div>
                             <Header/>
-                            <div className={classes.favouritesPage}>
-                                <FavItemList/>
-                            </div>
+                            <Payment/>
                             <Footer/>
-                        </Route>
-                        <Route path='/payment'>
-                            <div>
-                                <Header/>
-                                <Payment/>
-                                <Footer/>
+                        </div>
+                    </Route>
+                    {currentUser.type === ADMIN && <Route path='/admin/users-list'>
+                        <UsersList/>
+                    </Route>}
+                    <GeneralRoutes/>
+                </Switch>
+                : <Switch>
+                    <Route path={LOGIN_URL}>
+                        <div className={classes.loginBg}>
+                            <div className={classes.loginContainer}>
+                                <Login/>
                             </div>
-                        </Route>
-                        <GeneralRoutes/>
-                    </Switch>
-                    : <Switch>
-                        <Route path={LOGIN_URL}>
-                            <div className={classes.loginBg}>
-                                <div className={classes.loginContainer}>
-                                    <Login/>
-                                </div>
-                            </div>
-                        </Route>
-                        <GeneralRoutes/>
-                    </Switch>}
-                {ui.error && <SnackBar message={ui.error} error/>}
-                {ui.success && <SnackBar message={ui.success}/>}
-            </Router>
-        </TypeContext.Provider>
+                        </div>
+                    </Route>
+                    <GeneralRoutes/>
+                </Switch>}
+            {ui.error && <SnackBar message={ui.error} error/>}
+            {ui.success && <SnackBar message={ui.success}/>}
+        </Router>
     )
 }

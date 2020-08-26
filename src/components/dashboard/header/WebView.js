@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {ARM_FLAG, BLUE, EN_FLAG, LOGO, ORANGE, RUS_FLAG, WHITE} from "../../main/constants/constants";
 import {Link, useLocation} from "react-router-dom";
 import {HOME_URL, LOGIN_URL} from "../../main/constants/navigations";
@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {logoutUser} from "../../services/redux/actions/userAction";
 import {useTranslation} from "react-i18next";
 import {makeStyles} from "@material-ui/core/styles";
+import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     subMenu: {
@@ -53,6 +54,13 @@ const useStyles = makeStyles({
         alignItems: 'center',
         padding: '4px 5px',
     },
+    login: {
+        borderBottom: '2px solid transparent',
+        cursor: 'pointer',
+        '&:hover': {
+            borderBottom: `2px solid ${ORANGE}`
+        }
+    },
     title: {
         fontSize: props => props.media ? 15 : 24,
         fontWeight: 'bold',
@@ -81,6 +89,10 @@ const useStyles = makeStyles({
         display: "flex",
         alignItems: "center",
     },
+    link: {
+        textDecoration: 'none',
+        color: WHITE
+    }
 });
 
 export default function WebView(props) {
@@ -88,6 +100,7 @@ export default function WebView(props) {
     const currentUser = useSelector(state => state.user)
     const basketItems = useSelector(state => state.basket);
     const favItems = useSelector(state => state.favourites)
+    const isAdmin = useContext(TypeContext)
     const dispatch = useDispatch()
     const location = useLocation();
     const {t} = useTranslation()
@@ -122,10 +135,18 @@ export default function WebView(props) {
                     <ShoppingCartIcon className={classes.menuItem}/>
                     {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
                 </Link>
-                {currentUser ?
-                    <DropDown name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
-                              dropdownContent={<div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>}/>
-                    : <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
+
+                {currentUser &&
+                <DropDown name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
+                          dropdownContent={
+                              <React.Fragment>
+                                  {isAdmin && <div>
+                                      <Link to={'/admin/users-list'} className={classes.link}>{t('users')}</Link>
+                                  </div>}
+                                  <div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>
+                              </React.Fragment>}
+                />}
+                {!currentUser && <Link to={LOGIN_URL} className={`${classes.menuItem} ${classes.login}`}> {t('login')}</Link>}
             </div>
         </React.Fragment>
     )

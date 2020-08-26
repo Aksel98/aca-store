@@ -5,22 +5,21 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import uniqId from 'uniqid';
 import TotalPrice from "./TotalPrice";
-import {ORANGE, BLUE, BLACK} from "../../main/constants/constants";
+import {ORANGE, BLUE} from "../../main/constants/constants";
 import {makeStyles, useMediaQuery} from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import {getError} from "../../services/redux/actions/uiActions";
+import BackRouter from "../../main/BackRouter";
+import Loader from "../../main/loader/Loader";
 
 const useStyles = makeStyles({
     mainWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        marginTop: 70,
+        marginTop: props =>  props.mediaMobile ? 130 : 110,
         justifyContent: 'space-between',
-        height: props => props ? 720 : 678,
+        height: props =>  props.media ? (props.mediaMobile ? 'calc(100vh - 420px)' : 'calc(100vh - 400px)') : 'calc(100vh - 285px)',
         overflow: 'auto',
     },
     cartIcon: {
@@ -32,16 +31,13 @@ const useStyles = makeStyles({
     },
     totalPrice: {
         position: 'fixed',
-        top: 80,
+        top: props => props.media ? (props.mediaMobile ? 140 : 100) : 55,
         right: 40,
         zIndex: 1
     },
     emptyCart: {
         textAlign: 'center',
         color: BLUE
-    },
-    backIcon: {
-        marginLeft: 20
     },
     fullHeight: {
         height: '100%'
@@ -50,12 +46,13 @@ const useStyles = makeStyles({
 
 const CheckoutItems = () => {
     const [chosenItems, setChosenItems] = useState([]);
+    const [loader, setLoader] = useState(true);
     const basketItems = useSelector(state => state.basket);
     const dispatch = useDispatch()
     const {t} = useTranslation()
-    const media = useMediaQuery('(min-width:600px)');
-    const classes = useStyles(media);
-    const history = useHistory();
+    const media = useMediaQuery('(max-width:600px)');
+    const mediaMobile = useMediaQuery('(max-width:400px)');
+    const classes = useStyles({media, mediaMobile});
 
     useEffect(() => {
         getCartItems();
@@ -76,7 +73,9 @@ const CheckoutItems = () => {
                         })
                         setChosenItems(tempArr);
                         return tempArr
-                    }).catch(err => dispatch(getError(err.message)));
+                    }).catch(err => dispatch(getError(err.message))).finally(() => setLoader(false));
+            } else {
+                setLoader(false)
             }
         } catch (e) {
             console.log(e);
@@ -92,10 +91,8 @@ const CheckoutItems = () => {
     return (
         <React.Fragment>
             <Header/>
-            <div className={classes.mainWrapper}>
-                <div onClick={() => history.goBack()} className={classes.backIcon}>
-                    <Fab color="primary"><KeyboardBackspaceIcon/></Fab>
-                </div>
+            {loader ? <Loader/> : <div className={classes.mainWrapper}>
+                <BackRouter/>
                 <div className={classes.totalPrice}>
                     <TotalPrice/>
                 </div>
@@ -108,7 +105,7 @@ const CheckoutItems = () => {
                         remove={removeItem}
                         key={uniqId()}/>) : <h1 className={classes.emptyCart}>{t('yourCartIsEmpty')}</h1>}
                 </div>
-            </div>
+            </div>}
             <Footer/>
         </React.Fragment>
     )

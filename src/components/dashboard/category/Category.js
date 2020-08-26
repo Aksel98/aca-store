@@ -6,6 +6,9 @@ import {Link} from "react-router-dom";
 import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
+    main: {
+        position: 'relative'
+    },
     categoryImg: {
         width: 300,
         height: 135,
@@ -25,7 +28,7 @@ export default function Category(props) {
     const classes = useStyles()
 
     return (
-        <div>
+        <div className={classes.main}>
             {isAdmin && <div onClick={() => onDelete(true, id)} className={classes.deleteBtn}>
                 <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
             </div>}

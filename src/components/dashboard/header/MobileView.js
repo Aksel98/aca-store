@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {ARM_FLAG, BLUE, EN_FLAG, LOGO, ORANGE, RUS_FLAG, WHITE} from "../../main/constants/constants";
 import {Link, useLocation} from "react-router-dom";
 import {HOME_URL, LOGIN_URL} from "../../main/constants/navigations";
@@ -9,6 +9,7 @@ import {useTranslation} from "react-i18next";
 import {logoutUser} from "../../services/redux/actions/userAction";
 import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
 import {makeStyles} from "@material-ui/core/styles";
+import {TypeContext} from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     main: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles({
         textAlign: 'center',
     },
     title: {
-        fontSize: props => props.media ? 15 : 24,
+        fontSize: 18,
         fontWeight: 'bold',
         color: ORANGE,
         fontStyle: 'italic',
@@ -86,6 +87,10 @@ const useStyles = makeStyles({
         display: "flex",
         alignItems: "center",
     },
+    link: {
+        textDecoration: 'none',
+        color: WHITE
+    }
 });
 
 export default function (props) {
@@ -93,8 +98,9 @@ export default function (props) {
     const currentUser = useSelector(state => state.user)
     const basketItems = useSelector(state => state.basket);
     const favItems = useSelector(state => state.favourites)
-    const location = useLocation();
     const dispatch = useDispatch()
+    const location = useLocation();
+    const isAdmin = useContext(TypeContext)
     const {t} = useTranslation()
     const classes = useStyles({pathName: location.pathname === HOME_URL});
 
@@ -106,6 +112,17 @@ export default function (props) {
                     <Link to={HOME_URL} className={classes.title}>ACA store</Link>
                 </div>
                 <div className={classes.display}>
+                    {currentUser ? <div className={classes.menuItem}>
+                        <DropDown
+                            name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
+                            dropdownContent={
+                                <React.Fragment>
+                                    {isAdmin && <div>
+                                        <Link to={'/admin/users-list'} className={classes.link}>{t('users')}</Link>
+                                    </div>}
+                                    <div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>
+                                </React.Fragment>}/>
+                    </div> : <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser && <Link className={classes.checkoutLink} to='/favourites'>
                         <FavoriteTwoToneIcon className={classes.menuItem}/>
                         {favItems?.length > 0 && <div className={classes.cardItems}>{favItems?.length}</div>}
@@ -114,16 +131,6 @@ export default function (props) {
                         <ShoppingCartIcon className={classes.menuItem}/>
                         {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
                     </Link>
-                    {currentUser ? <div className={classes.menuItem}>
-                        <DropDown
-                            name={<div className={classes.userLogo}>{getFirstLetters(currentUser.displayName)}</div>}
-                            dropdownContent={
-                                <React.Fragment>
-                                    <div onClick={() => dispatch(logoutUser())}>
-                                        {t('logout')}
-                                    </div>
-                                </React.Fragment>}/>
-                    </div> : <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                 </div>
             </div>
             <div>

@@ -1,4 +1,4 @@
-import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_FROM_BASKET, UPDATE_PRICE} from "../types";
+import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_BASKET, REMOVE_FROM_BASKET, UPDATE_PRICE} from "../types";
 
 export const addToBasket = (id, price, device, quantity = 1) => (dispatch) => {
     dispatch({
@@ -21,6 +21,12 @@ export const updatePrice = (price, id) => (dispatch) => {
     dispatch({
         type: UPDATE_PRICE,
         payload: {price, id}
+    })
+}
+
+export const removeBasket = () => (dispatch) => {
+    dispatch({
+        type: REMOVE_BASKET,
     })
 }
 

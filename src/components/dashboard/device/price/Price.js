@@ -61,7 +61,7 @@ export default function Price(props) {
             dispatch(updatePrice(devPrice, id))
         }).catch(err => dispatch(getError(err.message)))
     }
-console.log(isAdmin)
+
     return (
         <div className={classes.display}>
             <h2 className={classes.relative}>
