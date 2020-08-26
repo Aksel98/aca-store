@@ -9,16 +9,41 @@ import ProductList from "../products/ProductList";
 import Device from "../device/Device";
 import CheckoutItems from "../checkout/CheckoutItems";
 import UsersList from "../../admin/UsersList";
+import {Hidden, withStyles} from "@material-ui/core";
 
-export default class GeneralRoutes extends React.Component {
+const styles = () => ({
+    main: {
+        height: 'calc(100vh - 180px)',
+        overflow: 'auto',
+        overflowX: 'hidden'
+    },
+    mainTablet: {
+        height: 'calc(100vh - 260px)',
+        overflow: 'auto',
+        overflowX: 'hidden'
+    }
+})
+
+class GeneralRoutes extends React.Component {
 
     render() {
+        const {classes} = this.props;
         return (
             <Switch>
                 <Route path={HOME_URL}>
                     <Header/>
-                    <Carousel/>
-                    <CategoryList/>
+                    <Hidden  only={['xs']}>
+                        <div className={classes.main}>
+                            <Carousel/>
+                            <CategoryList/>
+                        </div>
+                    </Hidden>
+                    <Hidden only={['lg', 'md', 'sm', 'xl']}>
+                        <div className={classes.mainTablet}>
+                            <Carousel/>
+                            <CategoryList/>
+                        </div>
+                    </Hidden>
                     <Footer/>
                 </Route>
                 <Route exact path='/checkout'>
@@ -44,3 +69,5 @@ export default class GeneralRoutes extends React.Component {
         )
     }
 }
+
+export default withStyles(styles)(GeneralRoutes)
