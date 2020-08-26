@@ -118,7 +118,7 @@ export default function (props) {
                             dropdownContent={
                                 <React.Fragment>
                                     {isAdmin && <div>
-                                        <Link to={'users-list'} className={classes.link}>{t('users')}</Link>
+                                        <Link to={'/admin/users-list'} className={classes.link}>{t('users')}</Link>
                                     </div>}
                                     <div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>
                                 </React.Fragment>}/>

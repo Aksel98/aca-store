@@ -32,43 +32,42 @@ const useStyles = makeStyles({
 
 export default function Dashboard() {
     const currentUser = useSelector(state => state.user)
-    const isAdmin = useContext(TypeContext)
     const ui = useSelector(state => state.ui)
     const classes = useStyles()
-    console.log(isAdmin)
+
     return (
-            <Router>
-                {currentUser ?
-                    <Switch>
-                        <Route path='/favourites'>
+        <Router>
+            {currentUser ?
+                <Switch>
+                    <Route path='/favourites'>
+                        <Header/>
+                        <FavItemList/>
+                        <Footer/>
+                    </Route>
+                    <Route path='/payment'>
+                        <div>
                             <Header/>
-                            <FavItemList/>
+                            <Payment/>
                             <Footer/>
-                        </Route>
-                        <Route path='/payment'>
-                            <div>
-                                <Header/>
-                                <Payment/>
-                                <Footer/>
+                        </div>
+                    </Route>
+                    {currentUser.type === ADMIN && <Route path='/admin/users-list'>
+                        <UsersList/>
+                    </Route>}
+                    <GeneralRoutes/>
+                </Switch>
+                : <Switch>
+                    <Route path={LOGIN_URL}>
+                        <div className={classes.loginBg}>
+                            <div className={classes.loginContainer}>
+                                <Login/>
                             </div>
-                        </Route>
-                        {isAdmin && <Route path='/users-list'>
-                            <UsersList/>
-                        </Route>}
-                        <GeneralRoutes/>
-                    </Switch>
-                    : <Switch>
-                        <Route path={LOGIN_URL}>
-                            <div className={classes.loginBg}>
-                                <div className={classes.loginContainer}>
-                                    <Login/>
-                                </div>
-                            </div>
-                        </Route>
-                        <GeneralRoutes/>
-                    </Switch>}
-                {ui.error && <SnackBar message={ui.error} error/>}
-                {ui.success && <SnackBar message={ui.success}/>}
-            </Router>
+                        </div>
+                    </Route>
+                    <GeneralRoutes/>
+                </Switch>}
+            {ui.error && <SnackBar message={ui.error} error/>}
+            {ui.success && <SnackBar message={ui.success}/>}
+        </Router>
     )
 }

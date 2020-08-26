@@ -81,20 +81,31 @@ export const signUpUser = (email, password, name, surname, history, setPassword)
 
 export const getUserData = () => (dispatch) => {
     auth.onAuthStateChanged(user => {
-        dispatch({
-            type: SET_USER,
-            payload: user
-        })
+        if (user) {
+            db.collection('users').doc(user.uid).get().then(res => {
+                return res.data()?.type
+            }).then(userType => {
+                dispatch({
+                    type: SET_USER,
+                    payload: {...user, type: userType}
+                })
+            })
+        } else {
+            dispatch({
+                type: SET_USER,
+                payload: user
+            })
+        }
     })
 }
 
 export const logoutUser = () => (dispatch) => {
     auth.signOut().then(() => {
+        window.location.reload()
         dispatch({
             type: SET_USER,
             payload: null
         })
-        window.location.reload()
     }).catch(err => {
         dispatch(getError(err.message))
     })

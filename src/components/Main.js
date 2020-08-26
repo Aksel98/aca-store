@@ -21,14 +21,11 @@ export default function Main() {
     }, [currentUser])
 
     function getUserType() {
-        db.collection('users').get().then(snapshot => {
-            console.log(snapshot)
-            if (currentUser) {
-                db.collection('users').doc(currentUser.uid).get().then(user => {
-                    setIsAdmin(user.data()?.type === ADMIN)
-                }).catch(err => console.log(err))
-            }
-        })
+        if (currentUser) {
+            db.collection('users').doc(currentUser.uid).get().then(user => {
+                setIsAdmin(user.data()?.type === ADMIN)
+            }).catch(err => console.log(err))
+        }
     }
 
     return (
