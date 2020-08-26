@@ -3,19 +3,35 @@ import {auth, db} from "../../firebase/Firebase";
 import firebase from "firebase";
 import {getError, getSuccess} from "./uiActions";
 
-export const signInGoogle = (history) => (dispatch) =>  {
+export const signInGoogle = (history) => (dispatch) => {
     auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
         history.goBack()
         dispatch(getSuccess('Success'))
+    }).then(() => {
+        const user = firebase.auth().currentUser
+        return db.collection('users').doc(user.uid).set({
+            name: user.displayName?.split(' ')[0],
+            surname: user.displayName?.split(' ')[1],
+            email: user.email,
+            type: 'user'
+        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
 }
 
-export const signInFacebook = (history) => (dispatch) =>  {
+export const signInFacebook = (history) => (dispatch) => {
     auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(() => {
         history.goBack()
         dispatch(getSuccess('Success'))
+    }).then(() => {
+        const user = firebase.auth().currentUser
+        return db.collection('users').doc(user.uid).set({
+            name: user.displayName?.split(' ')[0],
+            surname: user.displayName?.split(' ')[1],
+            email: user.email,
+            type: 'user'
+        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
@@ -25,6 +41,14 @@ export const signInGithub = (history) => (dispatch) => {
     auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(() => {
         history.goBack()
         dispatch(getSuccess('Success'))
+    }).then(() => {
+        const user = firebase.auth().currentUser
+        return db.collection('users').doc(user.uid).set({
+            name: user.displayName?.split(' ')[0],
+            surname: user.displayName?.split(' ')[1],
+            email: user.email,
+            type: 'user'
+        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
@@ -34,6 +58,14 @@ export const signInPhoneNumber = (history) => (dispatch) => {
     auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(() => {
         history.goBack()
         dispatch(getSuccess('Success'))
+    }).then(() => {
+        const user = firebase.auth().currentUser
+        return db.collection('users').doc(user.uid).set({
+            name: user.displayName?.split(' ')[0],
+            surname: user.displayName?.split(' ')[1],
+            email: user.email,
+            type: 'user'
+        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
@@ -75,8 +107,8 @@ export const signUpUser = (email, password, name, surname, history, setPassword)
         .catch(err => {
             dispatch(getError(err.message))
         }).finally(() => {
-            setPassword('')
-        })
+        setPassword('')
+    })
 }
 
 export const getUserData = () => (dispatch) => {

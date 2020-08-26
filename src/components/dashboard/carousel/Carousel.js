@@ -74,14 +74,9 @@ export default function Carousel() {
     const dispatch = useDispatch()
     const isAdmin = useContext(TypeContext)
     const classes = useStyles()
-    const isMounted = useRef(null);
 
     useEffect(() => {
-        // isMounted.current = true;
-        // if (isMounted.current) {
         getImageRefs();
-        // }
-        // return () => isMounted.current = false;
     }, [])
 
     useEffect(() => {
