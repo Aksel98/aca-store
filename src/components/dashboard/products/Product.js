@@ -86,7 +86,7 @@ const useStyles = makeStyles({
         }
     },
     favIconColor: {
-        color: props => props.currentUser && props.liked ? ORANGE : GREY
+        color: props => (props.currentUser && props.liked) ? ORANGE : GREY
     },
     deleteBtn: {
         width: 35,
@@ -123,10 +123,10 @@ export default function Product(props) {
             openModal(t('modalTitleForAddFavoriteItems'));
         }
         if (currentUser && !liked) {
-            dispatch(addToFav(id));
+            dispatch(addToFav(id, currentUser.uid));
             setLiked(!liked)
         } else if (currentUser && liked) {
-            dispatch(removeFromFav(id));
+            dispatch(removeFromFav(id, currentUser.uid));
             setLiked(!liked)
         }
     }
@@ -141,7 +141,7 @@ export default function Product(props) {
                 <MyButton newcolor={ORANGE}><HighlightOffIcon/></MyButton>
             </div>}
             <Link to={`/categories/${device}/${id}`} className={classes.infoWithImage}>
-                {images?.length && <img className={classes.productImage} src={images[0]} alt="" />}
+                {images?.length && <img className={classes.productImage} src={images[0]} alt=""/>}
                 <div className={classes.modelInfo}>
                     <div className={classes.productName}>{name}</div>
                     <div className={classes.price}>{numberFormat(price, '֏')}</div>
@@ -149,9 +149,9 @@ export default function Product(props) {
             </Link>
             {hover && (<div className={classes.btnWrapper}>
                     <div style={{display: 'flex'}}>
-                        <MyButton className={classes.favIconColor}
-                                  onClick={() => favItemHandler()}
-                        ><FavoriteTwoToneIcon/></MyButton>
+                        <MyButton className={classes.favIconColor} onClick={() => favItemHandler()}>
+                            <FavoriteTwoToneIcon/>
+                        </MyButton>
                     </div>
                     <div className={classes.btnParent}>
                         <MyButton newcolor={ORANGE}
