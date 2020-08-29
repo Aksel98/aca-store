@@ -12,9 +12,7 @@ const favouriteReducer = (state = initialState.favourites, action) => {
 
         case ADD_TO_FAVOURITES: {
             const newState = [...state];
-            if (!newState.includes(action?.favId)) {
-                newState.push(action.favId)
-            }
+            newState.push(action.favId)
             if (action.uid) {
                 db.collection('users').doc(action.uid).set({
                     favItems: newState
@@ -26,7 +24,7 @@ const favouriteReducer = (state = initialState.favourites, action) => {
 
         case REMOVE_FROM_FAVOURITES: {
             const newState = [...state];
-            newState.splice(newState.indexOf(action.id), 1);
+            newState.splice(newState.indexOf(action.favId), 1);
             if (action.uid) {
                 db.collection('users').doc(action.uid).set({
                     favItems: newState

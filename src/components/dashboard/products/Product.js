@@ -86,7 +86,7 @@ const useStyles = makeStyles({
         }
     },
     favIconColor: {
-        color: props => props.currentUser && props.liked ? ORANGE : GREY
+        color: props => (props.currentUser && props.liked) ? ORANGE : GREY
     },
     deleteBtn: {
         width: 35,
