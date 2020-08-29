@@ -2,70 +2,44 @@ import {SET_USER} from "../types"
 import {auth, db} from "../../firebase/Firebase";
 import firebase from "firebase";
 import {getError, getSuccess} from "./uiActions";
+import {USER} from "../../../main/constants/types";
+import {setFavourites} from "./favouriteActions";
 
 export const signInGoogle = (history) => (dispatch) => {
-    auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
+    auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(res => {
+        putUserData(res)
         history.goBack()
         dispatch(getSuccess('Success'))
-    }).then(() => {
-        const user = firebase.auth().currentUser
-        return db.collection('users').doc(user.uid).set({
-            name: user.displayName?.split(' ')[0],
-            surname: user.displayName?.split(' ')[1],
-            email: user.email,
-            type: 'user'
-        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
 }
 
 export const signInFacebook = (history) => (dispatch) => {
-    auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(() => {
+    auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()).then(res => {
+        putUserData(res)
         history.goBack()
         dispatch(getSuccess('Success'))
-    }).then(() => {
-        const user = firebase.auth().currentUser
-        return db.collection('users').doc(user.uid).set({
-            name: user.displayName?.split(' ')[0],
-            surname: user.displayName?.split(' ')[1],
-            email: user.email,
-            type: 'user'
-        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
 }
 
 export const signInGithub = (history) => (dispatch) => {
-    auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(() => {
+    auth.signInWithPopup(new firebase.auth.GithubAuthProvider()).then(res => {
+        putUserData(res)
         history.goBack()
         dispatch(getSuccess('Success'))
-    }).then(() => {
-        const user = firebase.auth().currentUser
-        return db.collection('users').doc(user.uid).set({
-            name: user.displayName?.split(' ')[0],
-            surname: user.displayName?.split(' ')[1],
-            email: user.email,
-            type: 'user'
-        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
 }
 
 export const signInPhoneNumber = (history) => (dispatch) => {
-    auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(() => {
+    auth.signInWithPopup(new firebase.auth.PhoneAuthProvider()).then(res => {
+        putUserData(res)
         history.goBack()
         dispatch(getSuccess('Success'))
-    }).then(() => {
-        const user = firebase.auth().currentUser
-        return db.collection('users').doc(user.uid).set({
-            name: user.displayName?.split(' ')[0],
-            surname: user.displayName?.split(' ')[1],
-            email: user.email,
-            type: 'user'
-        })
     }).catch(err => {
         dispatch(getError(err.message))
     })
@@ -96,7 +70,8 @@ export const signUpUser = (email, password, name, surname, history, setPassword)
                 name: name,
                 surname: surname,
                 email: email,
-                type: 'user'
+                favItems: [],
+                type: USER
             })
         })
         .then(() => {
@@ -115,6 +90,10 @@ export const getUserData = () => (dispatch) => {
     auth.onAuthStateChanged(user => {
         if (user) {
             db.collection('users').doc(user.uid).get().then(res => {
+                localStorage.setItem('favourites', JSON.stringify(res.data()?.favItems || []))
+                if (res.data()?.favItems) {
+                    dispatch(setFavourites(res.data().favItems))
+                }
                 return res.data()?.type
             }).then(userType => {
                 dispatch({
@@ -134,6 +113,7 @@ export const getUserData = () => (dispatch) => {
 export const logoutUser = () => (dispatch) => {
     auth.signOut().then(() => {
         window.location.reload()
+        localStorage.removeItem('favourites')
         dispatch({
             type: SET_USER,
             payload: null
@@ -141,4 +121,16 @@ export const logoutUser = () => (dispatch) => {
     }).catch(err => {
         dispatch(getError(err.message))
     })
+}
+
+export const putUserData = (data) => {
+    if (data.additionalUserInfo.isNewUser) {
+        return db.collection('users').doc(data.user.uid).set({
+            name: data.user.displayName?.split(' ')[0],
+            surname: data.user.displayName?.split(' ')[1],
+            email: data.user.email,
+            favItems: [],
+            type: USER
+        })
+    }
 }

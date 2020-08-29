@@ -8,7 +8,7 @@ import uiReducer from "./uiReducer";
 export const initialState = {
     user: false,
     basketItems: JSON.parse(localStorage.getItem('basketItems')) || [],
-    favourites: [],
+    favourites: JSON.parse(localStorage.getItem('favourites')) || [],
     ui: {
         error: false,
         success: ''
