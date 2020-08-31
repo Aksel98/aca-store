@@ -25,6 +25,8 @@ export default function Main() {
             db.collection('users').doc(currentUser.uid).get().then(user => {
                 setIsAdmin(user.data()?.type === ADMIN)
             }).catch(err => console.log(err))
+        } else {
+            setIsAdmin(null)
         }
     }
 

@@ -112,7 +112,6 @@ export const getUserData = () => (dispatch) => {
 
 export const logoutUser = () => (dispatch) => {
     auth.signOut().then(() => {
-        window.location.reload()
         localStorage.removeItem('favourites')
         dispatch({
             type: SET_USER,
