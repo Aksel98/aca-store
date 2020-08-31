@@ -18,11 +18,12 @@ import {numberFormat} from "../../main/format-numbers/NumberFormat";
 import {useMediaQuery} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {removeBasket, removeFromBasket} from "../../services/redux/actions/basketAction";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import {getError, getSuccess} from "../../services/redux/actions/uiActions";
-import { HOME_URL } from '../../main/constants/navigations';
+import {HOME_URL} from '../../main/constants/navigations';
 import BackRouter from "../../main/BackRouter";
 import {useHistory} from "react-router-dom";
+
 const useStyles = makeStyles({
     container: {
         display: "flex",
@@ -87,19 +88,19 @@ const useStyles = makeStyles({
         justifyContent: "center",
         padding: "20px"
     },
-    shippingMetods: {
+    shippingMethods: {
         display: "flex",
         flexDirection: "column",
         width: "100%",
         alignItems: "center"
     },
-    paymentMetods: {
+    paymentMethods: {
         display: "flex",
         flexDirection: "column",
         width: "100%",
         alignItems: "center"
     },
-    shippingIcom: {
+    shippingIcon: {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
@@ -128,14 +129,14 @@ const useStyles = makeStyles({
     confirmBtn: {
         width: "70%"
     },
-    transfersInfoblock: {
+    transfersInfoBlock: {
         textAlign: props => props.media && 'center',
         display: "flex",
         flexDirection: "column",
         width: "100%",
         margin: '0 0 40px'
     },
-    transfersInfobtn: {
+    transfersInfoBtn: {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -146,9 +147,8 @@ const useStyles = makeStyles({
 
 export default function Payment() {
     const currentUser = useSelector(state => state.user);
-    const [order, setOrder] = useState({ city: '', address: '', zip: '', ship: '5000', pay: 'bank', orderItems: [], uid: currentUser.uid });
-    const [chosenItems, setChosenItems] = useState([]);
-    const [subTotal, setSubTotal] = useState(0);
+    const [order, setOrder] = useState({city: '', address: '', zip: '', ship: '5000', pay: 'bank'});
+    const [totalPrice, setTotalPrice] = useState(0);
     const basketItems = useSelector(state => state.basket);
     const dispatch = useDispatch()
     const media = useMediaQuery('(max-width:968px)');
@@ -156,50 +156,18 @@ export default function Payment() {
     const classes = useStyles({media, mediaTablet});
     const location = useLocation()
     const history = useHistory();
-    const [finalPrice, setFinalPrice] = useState(subTotal * 1.2 || 0);
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [error, setError] = useState(false);
 
-
     useEffect(() => {
-        getCartItems();
-    }, []);
-
-    useEffect(() => {
-        const tempTotal = chosenItems.map((item, ind) => {
-            return item.price * location.state.quantity[ind]
-        }).reduce((acc, Value) => (acc + Value), 0);
-        setSubTotal(tempTotal);
-        const orderItems = [...chosenItems];
-        setOrder({ ...order, orderItems: orderItems })
-        const tempFinalPrice = subTotal * 1.2 + order.ship * 1;
-        setFinalPrice(tempFinalPrice);
-    }, [chosenItems, order.ship, order.bank])
-
-    const getCartItems = () => {
-        const basketIds = basketItems.map(item => item.id)
-        if (basketIds.length) {
-            try {
-                db.collection('product').where('id', 'in', basketIds).get().then(querySnapshot => {
-                    const tempArr = [];
-                    querySnapshot.docs.forEach(doc => {
-                        let tempObj = doc.data();
-                        tempArr.push({...tempObj});
-                    })
-                    setChosenItems(tempArr);
-                }).catch(err => dispatch(getError(err.message)));
-            } catch (e) {
-                console.log(e);
-            }
-        }
-    }
+        setTotalPrice(location.state.amount + (location.state.amount / 100) + +order.ship)
+    }, [order.ship]);
 
     const handleDataChange = (e) => {
-        const oldState = { ...order };
+        const oldState = {...order};
         oldState[e.target.id] = e.target.value;
         setError(false);
-        setOrder({ ...oldState });
-
+        setOrder({...oldState});
     }
 
     const handleRadioChange = (e) => {
@@ -207,39 +175,39 @@ export default function Payment() {
         setOrder({...order, [name]: value})
     }
 
-    const removeItem = (id) => {
-        let tempArr = [...chosenItems];
-        tempArr = tempArr.filter(objItem => (objItem.id !== id))
-        setChosenItems(tempArr);
-        dispatch(removeFromBasket(id))
-    }
     const confirmOrder = () => {
         try {
-            db.collection('users').doc(currentUser.uid).set({
-                order: {
-                    items: order.orderItems,
-                    price: finalPrice,
-                    address: order.address + ', ' + order.city + ', ' + order.country + ', ' + order.zip,
-                    shipping: order.ship,
-                    payment: order.pay,
-                    id: order.uid
-                }
-            }, { merge: true })
-                .then(() => {
-                    if (order.address && order.city && order.country && order.zip) {
+            if (order.address && order.city && order.country && order.zip) {
+                db.collection('users').doc(currentUser.uid).get().then(user => {
+                    let orders = []
+                    if (user.data()?.orders) {
+                        orders = [...user.data().orders]
+                    }
+                    orders.push({
+                        email: currentUser.email,
+                        price: totalPrice,
+                        address: order.address + ',' + order.city + ',' + order.country + ',' + order.zip,
+                        payment: order.pay,
+                        id: currentUser.uid
+                    })
+                    console.log(orders)
+                    db.collection('users').doc(currentUser.uid).set({
+                        orders
+                    }, {merge: true}).then(() => {
                         history.push(HOME_URL);
                         dispatch(getSuccess('Order received'));
                         dispatch(removeBasket())
-                    } else {
-                        setError(true); dispatch(getError('Invalid entries'))
-                    }
+                    }).catch(e => dispatch(getError(e.message)))
                 })
-                .catch(e => dispatch(getError(e.message)))
-
+            } else {
+                setError(true);
+                dispatch(getError('Invalid entries'))
+            }
         } catch (err) {
             console.log(err)
         }
     }
+
     return (
         <div className={classes.container}>
             <BackRouter/>
@@ -255,13 +223,14 @@ export default function Payment() {
                 <h2 className={classes.tableRowTitle}>{t('total')}</h2>
                 <h2 className={classes.tableRowTitle}>{t('action')}</h2>
             </div>}
-            <div>{!basketItems ? 'you have 0 items in your cart' : chosenItems.map((item, ind) =>
+            <div>{!basketItems ? 'you have 0 items in your cart' : basketItems.map((item, ind) =>
                 <div key={uniqId()} className={classes.tableRow}>
                     {!media &&
                     <React.Fragment>
-                        <span className={classes.collParam}> {item.model}</span>
-                        <span className={classes.collParam}> {location.state.quantity[ind]} </span>
-                        <span className={classes.collParam}> {numberFormat(item.price, ' ֏')}</span>
+                        <span className={classes.collParam}>{item.device}</span>
+                        <span className={classes.collParam}>{item.model}</span>
+                        <span className={classes.collParam}>{item.quantity}</span>
+                        <span className={classes.collParam}>{numberFormat(item.price, '֏')}</span>
                     </React.Fragment>}
                     {media && <>
                         <div>
@@ -274,26 +243,28 @@ export default function Payment() {
                         </div>
                         <div>
                             <div className={classes.tableRowTitle}>{t('quantity')}</div>
-                            <span className={classes.collParam}>{location.state.quantity[ind]}</span>
+                            <span className={classes.collParam}>{item.quantity}</span>
                         </div>
                         <div>
                             <div className={classes.tableRowTitle}>{t('price')}</div>
                             <span className={classes.collParam}>{item.price}</span>
                         </div>
                     </>}
-                    <span className={classes.collParam}> {numberFormat(location.state.quantity[ind] * item.price, ' ֏')}</span>
-                    <span className={classes.collParam}> <MyButton onClick={() => removeItem(item.id)}
-                        newcolor={ORANGE}
-                        variant="contained">{t("remove")}</MyButton></span>
+                    <span className={classes.collParam}> {numberFormat(item.subtotal || item.price, ' ֏')}</span>
+                    <span className={classes.collParam}>
+                        <MyButton newcolor={ORANGE}
+                                  variant="contained"
+                                  onClick={() => dispatch(removeFromBasket(item.id))}>{t("remove")}</MyButton>
+                    </span>
                 </div>)}
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>{t("subTotal")}</span>
-                <span className={classes.tableRowItemValue}>{numberFormat(subTotal, ' ֏')}</span>
+                <span className={classes.tableRowItemValue}>{numberFormat(location.state.amount, ' ֏')}</span>
             </div>
             <div className={classes.tableRow}>
-                <span className={classes.tableRowItemName}>{t("vat 20%")}</span>
-                <span className={classes.tableRowItemValue}> {numberFormat(subTotal * 0.2, ' ֏')}</span>
+                <span className={classes.tableRowItemName}>{t("vat")} 1%</span>
+                <span className={classes.tableRowItemValue}> {numberFormat(location.state.amount / 100, ' ֏')}</span>
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>{t("shippingRate")}</span>
@@ -301,34 +272,31 @@ export default function Payment() {
             </div>
             <div className={classes.tableRow}>
                 <span className={classes.tableRowItemName}>{t("total")}</span>
-                <span
-                    className={classes.tableRowItemValue}> {numberFormat(finalPrice, ' ֏')}</span>
+                <span className={classes.tableRowItemValue}> {numberFormat(totalPrice, ' ֏')}</span>
             </div>
             <div className={classes.methods}>
-                <div className={classes.shippingMetods}>
-                <span className={classes.shippingIcom}>
+                <div className={classes.shippingMethods}>
+                <span className={classes.shippingIcon}>
                 <LocalShippingIcon/>
                 <h2 className={classes.methodsTitle}>{t("shipping")} </h2>
                 </span>
                     <FormControl component="fieldset">
-
                         <RadioGroup aria-label="shipping" id='ship' name="shipping" value={order.ship}
                                     onChange={handleRadioChange}>
                             <FormControlLabel name='ship' value="5000" control={<Radio color="primary"/>}
-                                              label={t("standart 5,000 ֏")}/>
+                                              label={t("standard") + ' 5,000 ֏'}/>
                             <FormControlLabel name='ship' value="10000" control={<Radio color="primary"/>}
-                                              label={t("FedEx 2 day  10,000 ֏")}/>
+                                              label={t("FedEx 2 day") + ' 10,000 ֏'}/>
                         </RadioGroup>
                     </FormControl>
                 </div>
-                <div className={classes.paymentMetods}>
+                <div className={classes.paymentMethods}>
                 <span className={classes.paymentIcon}>
                 <AccountBalanceIcon/>
                 <h2 className={classes.methodsTitle}>{t("payment")}</h2>
                 </span>
                     <FormControl>
-                        <RadioGroup aria-label="payment" value={order.pay}
-                                    onChange={handleRadioChange}>
+                        <RadioGroup aria-label="payment" value={order.pay} onChange={handleRadioChange}>
                             <FormControlLabel name='pay' value="bank" control={<Radio color="primary"/>}
                                               label={t("bankTransfer")}/>
                             <FormControlLabel name='pay' value="cash" control={<Radio color="primary"/>}
@@ -338,25 +306,26 @@ export default function Payment() {
                 </div>
             </div>
             <div className={classes.transfersInfo}>
-                {order.pay === 'bank' && <div className={classes.transfersInfoblock}>
+                {order.pay === 'bank' && <div className={classes.transfersInfoBlock}>
                     <h2 className={classes.infoTitle}>{t("bankDetails")}</h2>
                     <p className={classes.infoText}>{t('bank')}: Ameriabank</p>
                     <p className={classes.infoText}>SWIFT / BIC: ARMIAM22</p>
                     <p className={classes.infoText}>a/c: 103002101576</p>
-                    <p className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of Armenia</p>
+                    <p className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of
+                        Armenia</p>
                     <p className={classes.infoText}>{t('yourOrderWillShipAfterWeReceivePayment')}</p>
                 </div>}
-                {!media && <div className={classes.transfersInfobtn}>
-                    <MyButton className={classes.confirmBtn} newcolor={ORANGE} onClick={confirmOrder} variant="contained">{t("confirmOrder")}</MyButton>
+                {!media && <div className={classes.transfersInfoBtn}>
+                    <MyButton className={classes.confirmBtn} newcolor={ORANGE} onClick={confirmOrder}
+                              variant="contained">{t("confirmOrder")}</MyButton>
                 </div>}
-                <div className={classes.transfersInfoblock}>
+                <div className={classes.transfersInfoBlock}>
                     <h2 className={classes.infoTitle}>{t("shippingAddress")}</h2>
                     <FormControl required className={classes.formControl}>
                         <InputLabel htmlFor="country-native-required">{t("country")}</InputLabel>
-                        <Select
-                            native
-                            id='country'
-                            onChange={handleDataChange}>
+                        <Select native
+                                id='country'
+                                onChange={handleDataChange}>
                             <option aria-label="None" value={order.country}/>
                             <option id="country">{t("armenia")}</option>
                             <option id="country">{t("georgia")}</option>
@@ -365,33 +334,30 @@ export default function Payment() {
                             <option id="country">{t("usa")}</option>
                         </Select>
                     </FormControl>
-                    <TextField
-                        required
-                        id="city"
-                        label={t("city")}
-                        placeholder="eg. Yerevan"
-                        onChange={handleDataChange}
-                        value={order.city}
-                        error={error} />
-                    <TextField
-                        required
-                        id="address"
-                        label={t("address")}
-                        placeholder="Street address, company name"
-                        onChange={handleDataChange}
-                        value={order.address}
-                        error={error} />
-                    <TextField
-                        required
-                        id="zip"
-                        label={t("zip")}
-                        placeholder="eg. 1520"
-                        onChange={handleDataChange}
-                        value={order.zip}
-                        error={error} />
+                    <TextField required
+                               id="city"
+                               label={t("city")}
+                               placeholder="eg. Yerevan"
+                               onChange={handleDataChange}
+                               value={order.city}
+                               error={error}/>
+                    <TextField required
+                               id="address"
+                               label={t("address")}
+                               placeholder="Street address, company name"
+                               onChange={handleDataChange}
+                               value={order.address}
+                               error={error}/>
+                    <TextField required
+                               id="zip"
+                               label={t("zip")}
+                               placeholder="eg. 1520"
+                               onChange={handleDataChange}
+                               value={order.zip}
+                               error={error}/>
                 </div>
             </div>
-            {media && <div className={classes.transfersInfobtn}>
+            {media && <div className={classes.transfersInfoBtn}>
                 <MyButton className={classes.confirmBtn} onClick={confirmOrder} newcolor={ORANGE}
                           variant="contained">{t("confirmOrder")}</MyButton>
             </div>}

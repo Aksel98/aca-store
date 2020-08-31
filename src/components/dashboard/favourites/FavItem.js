@@ -103,7 +103,7 @@ export default function FavItem(props) {
             </div>
             <div>
                 <Link to="/checkout"
-                      onClick={() => dispatch(addToBasket(id, price, device))}
+                      onClick={() => dispatch(addToBasket(id, price, device, model))}
                       className={classes.btnParent}>
                     <MyButton color="primary" maxwidth="90%" variant="contained">{t('buy')}</MyButton>
                 </Link>

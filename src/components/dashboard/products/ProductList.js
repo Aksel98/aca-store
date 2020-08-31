@@ -164,6 +164,7 @@ export default function ProductList() {
                             <Product openModal={openModal}
                                      openDeleteModal={openDeleteModal}
                                      device={item.device}
+                                     model={item.model}
                                      images={item.images}
                                      name={item.model}
                                      id={item.id}

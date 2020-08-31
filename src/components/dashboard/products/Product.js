@@ -95,7 +95,7 @@ const useStyles = makeStyles({
 });
 
 export default function Product(props) {
-    const {device, images, name, id, price, openModal, openDeleteModal} = props
+    const {device, model, images, name, id, price, openModal, openDeleteModal} = props
     const [hover, setHover] = useState(false);
     const basketItems = useSelector(state => state.basket)
     const currentUser = useSelector(state => state.user)
@@ -132,7 +132,7 @@ export default function Product(props) {
     }
 
     function addOrRemove() {
-        btnText === t('addToCart') ? dispatch(addToBasket(id, price, device)) : dispatch(removeFromBasket(id))
+        btnText === t('addToCart') ? dispatch(addToBasket(id, price, device, model)) : dispatch(removeFromBasket(id))
     }
 
     return (

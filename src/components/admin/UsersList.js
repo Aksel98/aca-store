@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles, withStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,35 +7,44 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {db} from '../services/firebase/Firebase';
 import uniqId from 'uniqid';
-import {GREY, BLUE, ORANGE, MyButton} from '../main/constants/constants';
+import {MyButton} from '../main/constants/constants';
 import {useHistory} from 'react-router-dom';
 import {useTranslation} from "react-i18next";
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
+import {numberFormat} from "../main/format-numbers/NumberFormat";
 
 const useStyles = makeStyles({
-    table: {
-        width: 'auto',
-        margin: "20px",
-    },
-    head: {
-        border: `2px solid ${BLUE}`,
-        backgroundColor: GREY,
-        textAlign: 'center',
-        fontSize: '18pt'
-    },
-
-    cells: {
-        border: `2px solid ${BLUE}`,
-        textAlign: 'center',
-        color: ORANGE,
-        fontSize: '14pt'
+    container: {
+        margin: '40px 20px'
     },
     btn: {
         width: 'fit-content',
         display: 'flex',
         justifyContent: 'end',
-        margin: '20px'
+        marginBottom: 50
     }
 });
+
+const StyledTableCell = withStyles((theme) => ({
+    head: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+        textAlign: 'left'
+    },
+    body: {
+        fontSize: 14,
+        textAlign: 'left'
+    },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+    root: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+    },
+}))(TableRow);
 
 export default function UsersList() {
     const [users, setUsers] = useState([]);
@@ -44,46 +53,46 @@ export default function UsersList() {
     const classes = useStyles();
 
     function usersList() {
-        db.collection('users').get()
-            .then((Snapshot) => {
-                const tempArr = [];
-                Snapshot.forEach((doc) => {
-                    tempArr.push({...doc.data()})
-
-                });
-                return setUsers([...tempArr])
-            })
+        db.collection('users').get().then((Snapshot) => {
+            const users = [];
+            Snapshot.forEach((doc) => {
+                users.push(...doc.data().orders)
+            });
+            setUsers(users)
+        })
     }
 
     useEffect(() => {
         usersList();
     }, [])
 
-    return (<div>
+    console.log(users)
+
+    return (
+        <div className={classes.container}>
             <MyButton className={classes.btn}
                       variant="contained"
                       onClick={() => history.goBack()}>{t('goBack')}</MyButton>
-            <Table className={classes.table}>
-                <TableHead>
-                    <TableRow key={uniqId()}>
-                        <TableCell key={uniqId()} className={classes.head}>FULLNAME</TableCell>
-                        <TableCell key={uniqId()} className={classes.head}>E-MAIL</TableCell>
-                        <TableCell key={uniqId()} className={classes.head}> ADDRESS</TableCell>
-                        <TableCell key={uniqId()} className={classes.head}>ORDER PRICE</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={uniqId()}>
-                            <TableCell key={uniqId()} className={classes.cells}>
-                                {user.name ? (user.name + ' ' + user.surname) : '...'}
-                            </TableCell>
-                            <TableCell key={uniqId()} className={classes.cells}>{user.email}</TableCell>
-                            <TableCell key={uniqId()} className={classes.cells}>{user.order?.address}</TableCell>
-                            <TableCell key={uniqId()} className={classes.cells}>{user.order?.price}</TableCell>
-                        </TableRow>))}
-                </TableBody>
-            </Table>
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell align="right">{t('email')}</StyledTableCell>
+                            <StyledTableCell align="right">{t('address')}</StyledTableCell>
+                            <StyledTableCell align="right">{t('orderPrice')}</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {users.map((user) => (
+                            <StyledTableRow key={uniqId()}>
+                                <StyledTableCell key={uniqId()} align="right">{user.email}</StyledTableCell>
+                                <StyledTableCell key={uniqId()} align="right">{user.address}</StyledTableCell>
+                                <StyledTableCell key={uniqId()} align="right">{numberFormat(user.price, '֏')}</StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 }

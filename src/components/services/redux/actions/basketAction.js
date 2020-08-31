@@ -1,12 +1,13 @@
 import {ADD_TO_BASKET, DECREMENT, INCREMENT, REMOVE_BASKET, REMOVE_FROM_BASKET, UPDATE_PRICE} from "../types";
 
-export const addToBasket = (id, price, device, quantity = 1) => (dispatch) => {
+export const addToBasket = (id, price, device, model, quantity = 1) => (dispatch) => {
     dispatch({
         type: ADD_TO_BASKET,
         id,
         price,
+        device,
+        model,
         quantity,
-        device
     })
 }
 
