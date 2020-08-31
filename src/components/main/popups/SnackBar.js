@@ -10,13 +10,11 @@ export default function SnackBar(props) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        setTimeout(() => removeUi(), props.duration || 5000)
-    }, [])
-
-    function removeUi() {
-        dispatch(getSuccess(''))
-        dispatch(getError(false))
-    }
+        setTimeout(() => {
+            dispatch(getSuccess(''))
+            dispatch(getError(false))
+        }, props.duration || 5000)
+    }, [props.duration, dispatch])
 
     const handleClose = () => {
         setOpen(false);

@@ -30,7 +30,6 @@ const useStyles = makeStyles({
 })
 
 const TotalPrice = () => {
-    const [quantity, setQuantity] = useState(0)
     const basketItems = useSelector(state => state.basket)
     const currentUser = useSelector(state => state.user)
     const [amount, setAmount] = useState(0)

@@ -161,7 +161,7 @@ export default function Payment() {
 
     useEffect(() => {
         setTotalPrice(location.state.amount + (location.state.amount / 100) + +order.ship)
-    }, [order.ship]);
+    }, [order.ship, location.state.amount]);
 
     const handleDataChange = (e) => {
         const oldState = {...order};
