@@ -11,7 +11,6 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import {MyButton, ORANGE, BLUE} from "../../main/constants/constants";
 import {numberFormat} from "../../main/format-numbers/NumberFormat";
@@ -23,6 +22,7 @@ import {getError, getSuccess} from "../../services/redux/actions/uiActions";
 import {HOME_URL} from '../../main/constants/navigations';
 import BackRouter from "../../main/BackRouter";
 import {useHistory} from "react-router-dom";
+import NativeSelect from "@material-ui/core/NativeSelect";
 
 const useStyles = makeStyles({
     container: {
@@ -124,7 +124,7 @@ const useStyles = makeStyles({
         margin: 0
     },
     infoText: {
-        margin: "0px"
+        margin: 2
     },
     confirmBtn: {
         width: "70%"
@@ -147,7 +147,7 @@ const useStyles = makeStyles({
 
 export default function Payment() {
     const currentUser = useSelector(state => state.user);
-    const [order, setOrder] = useState({city: '', address: '', zip: '', ship: '5000', pay: 'bank'});
+    const [order, setOrder] = useState({country: '', city: '', address: '', zip: '', ship: '5000', pay: 'bank'});
     const [totalPrice, setTotalPrice] = useState(0);
     const basketItems = useSelector(state => state.basket);
     const dispatch = useDispatch()
@@ -157,7 +157,7 @@ export default function Payment() {
     const location = useLocation()
     const history = useHistory();
     const {t} = useTranslation();
-    const [error, setError] = useState(false);
+    const [error, setError] = useState({country: false, city: false, address: false, zip: false});
 
     useEffect(() => {
         setTotalPrice(location.state.amount + (location.state.amount / 100) + +order.ship)
@@ -166,7 +166,7 @@ export default function Payment() {
     const handleDataChange = (e) => {
         const oldState = {...order};
         oldState[e.target.id] = e.target.value;
-        setError(false);
+        setError({country: false, city: false, address: false, zip: false});
         setOrder({...oldState});
     }
 
@@ -199,7 +199,7 @@ export default function Payment() {
                     }).catch(e => dispatch(getError(e.message)))
                 })
             } else {
-                setError(true);
+                setError({country: !order.country, city: !order.city, address: !order.address, zip: !order.zip});
                 dispatch(getError('Invalid entries'))
             }
         } catch (err) {
@@ -307,7 +307,7 @@ export default function Payment() {
             <div className={classes.transfersInfo}>
                 {order.pay === 'bank' && <div className={classes.transfersInfoBlock}>
                     <h2 className={classes.infoTitle}>{t("bankDetails")}</h2>
-                    <p className={classes.infoText}>{t('bank')}: Ameriabank</p>
+                    <p className={classes.infoText}>{t('bank')}: Ameria bank</p>
                     <p className={classes.infoText}>SWIFT / BIC: ARMIAM22</p>
                     <p className={classes.infoText}>a/c: 103002101576</p>
                     <p className={classes.infoText}>{t("address")}: 2 Vazgen Sargsyan Str., Yerevan, Republic of
@@ -320,18 +320,17 @@ export default function Payment() {
                 </div>}
                 <div className={classes.transfersInfoBlock}>
                     <h2 className={classes.infoTitle}>{t("shippingAddress")}</h2>
-                    <FormControl required className={classes.formControl}>
-                        <InputLabel htmlFor="country-native-required">{t("country")}</InputLabel>
-                        <Select native
-                                id='country'
-                                onChange={handleDataChange}>
-                            <option aria-label="None" value={order.country}/>
-                            <option id="country">{t("armenia")}</option>
-                            <option id="country">{t("georgia")}</option>
-                            <option id="country">{t("iran")}</option>
-                            <option id="country">{t("russia")}</option>
-                            <option id="country">{t("usa")}</option>
-                        </Select>
+                    <FormControl error={error.country}>
+                        <InputLabel htmlFor="name-native-error">{t('country')}</InputLabel>
+                        <NativeSelect id="country" value={order.country} onChange={handleDataChange}>
+                            <optgroup>
+                                <option value=""/>
+                                <option value={t("armenia")}>{t("armenia")}</option>
+                                <option value={t("georgia")}>{t("georgia")}</option>
+                                <option value={t("russia")}>{t("russia")}</option>
+                                <option value={t("usa")}>{t("usa")}</option>
+                            </optgroup>
+                        </NativeSelect>
                     </FormControl>
                     <TextField required
                                id="city"
@@ -339,21 +338,21 @@ export default function Payment() {
                                placeholder="eg. Yerevan"
                                onChange={handleDataChange}
                                value={order.city}
-                               error={error}/>
+                               error={error.city}/>
                     <TextField required
                                id="address"
                                label={t("address")}
                                placeholder="Street address, company name"
                                onChange={handleDataChange}
                                value={order.address}
-                               error={error}/>
+                               error={error.address}/>
                     <TextField required
                                id="zip"
                                label={t("zip")}
                                placeholder="eg. 1520"
                                onChange={handleDataChange}
                                value={order.zip}
-                               error={error}/>
+                               error={error.zip}/>
                 </div>
             </div>
             {media && <div className={classes.transfersInfoBtn}>

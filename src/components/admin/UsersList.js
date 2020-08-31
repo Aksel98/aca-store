@@ -56,7 +56,9 @@ export default function UsersList() {
         db.collection('users').get().then((Snapshot) => {
             const users = [];
             Snapshot.forEach((doc) => {
-                users.push(...doc.data().orders)
+                if (doc.data().orders) {
+                    users.push(...doc.data().orders)
+                }
             });
             setUsers(users)
         })
