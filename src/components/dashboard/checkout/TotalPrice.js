@@ -43,8 +43,6 @@ const TotalPrice = () => {
         }, 0))
     }, [basketItems])
 
-    console.log(quantity)
-
     return (
         currentUser ? <div className={classes.mainWrapper}>
             <div className={classes.price}>

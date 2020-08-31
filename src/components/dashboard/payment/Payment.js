@@ -190,7 +190,6 @@ export default function Payment() {
                         payment: order.pay,
                         id: currentUser.uid
                     })
-                    console.log(orders)
                     db.collection('users').doc(currentUser.uid).set({
                         orders
                     }, {merge: true}).then(() => {

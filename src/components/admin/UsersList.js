@@ -66,8 +66,6 @@ export default function UsersList() {
         usersList();
     }, [])
 
-    console.log(users)
-
     return (
         <div className={classes.container}>
             <MyButton className={classes.btn}
