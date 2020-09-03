@@ -126,7 +126,8 @@ export default function ProductList() {
                             let temp = doc.data();
                             tempArr.push({...temp, id: doc.id})
                         })
-                        nameFilter ? setProducts(products.filter(product => product.model.includes(
+                        const newProducts = [...tempArr]
+                        nameFilter ? setProducts(newProducts.filter(product => product.model.includes(
                             nameFilter.toLowerCase()) || product.model.includes(nameFilter.toUpperCase()))) : setProducts(tempArr);
                         setLoader(false)
                     })
@@ -159,9 +160,9 @@ export default function ProductList() {
     }
 
     function searchHandler(e) {
-        setLoader(true)
         setNameFilter(e.target.value)
     }
+    // console.log(nameFilter)
 
     function priceHandler(e, val) {
         setPriceFilter(val)
