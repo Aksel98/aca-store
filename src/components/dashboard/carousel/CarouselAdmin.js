@@ -49,11 +49,13 @@ const useStyles = makeStyles({
 export default function CarouselAdmin(props) {
     const [image, setImage] = useState(null);
     const {isOpen, open, images, setUrl, setDeletedImage} = props
+    const [btnDisabled, setBtnDisabled] = useState(false)
     const dispatch = useDispatch()
     const {t} = useTranslation()
     const classes = useStyles()
 
     function addCarouselImg() {
+        setBtnDisabled(true)
         if (image) {
             storage.ref(`images/carousel/${image?.name}`).put(image).on(
                 "state_changed",
@@ -69,6 +71,7 @@ export default function CarouselAdmin(props) {
                         .then(url => {
                                 setUrl(url)
                                 setImage(null)
+                                setBtnDisabled(false)
                             }
                         )
                 }
@@ -127,7 +130,7 @@ export default function CarouselAdmin(props) {
                              </div>
                          </div>
                      }
-                     disabled={!image}
+                     disabled={!image || btnDisabled}
                      doneButton={addCarouselImg}
                      doneButtonName={t('add')}
                      close={closeModal}/>
