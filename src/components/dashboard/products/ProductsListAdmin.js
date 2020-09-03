@@ -17,8 +17,9 @@ const useStyles = makeStyles(() => ({
 }))
 
 export default function ProductsListAdmin(props) {
-    const {open, isOpen, setNewDevice, deleteModal, openDeleteModal} = props
+    const {open, isOpen, setNewDevice, setLoader, deleteModal, openDeleteModal} = props
     const [newDeviceName, setNewDeviceName] = useState('');
+    const [btnDisable, setBtnDisable] = useState(false);
     const dispatch = useDispatch()
     const location = useLocation();
     const history = useHistory();
@@ -26,6 +27,7 @@ export default function ProductsListAdmin(props) {
     const classes = useStyles()
 
     function addDevice() {
+        setBtnDisable(true)
         const type = location.pathname.split("/")[2]
         const id = uniqId()
         db.collection("product").doc(id).set({
@@ -38,10 +40,12 @@ export default function ProductsListAdmin(props) {
             isOpen(false)
             setNewDevice(true)
             history.push(`${location}/${id}`)
+            setBtnDisable(false)
         }).catch(err => dispatch(getError(err.message)))
     }
 
     function deleteDevice() {
+        setLoader(true)
         db.collection("product").doc(deleteModal.id).delete().then(() => {
             setNewDevice(true)
             openDeleteModal(false)
@@ -67,7 +71,7 @@ export default function ProductsListAdmin(props) {
                          }
                          doneButton={addDevice}
                          doneButtonName={t('add')}
-                         disabled={!newDeviceName.trim()}
+                         disabled={!newDeviceName.trim() || btnDisable}
                          close={() => isOpen(false)}/>
             <ModalDialog open={deleteModal.open}
                          title={t('areYouSure')}

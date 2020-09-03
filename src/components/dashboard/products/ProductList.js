@@ -228,6 +228,7 @@ export default function ProductList() {
             <ProductsListAdmin open={addDeviceModal}
                                isOpen={setAddDeviceModal}
                                setNewDevice={setNewDevice}
+                               setLoader={setLoader}
                                deleteModal={deleteModal}
                                openDeleteModal={openDeleteModal}/>
         </div>
