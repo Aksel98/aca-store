@@ -162,7 +162,6 @@ export default function ProductList() {
     function searchHandler(e) {
         setNameFilter(e.target.value)
     }
-    // console.log(nameFilter)
 
     function priceHandler(e, val) {
         setPriceFilter(val)
@@ -174,6 +173,7 @@ export default function ProductList() {
 
     function changeLimitSize(e) {
         setLimit(+e.target.value)
+        setPage(1)
         setLoader(true)
     }
 
