@@ -1,7 +1,7 @@
 import { styled } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
-export const LOGO = '/images/cart-icon.png'
+export const LOGO = '/images/logo.png'
 export const EN_FLAG = '/images/english-flag.png'
 export const ARM_FLAG = '/images/armenian-flag.png'
 export const RUS_FLAG = '/images/russian-flag.png'

@@ -9,13 +9,15 @@ import {LOGIN_URL} from "../../main/constants/navigations";
 import {useTranslation} from "react-i18next";
 import Filters from "./Filters";
 import Loader from "../../main/loader/Loader";
-import {BLUE, MyButton} from "../../main/constants/constants";
+import {BLACK, BLUE, MyButton} from "../../main/constants/constants";
 import Pagination from '@material-ui/lab/Pagination';
 import ProductsListAdmin from "./ProductsListAdmin";
 import {getError} from "../../services/redux/actions/uiActions";
 import {useDispatch} from "react-redux";
 import {TypeContext} from "../../main/contexts/typeContext";
 import BackRouter from "../../main/BackRouter";
+import FormControl from "@material-ui/core/FormControl";
+import NativeSelect from "@material-ui/core/NativeSelect";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -30,7 +32,8 @@ const useStyles = makeStyles(() => ({
     },
     products: {
         height: props => props.mediaTablet ? 'calc(100vh - 560px)' : 'calc(100vh - 320px)',
-        margin: props => props.mediaTablet ? 0 : '20px 0 0',
+        margin: props => props.mediaTablet ? 0 : '20px auto 0',
+        maxWidth: props => !props.mediaTablet && 1080,
         overflow: 'auto',
         justifyContent: 'center',
         display: 'flex',
@@ -42,8 +45,13 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
     },
     pagination: {
+        maxWidth: 1000,
         display: 'flex',
         justifyContent: 'center',
+    },
+    paginationNum: {
+      color: BLACK,
+      fontWeight: 600
     },
     nothingFound: {
         color: BLUE
@@ -56,7 +64,8 @@ const useStyles = makeStyles(() => ({
 
 export default function ProductList() {
     const [products, setProducts] = useState([]);
-    const [priceFilter, setPriceFilter] = useState([0, 1000000]);
+    const [priceFilter, setPriceFilter] = useState([0, 10000000]);
+    const [maxPrice, setMaxPrice] = useState(0);
     const [nameFilter, setNameFilter] = useState('');
     const [orderBy, setOrderBy] = useState(localStorage.getItem('orderBy') || 'asc');
     const [loader, setLoader] = useState(true);
@@ -66,7 +75,7 @@ export default function ProductList() {
     const [newDevice, setNewDevice] = useState(false);
     const [page, setPage] = useState(1);
     const [paginationSize, setPaginationSize] = useState(0)
-    const [limit] = useState(8)
+    const [limit, setLimit] = useState(8)
     const isAdmin = useContext(TypeContext)
     const dispatch = useDispatch()
     const history = useHistory();
@@ -77,8 +86,23 @@ export default function ProductList() {
     const classes = useStyles({mediaTablet, mediaMobile});
 
     useEffect(() => {
-        getAllProductInfo();
-    }, [priceFilter, nameFilter, orderBy, page, newDevice]);
+        setMaximalPrice()
+    }, []);
+
+    useEffect(() => {
+            getAllProductInfo();
+    }, [nameFilter, priceFilter, orderBy, page, newDevice, limit]);
+
+    function setMaximalPrice() {
+        const prices = []
+        db.collection('product').where('device', '==', category).get().then(snap => {
+            snap.docs.forEach(doc => {
+                prices.push(doc.data().price)
+            })
+            setPriceFilter([0, Math.max(...prices) + 1])
+            setMaxPrice(Math.max(...prices) + 1)
+        })
+    }
 
     function getAllProductInfo() {
         try {
@@ -102,7 +126,9 @@ export default function ProductList() {
                             let temp = doc.data();
                             tempArr.push({...temp, id: doc.id})
                         })
-                        nameFilter ? setProducts(products.filter(product => product.model.includes(nameFilter))) : setProducts(tempArr);
+                        const newProducts = [...tempArr]
+                        nameFilter ? setProducts(newProducts.filter(product => product.model.includes(
+                            nameFilter.toLowerCase()) || product.model.includes(nameFilter.toUpperCase()))) : setProducts(tempArr);
                         setLoader(false)
                     })
                 } else {
@@ -136,6 +162,7 @@ export default function ProductList() {
     function searchHandler(e) {
         setNameFilter(e.target.value)
     }
+    // console.log(nameFilter)
 
     function priceHandler(e, val) {
         setPriceFilter(val)
@@ -145,19 +172,25 @@ export default function ProductList() {
         setAddDeviceModal(true)
     }
 
+    function changeLimitSize(e) {
+        setLimit(+e.target.value)
+        setLoader(true)
+    }
+
     return (
-        <div className={classes.container}>
+        loader ? <Loader/> : <div className={classes.container}>
             <BackRouter/>
             <Filters name={nameFilter}
                      orderBy={orderBy}
                      price={priceFilter}
+                     maxPrice={maxPrice}
                      onSearch={searchHandler}
                      onOrder={orderHandler}
                      onPrice={priceHandler}/>
             <div className={classes.productsParent}>
-                {loader ? <Loader/> : <div>
+                <div>
                     {isAdmin && <div onClick={openPopup} className={classes.btnParent}>
-                        <MyButton color="primary" maxwidth="75%" variant="contained">{t('addDevice')}</MyButton>
+                        <MyButton color="primary" maxwidth="860px" variant="contained">{t('addDevice')}</MyButton>
                     </div>}
                     <div className={classes.products}>
                         {products.length ? products.map((item) => (
@@ -174,9 +207,17 @@ export default function ProductList() {
                     </div>
                     <div className={classes.pagination}>
                         <Pagination count={paginationSize} page={page} onChange={changePagination} color="primary"/>
+                        <FormControl>
+                            <NativeSelect className={classes.paginationNum} value={limit} onChange={(e) => changeLimitSize(e)}>
+                                <optgroup>
+                                    <option value={2}>2</option>
+                                    <option value={4}>4</option>
+                                    <option value={8}>8</option>
+                                </optgroup>
+                            </NativeSelect>
+                        </FormControl>
                     </div>
                 </div>
-                }
             </div>
             <ModalDialog open={modal.open}
                          title={modal.title}
@@ -187,6 +228,7 @@ export default function ProductList() {
             <ProductsListAdmin open={addDeviceModal}
                                isOpen={setAddDeviceModal}
                                setNewDevice={setNewDevice}
+                               setLoader={setLoader}
                                deleteModal={deleteModal}
                                openDeleteModal={openDeleteModal}/>
         </div>

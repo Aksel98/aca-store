@@ -48,7 +48,7 @@ const useStyles = makeStyles({
 })
 
 export default function Filters(props) {
-    const {name, orderBy, price, onSearch, onOrder, onPrice} = props
+    const {name, orderBy, price, maxPrice, onSearch, onOrder, onPrice} = props
     const mediaTablet = useMediaQuery('(max-width:600px)');
     const classes = useStyles(mediaTablet);
     const {t} = useTranslation()
@@ -80,7 +80,7 @@ export default function Filters(props) {
                 <div className={classes.filtersTitle}>{t('price')}</div>
                 <Slider
                     min={0}
-                    max={1000000}
+                    max={maxPrice}
                     step={50000}
                     value={price}
                     onChange={onPrice}
