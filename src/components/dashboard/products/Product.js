@@ -42,7 +42,7 @@ const useStyles = makeStyles({
         fontWeight: '600'
     },
     productName: {
-        fontSize: props => props.mediaMobile ? 16 : 20,
+        fontSize: 16,
         fontWeight: 'bold',
         fontStyle: 'italic',
         marginBottom: 25,
