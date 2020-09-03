@@ -29,13 +29,14 @@ export default function (state = initialState.basketItems, action) {
         }
         case ADD_TO_BASKET: {
             let newState = [...state];
-            const {id, price, quantity, device} = action
+            const {id, price, device, model, quantity} = action
             const currentIndex = newState.findIndex(item => item.id === id)
             currentIndex === -1 ? newState.push({
                 id,
                 price,
+                device,
+                model,
                 quantity,
-                device
             }) : newState[currentIndex].quantity = action.quantity
             localStorage.setItem('basketItems', JSON.stringify(newState))
             return newState
@@ -47,6 +48,7 @@ export default function (state = initialState.basketItems, action) {
             return newState
         }
         case REMOVE_BASKET: {
+            localStorage.setItem('basketItems', JSON.stringify([]))
             return []
         }
         case UPDATE_PRICE: {

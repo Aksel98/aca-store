@@ -115,7 +115,7 @@ export default function Device() {
     }
 
     function buy() {
-        dispatch(addToBasket(device.id, price, device.device, deviceCount))
+        dispatch(addToBasket(device.id, price, device.device, device.model, deviceCount))
     }
 
     return (

@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
     categoryView: {
         backgroundColor: WHITE,
         minHeight: 180,
-        padding: '80px 40px',
+        padding: '40px 40px 0',
         display: 'flex',
         flexDirection: 'row',
         flexFlow: 'wrap',

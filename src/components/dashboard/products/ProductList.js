@@ -66,7 +66,7 @@ export default function ProductList() {
     const [newDevice, setNewDevice] = useState(false);
     const [page, setPage] = useState(1);
     const [paginationSize, setPaginationSize] = useState(0)
-    const [limit] = useState(6)
+    const [limit] = useState(8)
     const isAdmin = useContext(TypeContext)
     const dispatch = useDispatch()
     const history = useHistory();
@@ -164,6 +164,7 @@ export default function ProductList() {
                             <Product openModal={openModal}
                                      openDeleteModal={openDeleteModal}
                                      device={item.device}
+                                     model={item.model}
                                      images={item.images}
                                      name={item.model}
                                      id={item.id}

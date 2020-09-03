@@ -5,11 +5,8 @@ import {db} from "../../firebase/Firebase";
 const favouriteReducer = (state = initialState.favourites, action) => {
     switch (action.type) {
         case SET_FAVOURITES: {
-            if (action.state) {
-                return action.state;
-            }
+            return action.state;
         }
-
         case ADD_TO_FAVOURITES: {
             const newState = [...state];
             newState.push(action.favId)

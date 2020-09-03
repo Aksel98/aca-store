@@ -31,6 +31,7 @@ const useStyles = makeStyles({
     },
     imageName: {
         fontWeight: 'bold',
+        wordBreak: 'break-word',
         color: ORANGE,
         lineHeight: '18px',
         fontSize: 9
