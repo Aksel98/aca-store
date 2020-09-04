@@ -27,6 +27,7 @@
   "close": "Close",
   "search": "Search",
   "price": "Price",
+  "paymentMethod": "Payment method",
   "orderBy": "Order By",
   "ascending": "Ascending",
   "descending": "Descending",

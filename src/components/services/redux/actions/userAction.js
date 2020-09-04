@@ -117,6 +117,7 @@ export const logoutUser = () => (dispatch) => {
             type: SET_USER,
             payload: null
         })
+        dispatch(getSuccess('Logged out'))
     }).catch(err => {
         dispatch(getError(err.message))
     })
