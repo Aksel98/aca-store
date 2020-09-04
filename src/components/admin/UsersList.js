@@ -80,6 +80,7 @@ export default function UsersList() {
                         <TableRow>
                             <StyledTableCell align="right">{t('email')}</StyledTableCell>
                             <StyledTableCell align="right">{t('address')}</StyledTableCell>
+                            <StyledTableCell align="right">{t('paymentMethod')}</StyledTableCell>
                             <StyledTableCell align="right">{t('orderPrice')}</StyledTableCell>
                         </TableRow>
                     </TableHead>
@@ -88,6 +89,7 @@ export default function UsersList() {
                             <StyledTableRow key={uniqId()}>
                                 <StyledTableCell key={uniqId()} align="right">{user.email}</StyledTableCell>
                                 <StyledTableCell key={uniqId()} align="right">{user.address}</StyledTableCell>
+                                <StyledTableCell key={uniqId()} align="right">{user.payment}</StyledTableCell>
                                 <StyledTableCell key={uniqId()} align="right">{numberFormat(user.price, '֏')}</StyledTableCell>
                             </StyledTableRow>
                         ))}
