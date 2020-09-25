@@ -1,15 +1,15 @@
-import React, {useContext} from "react";
-import {ARM_FLAG, BLUE, EN_FLAG, LOGO, ORANGE, RUS_FLAG, WHITE} from "../../main/constants/constants";
-import {Link, useLocation} from "react-router-dom";
-import {HOME_URL, LOGIN_URL} from "../../main/constants/navigations";
+import React, { useContext } from "react";
+import { ARM_FLAG, BLUE, EN_FLAG, LOGO, ORANGE, RUS_FLAG, WHITE } from "../../main/constants/constants";
+import { Link, useLocation } from "react-router-dom";
+import { HOME_URL, LOGIN_URL } from "../../main/constants/navigations";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import DropDown from "../../main/dropdown/Dropdown";
-import {useDispatch, useSelector} from "react-redux";
-import {useTranslation} from "react-i18next";
-import {logoutUser} from "../../services/redux/actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { logoutUser } from "../../services/redux/actions/userAction";
 import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
-import {makeStyles} from "@material-ui/core/styles";
-import {TypeContext} from "../../main/contexts/typeContext";
+import { makeStyles } from "@material-ui/core/styles";
+import { TypeContext } from "../../main/contexts/typeContext";
 
 const useStyles = makeStyles({
     main: {
@@ -94,21 +94,21 @@ const useStyles = makeStyles({
 });
 
 export default function (props) {
-    const {changeLanguage, getFirstLetters} = props
+    const { changeLanguage, getFirstLetters } = props
     const currentUser = useSelector(state => state.user)
     const basketItems = useSelector(state => state.basket);
     const favItems = useSelector(state => state.favourites)
     const dispatch = useDispatch()
     const location = useLocation();
     const isAdmin = useContext(TypeContext)
-    const {t} = useTranslation()
-    const classes = useStyles({pathName: location.pathname === HOME_URL});
+    const { t } = useTranslation()
+    const classes = useStyles({ pathName: location.pathname === HOME_URL });
 
     return (
         <React.Fragment>
             <div className={classes.main}>
                 <div className={classes.display}>
-                    <img src={LOGO} width={40} height={30} alt=""/>
+                    <img src={LOGO} width={40} height={30} alt="" />
                     <Link to={HOME_URL} className={classes.title}>ACA store</Link>
                 </div>
                 <div className={classes.display}>
@@ -121,22 +121,22 @@ export default function (props) {
                                         <Link to={'/admin/users-list'} className={classes.link}>{t('users')}</Link>
                                     </div>}
                                     <div onClick={() => dispatch(logoutUser())}>{t('logout')}</div>
-                                </React.Fragment>}/>
+                                </React.Fragment>} />
                     </div> : <Link to={LOGIN_URL} className={classes.menuItem}> {t('login')}</Link>}
                     {currentUser && <Link className={classes.checkoutLink} to='/favourites'>
-                        <FavoriteTwoToneIcon className={classes.menuItem}/>
+                        <FavoriteTwoToneIcon className={classes.menuItem} />
                         {favItems?.length > 0 && <div className={classes.cardItems}>{favItems?.length}</div>}
                     </Link>}
                     <Link className={classes.checkoutLink} to='/checkout'>
-                        <ShoppingCartIcon className={classes.menuItem}/>
+                        <ShoppingCartIcon className={classes.menuItem} />
                         {basketItems?.length > 0 && <div className={classes.cardItems}>{basketItems.length}</div>}
                     </Link>
                 </div>
             </div>
             <div>
-                <img onClick={() => changeLanguage('en')} className={classes.flagsImg} src={EN_FLAG} alt=""/>
-                <img onClick={() => changeLanguage('arm')} className={classes.flagsImg} src={ARM_FLAG} alt=""/>
-                <img onClick={() => changeLanguage('rus')} className={classes.flagsImg} src={RUS_FLAG} alt=""/>
+                <img onClick={() => changeLanguage('en')} className={classes.flagsImg} src={EN_FLAG} alt="" />
+                <img onClick={() => changeLanguage('arm')} className={classes.flagsImg} src={ARM_FLAG} alt="" />
+                <img onClick={() => changeLanguage('rus')} className={classes.flagsImg} src={RUS_FLAG} alt="" />
             </div>
         </React.Fragment>
     )
